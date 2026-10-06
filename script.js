@@ -1,202 +1,192 @@
-/* =====================================================================
-   LorePDF – script.js
-   1) NOVEL DATA  – add new novels here (nothing else to edit)
-   2) Helpers
-   3) Homepage
-   4) Novel page + series navigation
-   5) Locker manager (AdBlueMedia)
-   ===================================================================== */
+/* ==========================================================
+   LorePDF – all data and logic live here.
+   To add a novel: add one object to the `novels` array below.
+   ========================================================== */
 
-/* ---------- 1) NOVEL DATA ----------
-   To add a novel, copy one object, change the values, add a comma.
-   recommended: true -> shows in the Recommended carousel
-   trending:    true -> shows in Trending books
-   previousPart / nextPart: the id of the other part, or null.        */
    const novels = [
     {
       id: "example-novel",
-      title: "Example Novel",
+      title: "The Last Archive",
       author: "Example Author",
-      cover: "images/example.jpg",   // missing image = placeholder cover is shown
-      description: "This is a placeholder description. Replace it with the real story summary.",
+      cover: "images/example.jpg",        // missing image? a styled fallback cover is drawn
+      description: "Placeholder description. A keeper of a forgotten library discovers that every book she saves rewrites the world outside its walls.",
       category: "Fantasy",
-  
-      series: "Example Series",      // use null for standalone novels
+      series: "The Archive Saga",
       part: 1,
-      previousPart: null,
-      nextPart: "example-novel-2",
-  
+      previousPart: null,                 // id of previous novel in series, or null
+      nextPart: null,                     // id of next novel in series, or null
       recommended: true,
       trending: true,
-  
       locker: { it: "EXAMPLE_IT", key: "EXAMPLE_KEY" }
     }
   ];
   
-  /* ---------- 2) HELPERS ---------- */
-  const findNovel = (id) => novels.find((n) => n.id === id);
-  
-  function esc(text) {
-    const d = document.createElement("div");
-    d.textContent = text == null ? "" : text;
-    return d.innerHTML;
-  }
-  
-  // Cover image with a text placeholder if the image file is missing
-  function coverHTML(n) {
-    return `<div class="cover"><img src="${esc(n.cover)}" alt="Cover of ${esc(n.title)}" loading="lazy"
-      onerror="this.parentNode.textContent=this.alt.replace('Cover of ','')"></div>`;
-  }
-  
-  function cardHTML(n) {
-    return `<a class="card" href="novel.html?id=${encodeURIComponent(n.id)}">
-      ${coverHTML(n)}
-      <div class="card-body">
-        <h3 class="card-title">${esc(n.title)}</h3>
-        <p class="card-meta">${esc(n.author)}</p>
-        <span class="tag">${esc(n.category)}</span>
-      </div></a>`;
-  }
-  
-  /* ---------- 3) HOMEPAGE ---------- */
-  function initHome() {
-    const carousel = document.getElementById("recommendedCarousel");
-    const grid = document.getElementById("trendingGrid");
-  
-    const recommended = novels.filter((n) => n.recommended);
-    const trending = novels.filter((n) => n.trending);
-    carousel.innerHTML = recommended.map(cardHTML).join("") || '<p class="empty">No recommended novels yet.</p>';
-    grid.innerHTML = trending.map(cardHTML).join("") || '<p class="empty">No trending novels yet.</p>';
-  
-    // Auto-scroll: move one card every 3s, loop at the end, pause while the user interacts
-    const step = () => (carousel.querySelector(".card")?.offsetWidth || 160) + 16;
-    let paused = false;
-    setInterval(() => {
-      if (paused || document.hidden) return;
-      const atEnd = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 4;
-      carousel.scrollTo({ left: atEnd ? 0 : carousel.scrollLeft + step(), behavior: "smooth" });
-    }, 3000);
-    ["pointerenter", "touchstart", "focusin"].forEach((e) => carousel.addEventListener(e, () => (paused = true), { passive: true }));
-    ["pointerleave", "touchend", "focusout"].forEach((e) => carousel.addEventListener(e, () => (paused = false), { passive: true }));
-  
-    // Desktop arrows
-    document.getElementById("carouselPrev").onclick = () => carousel.scrollBy({ left: -step(), behavior: "smooth" });
-    document.getElementById("carouselNext").onclick = () => carousel.scrollBy({ left: step(), behavior: "smooth" });
-  
-    // Desktop mouse drag
-    let down = false, startX = 0, startLeft = 0, moved = false;
-    carousel.addEventListener("mousedown", (e) => { down = true; moved = false; startX = e.pageX; startLeft = carousel.scrollLeft; });
-    window.addEventListener("mouseup", () => (down = false));
-    carousel.addEventListener("mousemove", (e) => {
-      if (!down) return;
-      if (Math.abs(e.pageX - startX) > 5) moved = true;
-      carousel.style.scrollSnapType = "none";
-      carousel.scrollLeft = startLeft - (e.pageX - startX);
-    });
-    carousel.addEventListener("mouseup", () => (carousel.style.scrollSnapType = ""));
-    carousel.addEventListener("click", (e) => { if (moved) e.preventDefault(); }, true); // dragging must not open a card
-  }
-  
-  /* ---------- 4) NOVEL PAGE ---------- */
-  function initNovel() {
-    const root = document.getElementById("novelRoot");
-    const id = new URLSearchParams(location.search).get("id");
-    const n = findNovel(id);
-  
-    if (!n) {
-      root.innerHTML = `<div><h1>Novel not found</h1>
-        <p class="by">We couldn't find a novel with this link.</p>
-        <a class="btn btn-primary" href="index.html">Back to all novels</a></div>`;
-      document.title = "Novel not found – LorePDF";
-      return;
-    }
-  
-    document.title = `${n.title} – LorePDF`;
-    const seriesFacts = n.series ? `<span class="tag">${esc(n.series)}</span><span class="tag">Part ${esc(n.part)}</span>` : "";
-  
-    // Series buttons: shown only when previousPart / nextPart is set. Standalone novels get none.
-    const prevBtn = n.series && n.previousPart ? `<a class="btn" href="novel.html?id=${encodeURIComponent(n.previousPart)}">&#8249; Previous Part</a>` : "";
-    const nextBtn = n.series && n.nextPart ? `<a class="btn btn-primary" href="novel.html?id=${encodeURIComponent(n.nextPart)}">Next Part &#8250;</a>` : "";
-    const seriesNav = prevBtn || nextBtn ? `<p class="series-label">Continue the series</p><div class="series-nav">${prevBtn}${nextBtn}</div>` : "";
-  
-    root.innerHTML = `
-      ${coverHTML(n)}
-      <div>
-        <h1>${esc(n.title)}</h1>
-        <p class="by">by ${esc(n.author)}</p>
-        <div class="facts"><span class="tag">${esc(n.category)}</span>${seriesFacts}</div>
-        <p class="description">${esc(n.description)}</p>
-        <button class="btn btn-primary read-btn" id="readBtn">Read now</button>
-        <p class="locker-msg" id="lockerMsg" role="status"></p>
-        ${seriesNav}
-      </div>`;
-  
-    const btn = document.getElementById("readBtn");
-    const msg = document.getElementById("lockerMsg");
-    btn.addEventListener("click", async () => {
-      btn.disabled = true;
-      msg.className = "locker-msg";
-      msg.textContent = "Loading…";
-      try {
-        await openLocker(n.locker.it, n.locker.key);
-        msg.textContent = "";
-      } catch (err) {
-        msg.className = "locker-msg error";
-        msg.textContent = "Couldn't load the download. Turn off your ad blocker or check your connection, then try again.";
-        console.error("Locker error:", err);
-      }
-      btn.disabled = false;
-    });
-  }
-  
-  /* ---------- 5) LOCKER MANAGER (AdBlueMedia) ----------
-     Only ONE locker is active at a time. Every click: remove the old script,
-     clear the old config, set the new it/key, load the common script, then call
-     the official _VR() that the AdBlueMedia script provides (we never define it). */
+  /* ---------- Content Locker manager (AdBlueMedia) ---------- */
   const LOCKER = {
-    // Paste the common AdBlueMedia script URL from your dashboard here (only place it appears)
-    SCRIPT_URL: "https://REPLACE-WITH-ADBLUEMEDIA-SCRIPT-URL.js",
-    // Names of the global variables AdBlueMedia gives you in its embed code.
-    // Typical embed:  var abc123 = { "it": 123, "key": "xyz" };
-    VAR_NAME: "REPLACE_WITH_ADBLUEMEDIA_VARIABLE_NAME",
-    SCRIPT_ID: "adbluemedia-locker-script"
+    SCRIPT_URL: "https://REPLACE_WITH_ADBLUEMEDIA_SCRIPT_URL", // the one common script URL
+    CONFIG_VAR: "REPLACE_WITH_CONFIG_VARIABLE_NAME"             // global variable name AdBlueMedia gives you (it/key go inside it)
   };
   
   function openLocker(it, key) {
-    return new Promise((resolve, reject) => {
-      // 1 + 2: remove previous script and previous configuration
-      document.getElementById(LOCKER.SCRIPT_ID)?.remove();
-      try { delete window[LOCKER.VAR_NAME]; } catch (e) { window[LOCKER.VAR_NAME] = undefined; }
-      try { delete window._VR; } catch (e) { window._VR = undefined; }
+    // 1. remove previous locker script and 2-3. clear previous config / _VR
+    const old = document.getElementById("locker-script");
+    if (old) old.remove();
+    try { delete window[LOCKER.CONFIG_VAR]; } catch (e) { window[LOCKER.CONFIG_VAR] = undefined; }
+    try { delete window._VR; } catch (e) { window._VR = undefined; }
+    // 4. set this novel's values
+    window[LOCKER.CONFIG_VAR] = { it: it, key: key };
+    // 5. load the shared script
+    const s = document.createElement("script");
+    s.id = "locker-script";
+    s.src = LOCKER.SCRIPT_URL;
+    // 6-7. when loaded, call the official _VR() (defined by AdBlueMedia, never by us)
+    s.onload = function () { if (typeof window._VR === "function") window._VR(); };
+    document.body.appendChild(s);
+  }
   
-      // 3: set the selected novel's values
-      window[LOCKER.VAR_NAME] = { it: it, key: key };
+  /* ---------- Helpers ---------- */
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = t => String(t ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const byId = id => novels.find(n => n.id === id);
+  const url = n => "novel.html?id=" + encodeURIComponent(n.id);
+  const categories = () => [...new Set(novels.map(n => n.category).filter(Boolean))].sort();
   
-      // 4: load the common script (cache-busting query makes the browser run it again)
-      const s = document.createElement("script");
-      s.id = LOCKER.SCRIPT_ID;
-      s.src = LOCKER.SCRIPT_URL + (LOCKER.SCRIPT_URL.includes("?") ? "&" : "?") + "t=" + Date.now();
-      s.async = true;
+  function cover(n) {
+    return `<div class="cover"><img src="${esc(n.cover)}" alt="${esc(n.title)} cover" loading="lazy"
+      onerror="this.parentNode.classList.add('fb');this.replaceWith(document.createTextNode(this.alt.replace(' cover','')))"></div>`;
+  }
+  function card(n) {
+    return `<a class="card" href="${url(n)}">${cover(n)}<h3>${esc(n.title)}</h3><p>${esc(n.author)}</p><span class="tag">${esc(n.category)}</span></a>`;
+  }
   
-      // 5 + 6 + 7: when loaded, call the official _VR() to show the locker
-      s.onload = () => {
-        if (typeof window._VR === "function") {
-          window._VR();
-          resolve();
-        } else {
-          reject(new Error("AdBlueMedia script loaded but _VR() was not found."));
-        }
-      };
-      s.onerror = () => { s.remove(); reject(new Error("Could not load the AdBlueMedia script.")); };
-      document.head.appendChild(s);
+  /* ---------- Shared header, search overlay, footer ---------- */
+  function renderChrome() {
+    const home = document.body.dataset.page === "home";
+    $("#app-header").innerHTML = `
+    <header class="hdr"><div class="wrap hdr-in">
+      <a class="logo" href="index.html">Lore<b>PDF</b></a>
+      <nav class="nav" id="nav">
+        <a href="index.html">Home</a><a href="${home ? "#browse" : "index.html#browse"}">Browse</a>
+      </nav>
+      <button class="search-btn" data-open-search aria-label="Search novels">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search novels</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Menu">☰</button>
+    </div></header>
+    <div class="ov" id="ov" role="dialog" aria-label="Search"><div class="ov-in">
+      <div class="sbox"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a79fbd" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Title, author, category or series" autocomplete="off">
+        <button id="qClear" aria-label="Clear" hidden>✕</button><button id="qClose" aria-label="Close search">Esc</button></div>
+      <div class="sres" id="sres"></div></div></div>`;
+    $("#app-footer").innerHTML = `<footer><div class="wrap">© ${new Date().getFullYear()} LorePDF. Discover, read, continue the series.</div></footer>`;
+    $("#burger").onclick = () => $("#nav").classList.toggle("open");
+    $("#nav").onclick = () => $("#nav").classList.remove("open");
+    initSearch();
+  }
+  
+  /* ---------- Search ---------- */
+  // Every typed word must appear somewhere in title/author/category/series (case-insensitive, partial).
+  function searchNovels(q) {
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    if (!words.length) return [];
+    return novels.filter(n => {
+      const hay = [n.title, n.author, n.category, n.series].join(" ").toLowerCase();
+      return words.every(w => hay.includes(w));
+    });
+  }
+  function initSearch() {
+    const ov = $("#ov"), q = $("#q"), res = $("#sres"), clear = $("#qClear");
+    const open = () => { ov.classList.add("open"); document.body.style.overflow = "hidden"; q.focus(); draw(); };
+    const close = () => { ov.classList.remove("open"); document.body.style.overflow = ""; };
+    function draw() {
+      const v = q.value.trim();
+      clear.hidden = !v;
+      if (!v) { res.innerHTML = `<div class="hint"><strong>What do you want to read?</strong>Search by title, author, category or series.</div>`; return; }
+      const r = searchNovels(v);
+      res.innerHTML = r.length ? r.map(n => `<a class="srow" href="${url(n)}">${cover(n)}<div><h3>${esc(n.title)}</h3>
+        <p>${esc(n.author)} · ${esc(n.category)}${n.series ? " · " + esc(n.series) + (n.part ? " #" + n.part : "") : ""}</p></div></a>`).join("")
+        : `<div class="hint"><strong>No novels found</strong>Try another title, author, or category.</div>`;
+    }
+    document.addEventListener("click", e => { if (e.target.closest("[data-open-search]")) open(); });
+    q.addEventListener("input", draw);
+    clear.onclick = () => { q.value = ""; draw(); q.focus(); };
+    $("#qClose").onclick = close;
+    ov.addEventListener("click", e => { if (e.target === ov) close(); });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") close();
+      if (e.key === "/" && !/input|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); open(); }
     });
   }
   
-  /* ---------- Start ---------- */
-  document.addEventListener("DOMContentLoaded", () => {
-    const year = document.getElementById("year");
-    if (year) year.textContent = new Date().getFullYear();
-    const page = document.body.dataset.page;
-    if (page === "home") initHome();
-    if (page === "novel") initNovel();
-  });
+  /* ---------- Homepage ---------- */
+  function renderHome() {
+    const feat = (novels.filter(n => n.recommended).concat(novels)).slice(0, 3);
+    $("#heroCovers").innerHTML = [0, 1, 2].map(i => cover(feat[i % feat.length])).join("");
+  
+    const rec = $("#recommended");
+    const recs = novels.filter(n => n.recommended);
+    rec.innerHTML = recs.map(card).join("");
+    initCarousel(rec, recs.length);
+  
+    $("#trending").innerHTML = novels.filter(n => n.trending).map((n, i) =>
+      `<a class="trend-item" href="${url(n)}"><span class="rank">${i + 1}</span>${cover(n)}<div><h3>${esc(n.title)}</h3><p>${esc(n.author)}</p><span class="tag">${esc(n.category)}</span></div></a>`).join("");
+  
+    // Browse: chips built from data
+    const chips = $("#chips"); let active = "All";
+    const grid = $("#browseGrid");
+    function draw() {
+      chips.innerHTML = ["All", ...categories()].map(c => `<button class="chip ${c === active ? "on" : ""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+      grid.innerHTML = novels.filter(n => active === "All" || n.category === active).map(card).join("");
+    }
+    chips.onclick = e => { const b = e.target.closest(".chip"); if (b) { active = b.dataset.c; draw(); } };
+    draw();
+  }
+  
+  /* Carousel: scroll-snap + auto-advance + mouse drag + arrows */
+  function initCarousel(el, count) {
+    const step = () => (el.firstElementChild?.offsetWidth || 180) + 16;
+    const go = d => {
+      const max = el.scrollWidth - el.clientWidth;
+      if (d > 0 && el.scrollLeft >= max - 4) el.scrollTo({ left: 0, behavior: "smooth" });
+      else el.scrollBy({ left: d * step(), behavior: "smooth" });
+    };
+    document.querySelectorAll("[data-dir]").forEach(b => b.onclick = () => go(+b.dataset.dir));
+    let paused = false;
+    ["mouseenter", "touchstart", "focusin"].forEach(ev => el.addEventListener(ev, () => paused = true, { passive: true }));
+    ["mouseleave", "touchend", "focusout"].forEach(ev => el.addEventListener(ev, () => paused = false, { passive: true }));
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => { if (!paused && count > 2) go(1); }, 3800);
+    // desktop drag
+    let down = false, sx = 0, sl = 0, moved = false;
+    el.addEventListener("pointerdown", e => { if (e.pointerType !== "mouse") return; down = true; moved = false; sx = e.clientX; sl = el.scrollLeft; });
+    window.addEventListener("pointermove", e => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 5) { moved = true; el.style.scrollSnapType = "none"; } el.scrollLeft = sl - dx; });
+    window.addEventListener("pointerup", () => { if (down) { down = false; el.style.scrollSnapType = ""; } });
+    el.addEventListener("click", e => { if (moved) { e.preventDefault(); moved = false; } }, true);
+  }
+  
+  /* ---------- Novel page ---------- */
+  function renderNovel() {
+    const root = $("#novelRoot");
+    const n = byId(new URLSearchParams(location.search).get("id"));
+    if (!n) {
+      root.innerHTML = `<div class="hint" style="padding-block:90px"><strong>Novel not found</strong>This link may be outdated. <a href="index.html" style="color:var(--accent)">Browse all novels</a> or use search.</div>`;
+      return;
+    }
+    document.title = n.title + " – LorePDF";
+    const prev = byId(n.previousPart), next = byId(n.nextPart);
+    root.innerHTML = `<article class="novel">${cover(n)}
+      <div class="novel-info"><h1>${esc(n.title)}</h1><p class="by">by ${esc(n.author)}</p>
+        <div class="meta"><span class="pill">${esc(n.category)}</span>${n.series ? `<span class="pill">${esc(n.series)}</span>` : ""}${n.part ? `<span class="pill">Part ${esc(n.part)}</span>` : ""}</div>
+        <p class="desc">${esc(n.description)}</p>
+        <div class="read-box"><button class="btn btn-primary btn-lg" id="readBtn">Read now</button><p class="note">Complete a short step to unlock your copy.</p></div>
+        ${(prev || next) ? `<div class="snav" dir="rtl">${next ? `<a class="btn btn-ghost" href="${url(next)}">الجزء التالي</a>` : ""}${prev ? `<a class="btn btn-ghost" href="${url(prev)}">الجزء السابق</a>` : ""}</div>` : ""}
+      </div></article>`;
+    $("#readBtn").onclick = () => openLocker(n.locker.it, n.locker.key);
+  
+    // Related: same category or series first, never itself
+    const rel = novels.filter(x => x.id !== n.id && (x.category === n.category || (n.series && x.series === n.series))).slice(0, 6);
+    if (rel.length) { $("#related").innerHTML = rel.map(card).join(""); $("#relatedSec").hidden = false; }
+  }
+  
+  /* ---------- Boot ---------- */
+  renderChrome();
+  document.body.dataset.page === "novel" ? renderNovel() : renderHome();
