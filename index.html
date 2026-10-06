@@ -1,163 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>LorePDF - Locker Test</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            color: #222;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 60px auto;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .books {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .book {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-
-        .book h2 {
-            margin-top: 0;
-        }
-
-        button {
-            border: none;
-            background: #111;
-            color: white;
-            padding: 13px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        button:hover {
-            opacity: 0.85;
-        }
-
-        @media (max-width: 600px) {
-            .books {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LorePDF – Discover novels and keep reading</title>
+  <meta name="description" content="Discover novels, follow series part by part, and read in one tap.">
+  <link rel="stylesheet" href="style.css">
 </head>
+<body data-page="home">
+  <header class="site-header">
+    <a class="logo" href="index.html">Lore<span>PDF</span></a>
+    <a class="header-link" href="#trending">Trending</a>
+  </header>
 
-<body>
+  <main>
+    <section class="hero">
+      <h1>Your next novel is one tap away.</h1>
+      <p>Browse stories, follow a series from part one to the last, and pick up right where you left off.</p>
+      <a class="btn btn-primary" href="#recommended">Browse novels</a>
+    </section>
 
-<div class="container">
-
-    <h1>📚 LorePDF Locker Test</h1>
-
-    <div class="books">
-
-        <!-- LOCKER 1 -->
-        <div class="book">
-            <h2>Book 1</h2>
-            <p>Testing Locker #1</p>
-
-            <button onclick="openLocker(4516914, '328d8')">
-                Download Book 1
-            </button>
+    <section class="section" id="recommended">
+      <div class="section-head">
+        <h2>Recommended</h2>
+        <div class="arrows">
+          <button class="arrow" id="carouselPrev" aria-label="Scroll left">&#8249;</button>
+          <button class="arrow" id="carouselNext" aria-label="Scroll right">&#8250;</button>
         </div>
+      </div>
+      <div class="carousel" id="recommendedCarousel"></div>
+    </section>
 
+    <section class="section" id="trending">
+      <div class="section-head"><h2>Trending books</h2></div>
+      <div class="grid" id="trendingGrid"></div>
+    </section>
+  </main>
 
-        <!-- LOCKER 2 -->
-        <div class="book">
-            <h2>Book 2</h2>
-            <p>Testing Locker #2</p>
-
-            <button onclick="openLocker(4495281, 'd7d57')">
-                Download Book 2
-            </button>
-        </div>
-
-    </div>
-
-</div>
-
-
-<script>
-
-let lockerScript = null;
-
-function openLocker(it, key) {
-
-    // إذا كان locker قديم محمل، نحاول نحيدوه
-    if (lockerScript) {
-        lockerScript.remove();
-        lockerScript = null;
-    }
-
-    // نحيد الدالة القديمة إذا كانت موجودة
-    try {
-        delete window._VR;
-    } catch (e) {
-        window._VR = undefined;
-    }
-
-    // إعداد locker الحالي
-    window.MnuOd_hJE_TAKyuc = {
-        it: it,
-        key: key
-    };
-
-    // تحميل سكريبت AdBlueMedia
-    lockerScript = document.createElement("script");
-
-    lockerScript.type = "text/javascript";
-    lockerScript.src =
-        "https://d18k3i06xdslhs.cloudfront.net/e02d6e3.js";
-
-    lockerScript.onload = function () {
-
-        // نعطي السكريبت شوية وقت باش يجهز function
-        setTimeout(function () {
-
-            if (typeof window._VR === "function") {
-                window._VR();
-            } else {
-                alert("Locker function was not loaded.");
-            }
-
-        }, 100);
-
-    };
-
-    lockerScript.onerror = function () {
-        alert("Could not load the locker script.");
-    };
-
-    document.head.appendChild(lockerScript);
-}
-
-</script>
-
+  <footer class="site-footer">&copy; <span id="year"></span> LorePDF</footer>
+  <script src="script.js"></script>
 </body>
 </html>
