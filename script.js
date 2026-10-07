@@ -4,6 +4,7 @@
    - id: unique, used in the URL (novel.html?id=...)
    - previousPart / nextPart: the id of the neighbouring part, or null
    - addedAt: "YYYY-MM-DD" — newest dates appear first in Latest Additions
+   - genres: any names from GENRE_GROUPS below (category = main genre label)
    - trending: true shows the book in Trending
    - previews: list of image URLs
    - readUrl: where "Read Now" opens (leave "" until the file link is ready)
@@ -16,6 +17,7 @@
       cover: "https://i.pinimg.com/736x/4d/8c/eb/4d8ceb7c6e967c8c7948475e43791a2b.jpg",
       description: "PART#1 of the legendary epic fantasy trilogy by J.R.R. Tolkien.",
       category: "Epic Fantasy",
+      genres: ["Epic Fantasy", "Fantasy", "Adventure", "Classic Literature"],
       series: "The Lord of the Rings",
       part: 1,
       partLabel: "Part #1",
@@ -43,6 +45,7 @@
       cover: "https://i.pinimg.com/1200x/ce/54/b0/ce54b0ab1ec76b64d312a8ec4ac2c8f1.jpg",
       description: "PART#2 of the legendary epic fantasy trilogy by J.R.R. Tolkien.",
       category: "Epic Fantasy",
+      genres: ["Epic Fantasy", "Fantasy", "Adventure", "Classic Literature"],
       series: "The Lord of the Rings",
       part: 2,
       partLabel: "Part #2",
@@ -70,6 +73,7 @@
       cover: "https://i.pinimg.com/736x/5a/a6/8d/5aa68d9bf23a1766c5c0c58f8a8e234f.jpg",
       description: "The #FINAL and climactic part of the legendary epic fantasy trilogy by J.R.R. Tolkien.",
       category: "Epic Fantasy",
+      genres: ["Epic Fantasy", "Fantasy", "Adventure", "Classic Literature"],
       series: "The Lord of the Rings",
       part: 3,
       partLabel: "Part #3 — Final Part",
@@ -93,94 +97,91 @@
   ];
   /* ============================ END NOVEL DATA ============================ */
   
+  /* Genre families shown in "Browse by Genre". Add a genre by adding its name to a list. */
+  const GENRE_GROUPS = {
+    "Romance": ["Romance", "Contemporary Romance", "Historical Romance", "Erotica"],
+    "Fantasy": ["Fantasy", "Epic Fantasy", "Dark Fantasy", "Urban Fantasy", "Magical Realism"],
+    "Sci-Fi": ["Science Fiction", "Dystopian", "Speculative Fiction"],
+    "Mystery": ["Mystery", "Thriller", "Psychological Thriller", "Crime", "Crime Fiction", "Detective", "Suspense"],
+    "Dark": ["Horror", "Gothic", "Paranormal", "Supernatural"],
+    "Adventure": ["Adventure", "Action", "War", "Western"],
+    "Literary": ["Literary Fiction", "Contemporary Fiction", "Classic Literature", "Historical Fiction", "Philosophical Fiction", "Political Fiction", "Religious Fiction", "Drama", "Comedy", "Satire"],
+    "Young Readers": ["Young Adult", "New Adult", "Teen Fiction", "Coming of Age", "Middle Grade", "Children's Fiction"],
+    "Life & Form": ["Family", "LGBTQ+", "Short Stories", "Novellas", "Biography / Autobiographical Fiction", "Memoir"]
+  };
+  
   /* ======================= LOGIC (no need to edit) ======================= */
-  /* Validate data: skip invalid/duplicate novels, drop broken part links. */
   const DATA = (() => {
     const seen = new Set(), out = [];
     NOVELS.forEach(n => {
       if (!n || !n.id || !n.title) return console.warn("LorePDF: novel skipped (id and title required)", n);
       if (seen.has(n.id)) return console.warn("LorePDF: duplicate id skipped:", n.id);
       seen.add(n.id);
-      out.push({ author: "", cover: "", description: "", category: "Novel", series: "", partLabel: "", story: [], note: "", readUrl: "", trending: false, addedAt: "", previousPart: null, nextPart: null, ...n, previews: (n.previews || []).filter(Boolean) });
+      const m = { author: "", cover: "", description: "", category: "Novel", series: "", part: null, partLabel: "", story: [], note: "", readUrl: "", trending: false, addedAt: "", previousPart: null, nextPart: null, ...n };
+      m.genres = (n.genres && n.genres.length ? n.genres : [m.category]); m.previews = (n.previews || []).filter(Boolean);
+      out.push(m);
     });
-    out.forEach(n => ["previousPart", "nextPart"].forEach(k => {
-      if (n[k] && !seen.has(n[k])) { console.warn(`LorePDF: ${n.id}.${k} points to unknown id "${n[k]}"`); n[k] = null; }
-    }));
+    out.forEach(n => ["previousPart", "nextPart"].forEach(k => { if (n[k] && !seen.has(n[k])) { console.warn(`LorePDF: ${n.id}.${k} unknown id`); n[k] = null; } }));
     return out;
   })();
-  
   const $ = (s, r = document) => r.querySelector(s);
+  const esc = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
   const byId = id => DATA.find(n => n.id === id);
   const href = n => `novel.html?id=${encodeURIComponent(n.id)}`;
-  const img = (src, alt, eager, ph) => `<img src="${src}" alt="${alt}" data-ph="${ph || alt}" referrerpolicy="no-referrer" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'}>`;
-  const card = (n, eager) => `<a class="card" href="${href(n)}"><div class="cov">${img(n.cover, n.title + " cover", eager, n.title)}</div><div class="meta"><span class="tag">${n.category}</span><h3>${n.title}</h3><p>${n.author}</p>${n.partLabel ? `<small>${n.partLabel}</small>` : ""}</div></a>`;
+  const img = (n, src, alt, eager, ph) => `<img src="${esc(src)}" alt="${esc(alt)}" data-ph="${esc(ph || alt)}" referrerpolicy="no-referrer" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'}>`;
+  const cover = (n, eager) => `<div class="cov">${img(n, n.cover, n.title + " cover", eager, n.title)}</div>`;
+  const hay = n => [n.title, n.author, n.series, n.category, ...n.genres].join(" ").toLowerCase();
+  const uniq = f => [...new Set(DATA.map(f).flat().filter(x => x !== "" && x != null))];
   
-  /* Broken images degrade to a text placeholder; loaded previews adopt their real ratio. */
   document.addEventListener("error", e => {
     const i = e.target;
     if (i.tagName !== "IMG" || i.dataset.failed || i.closest(".lb")) return;
-    i.dataset.failed = 1;
-    const s = document.createElement("span"); s.className = "ph"; s.textContent = i.dataset.ph || i.alt;
-    i.replaceWith(s);
-  }, true);
-  document.addEventListener("load", e => {
-    const i = e.target, g = i.tagName === "IMG" && i.closest(".gi");
-    if (g && i.naturalWidth) g.style.aspectRatio = Math.min(2.2, Math.max(.6, i.naturalWidth / i.naturalHeight));
+    i.dataset.failed = 1; const s = document.createElement("span"); s.className = "ph"; s.textContent = i.dataset.ph || i.alt; i.replaceWith(s);
   }, true);
   
-  /* ---------- Shared chrome ---------- */
+  /* ---------- Chrome ---------- */
   document.body.insertAdjacentHTML("afterbegin", `
   <header class="hdr"><div class="bar">
-    <a class="logo" href="index.html">Lore<span>PDF</span></a>
-    <nav class="nav" id="nav"><a href="index.html">Home</a><a href="index.html#rec-sec">Latest Additions</a><a href="index.html#trend-sec">Trending</a><a href="index.html#library">Library</a></nav>
-    <button class="ibtn" id="sbtn" aria-label="Search"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
-    <button class="ibtn burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+    <a class="logo" href="index.html">Lore<b>PDF</b></a>
+    <nav class="nav" id="nav"><a href="index.html#latest">Latest</a><a href="index.html#trending">Trending</a><a href="index.html#genres">Genres</a><a href="index.html#library">Browse</a></nav>
+    <button class="sbtn" id="sbtn" aria-label="Search"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search</span></button>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
   </div><div class="bd" id="bd"></div></header>
   <div class="sov" id="sov" hidden role="dialog" aria-label="Search"><div class="sbox">
-    <div class="srow"><input id="sin" type="search" enterkeyhint="search" placeholder="Title, author, genre or series" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="ibtn" id="sx" aria-label="Close search">✕</button></div>
-    <div class="grid" id="sres"></div>
-  </div></div>`);
-  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><a class="logo" href="index.html">Lore<span>PDF</span></a><p>© ${new Date().getFullYear()} LorePDF</p></footer>`);
-  
-  const nav = $("#nav"), burger = $("#burger"), sov = $("#sov"), sin = $("#sin"), sres = $("#sres");
-  const lb = document.createElement("div");
-  lb.className = "lb"; lb.hidden = true; lb.setAttribute("role", "dialog");
-  lb.innerHTML = `<button class="ibtn lx" aria-label="Close preview">✕</button><div class="stage"><img alt=""></div><div class="lbar"><button class="ibtn lp" aria-label="Previous image">‹</button><span class="lc"></span><button class="ibtn ln" aria-label="Next image">›</button></div>`;
-  document.body.appendChild(lb);
+    <div class="srow"><input id="sin" type="search" enterkeyhint="search" placeholder="Title, author, genre or series" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="x" id="sx" aria-label="Close search">✕</button></div>
+    <div class="res" id="sres"></div></div></div>
+  <div class="lb" id="lb" hidden role="dialog" aria-label="Preview"><button class="x lx" aria-label="Close preview">✕</button><div class="stage"><img alt=""></div><div class="lbar"><button class="x lp" aria-label="Previous image">‹</button><span class="lc"></span><button class="x ln" aria-label="Next image">›</button></div></div>`);
+  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><a class="logo" href="index.html">Lore<b>PDF</b></a><p>© ${new Date().getFullYear()} LorePDF</p></footer>`);
+  const nav = $("#nav"), burger = $("#burger"), sov = $("#sov"), sin = $("#sin"), lb = $("#lb");
   const syncLock = () => document.body.classList.toggle("lock", !sov.hidden || !lb.hidden || nav.classList.contains("open"));
-  
-  /* Menu */
   const setMenu = o => { nav.classList.toggle("open", o); $("#bd").classList.toggle("on", o); burger.setAttribute("aria-expanded", o); syncLock(); };
   burger.onclick = e => { e.stopPropagation(); setMenu(!nav.classList.contains("open")); };
   nav.addEventListener("click", e => { if (e.target.closest("a")) setMenu(false); });
   document.addEventListener("click", e => { if (nav.classList.contains("open") && !e.target.closest("#nav,#burger")) setMenu(false); });
-  addEventListener("resize", () => { if (innerWidth >= 760) setMenu(false); });
+  addEventListener("resize", () => { if (innerWidth >= 800) setMenu(false); });
   addEventListener("pageshow", () => { setMenu(false); closeS(); closeLb(); });
   
-  /* Search */
+  /* Search overlay */
   function runS() {
-    const words = sin.value.toLowerCase().split(/\s+/).filter(Boolean);
-    const hits = DATA.filter(n => { const hay = [n.title, n.author, n.category, n.series].join(" ").toLowerCase(); return words.every(w => hay.includes(w)); });
-    sres.innerHTML = hits.length ? hits.map(n => card(n, true)).join("") : `<div class="empty"><h3>No novels found</h3><p>Try a title, author, genre or series.</p></div>`;
+    const w = sin.value.toLowerCase().split(/\s+/).filter(Boolean);
+    const hits = DATA.filter(n => w.every(x => hay(n).includes(x)));
+    $("#sres").innerHTML = hits.length ? hits.map(n => `<a class="row" href="${href(n)}">${cover(n, true)}<div><h3>${n.title}</h3><p>${n.author}</p><small>${n.series ? n.series + (n.partLabel ? " · " + n.partLabel : "") : n.genres.slice(0, 2).join(" · ")}</small></div></a>`).join("") : `<div class="empty"><h3>No novels found</h3><p>Try a title, author, genre or series.</p></div>`;
   }
   function openS() { setMenu(false); sov.hidden = false; syncLock(); sin.focus(); runS(); }
   function closeS() { if (sov.hidden) return; sov.hidden = true; sin.blur(); syncLock(); }
   $("#sbtn").onclick = openS; $("#sx").onclick = closeS; sin.oninput = runS;
   sov.addEventListener("click", e => { if (e.target === sov || e.target.classList.contains("sbox")) closeS(); });
-  sin.addEventListener("keydown", e => { if (e.key === "Enter") sin.blur(); });
   
   /* Lightbox */
   let lbList = [], lbI = 0, tx = 0;
   function showLb(i) {
     if (!lbList.length) return;
     lbI = (i + lbList.length) % lbList.length;
-    const im = $("img", lb); im.alt = `Preview ${lbI + 1}`; im.src = lbList[lbI];
-    $(".lc", lb).textContent = `${lbI + 1} / ${lbList.length}`;
-    lb.hidden = false; syncLock();
+    const im = $("img", lb); im.referrerPolicy = "no-referrer"; im.alt = `Preview ${lbI + 1}`; im.src = lbList[lbI];
+    $(".lc", lb).textContent = `${lbI + 1} / ${lbList.length}`; lb.hidden = false; syncLock();
   }
   function closeLb() { if (lb.hidden) return; lb.hidden = true; syncLock(); }
   $(".lx", lb).onclick = closeLb; $(".lp", lb).onclick = () => showLb(lbI - 1); $(".ln", lb).onclick = () => showLb(lbI + 1);
-  $("img", lb).referrerPolicy = "no-referrer";
   lb.addEventListener("click", e => { if (e.target === lb || e.target.classList.contains("stage")) closeLb(); });
   lb.addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive: true });
   lb.addEventListener("touchend", e => { const d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 50) showLb(lbI + (d < 0 ? 1 : -1)); }, { passive: true });
@@ -190,74 +191,98 @@
     if (!lb.hidden && e.key === "ArrowRight") showLb(lbI + 1);
   });
   
-  /* ---------- Home ---------- */
-  function carousel(track) {
-    const gap = () => parseFloat(getComputedStyle(track).columnGap) || 0;
-    const step = () => (track.firstElementChild ? track.firstElementChild.getBoundingClientRect().width + gap() : 0);
-    const arrows = [...document.querySelectorAll(".arr")];
-    const overflow = () => track.scrollWidth > track.clientWidth + 4;
-    const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-    const sync = () => {
-      $(".arrows").hidden = !overflow();
-      arrows[0].disabled = track.scrollLeft < 4; arrows[1].disabled = atEnd();
-    };
-    let until = 0, touching = false, hover = false;
+  /* Scroll strip with arrows + gentle auto-advance (optional) */
+  function strip(track, box, auto) {
+    if (!track || !box) return;
+    const btns = [...box.querySelectorAll(".arr")];
+    const step = () => { const c = track.firstElementChild; return c ? c.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap) || 0) : 0; };
+    const over = () => track.scrollWidth > track.clientWidth + 4, end = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    const sync = () => { box.hidden = !over(); if (btns[0]) { btns[0].disabled = track.scrollLeft < 4; btns[1].disabled = end(); } };
+    let until = 0, busy = false;
     const hold = ms => { until = Date.now() + ms; };
-    arrows.forEach(b => b.onclick = () => { hold(6000); track.scrollBy({ left: b.dataset.dir * step(), behavior: "smooth" }); });
-    track.addEventListener("touchstart", () => { touching = true; }, { passive: true });
-    ["touchend", "touchcancel"].forEach(t => track.addEventListener(t, () => { touching = false; hold(4500); }, { passive: true }));
-    track.addEventListener("mouseenter", () => hover = true); track.addEventListener("mouseleave", () => { hover = false; hold(1500); });
+    btns.forEach(b => b.onclick = () => { hold(6000); track.scrollBy({ left: b.dataset.dir * step(), behavior: "smooth" }); });
+    track.addEventListener("touchstart", () => { busy = true; }, { passive: true });
+    ["touchend", "touchcancel"].forEach(t => track.addEventListener(t, () => { busy = false; hold(4500); }, { passive: true }));
+    track.addEventListener("mouseenter", () => busy = true); track.addEventListener("mouseleave", () => { busy = false; hold(1500); });
     track.addEventListener("wheel", () => hold(4500), { passive: true });
-    track.addEventListener("focusin", () => hold(6000));
     track.addEventListener("scroll", sync, { passive: true }); addEventListener("resize", sync); sync();
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setInterval(() => {
-      if (touching || hover || document.hidden || Date.now() < until || !overflow()) return;
-      track.scrollTo({ left: atEnd() ? 0 : track.scrollLeft + step(), behavior: "smooth" });
+    if (auto && !matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
+      if (busy || document.hidden || Date.now() < until || !over()) return;
+      track.scrollTo({ left: end() ? 0 : track.scrollLeft + step(), behavior: "smooth" });
     }, 4500);
   }
+  
+  /* ---------- Home ---------- */
   function home() {
-    const latest = DATA.filter(n => n.addedAt).sort((a, b) => b.addedAt.localeCompare(a.addedAt)).slice(0, 10);
+    const empty = !DATA.length;
+    if (empty) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
+    const latest = DATA.filter(n => n.addedAt).sort((a, b) => b.addedAt.localeCompare(a.addedAt)).slice(0, 12);
+    if (latest.length) {
+      $("#latest-track").innerHTML = latest.map((n, i) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, i < 4)}<h3>${n.title}</h3><p>${n.author}</p></a>`).join("");
+      strip($("#latest-track"), $("#latest .arrows"), true);
+    } else $("#latest").hidden = true;
     const tr = DATA.filter(n => n.trending);
-    const track = $("#rec");
-    if (!DATA.length) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
-    if (latest.length) { track.innerHTML = latest.map((n, i) => card(n, i < 3)).join(""); carousel(track); } else $("#rec-sec").hidden = true;
-    if (tr.length) $("#trend").innerHTML = tr.map(n => card(n, false)).join(""); else $("#trend-sec").hidden = true;
-    const cats = ["All", ...new Set(DATA.map(n => n.category))];
-    const lib = $("#lib"), chips = $("#chips");
-    const draw = c => {
-      chips.innerHTML = cats.map(x => `<button class="chip${x === c ? " on" : ""}" data-c="${x}">${x}</button>`).join("");
-      lib.innerHTML = DATA.filter(n => c === "All" || n.category === c).map(n => card(n, false)).join("");
+    if (tr.length) $("#ranks").innerHTML = tr.map((n, i) => `<a class="rank" href="${href(n)}"><span class="num">${i + 1}</span>${cover(n)}<div><h3>${n.title}</h3><p>${n.author}</p><small>${n.genres.slice(0, 2).join(" · ")}</small></div></a>`).join(""); else $("#trending").hidden = true;
+    const series = uniq(n => n.series).map(s => ({ s, items: DATA.filter(n => n.series === s).sort((a, b) => (a.part || 0) - (b.part || 0)) })).sort((a, b) => b.items.length - a.items.length);
+    if (series.length) $("#sgrid").innerHTML = series.map(x => `<button class="scard" data-s="${esc(x.s)}"><span class="fan">${x.items.slice(0, 3).map((n, i) => `<span class="fc" style="--k:${i}">${cover(n)}</span>`).join("")}</span><span class="st"><h3>${x.s}</h3><p>${x.items.length} ${x.items.length === 1 ? "part" : "parts"} · ${x.items[0].author}</p></span></button>`).join(""); else $("#series").hidden = true;
+  
+    /* Library state + filters */
+    const st = { q: "", genre: "", author: "", series: "", part: "" };
+    const fill = (id, label, vals) => { $(id).innerHTML = `<option value="">${label}</option>` + vals.map(v => `<option value="${esc(v)}">${id === "#lp" ? "Part " + v : v}</option>`).join(""); };
+    fill("#lg", "All genres", Object.values(GENRE_GROUPS).flat()); fill("#la", "All authors", uniq(n => n.author).sort());
+    fill("#ls", "All series", uniq(n => n.series).sort()); fill("#lp", "Any part", uniq(n => n.part).sort((a, b) => a - b));
+    const map = { "#lq": "q", "#lg": "genre", "#la": "author", "#ls": "series", "#lp": "part" };
+    const draw = () => {
+      Object.entries(map).forEach(([id, k]) => { if ($(id).value !== String(st[k])) $(id).value = st[k]; });
+      const w = st.q.toLowerCase().split(/\s+/).filter(Boolean);
+      const hits = DATA.filter(n => w.every(x => hay(n).includes(x)) && (!st.genre || n.genres.includes(st.genre)) && (!st.author || n.author === st.author) && (!st.series || n.series === st.series) && (!st.part || String(n.part) === st.part));
+      $("#count").textContent = `${hits.length} ${hits.length === 1 ? "novel" : "novels"}`;
+      $("#lib").innerHTML = hits.length ? hits.map(n => `<a class="card" href="${href(n)}">${cover(n)}<h3>${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("") : `<div class="empty"><h3>Nothing matches yet</h3><p>Try fewer filters or a different word.</p><button class="btn sm" data-reset>Clear filters</button></div>`;
+      $("#gchips").querySelectorAll(".gc").forEach(c => c.classList.toggle("on", c.dataset.g === st.genre));
     };
-    chips.onclick = e => { const b = e.target.closest(".chip"); if (b) draw(b.dataset.c); };
-    draw("All");
+    const toLib = () => $("#library").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    Object.entries(map).forEach(([id, k]) => $(id).addEventListener(k === "q" ? "input" : "change", e => { st[k] = e.target.value; draw(); }));
+    const reset = () => { Object.keys(st).forEach(k => st[k] = ""); draw(); };
+    $("#reset").onclick = reset; $("#lib").addEventListener("click", e => { if (e.target.closest("[data-reset]")) reset(); });
+    $("#sgrid").addEventListener("click", e => { const b = e.target.closest(".scard"); if (b) { reset(); st.series = b.dataset.s; draw(); toLib(); } });
+  
+    /* Genre browser */
+    const groups = Object.keys(GENRE_GROUPS); let gi = 0;
+    const count = g => DATA.filter(n => n.genres.includes(g)).length;
+    const drawG = () => {
+      $("#gtabs").innerHTML = groups.map((g, i) => `<button class="gt${i === gi ? " on" : ""}" data-i="${i}">${g}</button>`).join("");
+      $("#gchips").innerHTML = GENRE_GROUPS[groups[gi]].map(g => `<button class="gc${g === st.genre ? " on" : ""}${count(g) ? "" : " dim"}" data-g="${esc(g)}">${g}<i>${count(g)}</i></button>`).join("");
+    };
+    $("#gtabs").onclick = e => { const b = e.target.closest(".gt"); if (b) { gi = +b.dataset.i; drawG(); } };
+    $("#gchips").onclick = e => { const b = e.target.closest(".gc"); if (b) { st.genre = st.genre === b.dataset.g ? "" : b.dataset.g; draw(); if (st.genre) toLib(); } };
+    drawG(); draw();
+    const p = new URLSearchParams(location.search);
+    ["genre", "series", "author", "part"].forEach(k => { if (p.get(k)) st[k] = p.get(k); }); if (p.get("q")) st.q = p.get("q");
+    if ([...p.keys()].length) { draw(); }
   }
   
   /* ---------- Novel page ---------- */
   function novelPage() {
-    const n = byId(new URLSearchParams(location.search).get("id"));
-    const root = $("#novel");
+    const root = $("#novel"), n = byId(new URLSearchParams(location.search).get("id"));
     if (!n) { document.title = "LorePDF — Not found"; root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="index.html">Browse novels</a></p></div>`; return; }
-    document.title = `${n.title} — LorePDF`;
-    lbList = n.previews;
+    document.title = `${n.title} — LorePDF`; lbList = n.previews;
+    const pn = (m, label) => m ? `<a class="pn" href="${href(m)}">${cover(m)}<span><small>${label}</small><b>${m.title}</b></span></a>` : "";
     const prev = n.previousPart && byId(n.previousPart), next = n.nextPart && byId(n.nextPart);
-    const parts = (prev ? `<a class="btn ghost" href="${href(prev)}">Previous Part</a>` : "") + (next ? `<a class="btn ghost" href="${href(next)}">Next Part</a>` : "");
     root.innerHTML = `
-    <article class="np">
-      <div class="npc cov">${img(n.cover, n.title + " cover", true, n.title)}</div>
+    <section class="nhero" style="--u:url(${esc(n.cover)})"><div class="wrap np">
+      <div class="npc">${cover(n, true)}</div>
       <div class="npi">
-        <span class="tag">${n.category}</span>
-        <h1>${n.title}</h1>
-        <p class="by">${n.author}</p>
         ${n.series ? `<p class="ser">${n.series}${n.partLabel ? " — " + n.partLabel : ""}</p>` : ""}
+        <h1>${n.title}</h1><p class="by">by ${n.author}</p>
+        <div class="gl">${n.genres.map(g => `<a href="index.html?genre=${encodeURIComponent(g)}#library">${g}</a>`).join("")}</div>
         ${n.description ? `<p class="desc">${n.title}, ${n.description}</p>` : ""}
-        <div class="acts"><a class="btn" href="${n.readUrl || "#previews"}"${n.readUrl ? ' target="_blank" rel="noopener"' : ""}>Read Now</a></div>
-        ${parts ? `<div class="acts parts">${parts}</div>` : ""}
-      </div>
-    </article>
-    ${n.previews.length ? `<section class="sec" id="previews"><div class="sec-h"><h2>Preview</h2></div><div class="gal">${n.previews.map((p, i) => `<button class="gi" data-i="${i}" aria-label="Open preview ${i + 1}">${img(p, `${n.title} preview ${i + 1}`, i === 0, "Preview unavailable")}</button>`).join("")}</div></section>` : ""}
-    ${n.story.length || n.note ? `<section class="sec story">${n.story.map(s => `<div><h3>${s.h}</h3><p>${s.t}</p></div>`).join("")}${n.note ? `<p class="note">${n.note}</p>` : ""}</section>` : ""}`;
-    root.querySelectorAll(".gi").forEach(b => b.onclick = () => showLb(+b.dataset.i));
+        <a class="btn" href="${n.readUrl ? esc(n.readUrl) : "#previews"}"${n.readUrl ? ' target="_blank" rel="noopener"' : ""}>Read Now</a>
+        ${prev || next ? `<div class="pns">${pn(prev, "Previous Part")}${pn(next, "Next Part")}</div>` : ""}
+      </div></div></section>
+    ${n.previews.length ? `<section class="wrap sec" id="previews"><div class="sh"><h2>Preview</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Previous">‹</button><button class="arr" data-dir="1" aria-label="Next">›</button></div></div><div class="track pv" id="pv">${n.previews.map((p, i) => `<button class="slide" data-i="${i}" style="--u:url(${esc(p)})" aria-label="Open preview ${i + 1}">${img(n, p, `${n.title} preview ${i + 1}`, i === 0, "Preview unavailable")}</button>`).join("")}</div></section>` : ""}
+    ${n.story.length || n.note ? `<section class="wrap sec story">${n.story.map(s => `<div><h3>${s.h}</h3><p>${s.t}</p></div>`).join("")}${n.note ? `<p class="note">${n.note}</p>` : ""}</section>` : ""}`;
+    root.querySelectorAll(".slide").forEach(b => b.onclick = () => showLb(+b.dataset.i));
+    strip($("#pv"), $("#previews .arrows"), false);
   }
   
   try { document.body.dataset.page === "home" ? home() : novelPage(); }
