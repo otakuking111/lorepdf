@@ -23,7 +23,7 @@
       previousPart: null,
       nextPart: "the-two-towers",
       addedAt: "2026-10-07",
-      readUrl: "lorepdf.com/c97c3c9",
+      readUrl: "c97c3c9",
       story: [
         { h: "Starting Plot", t: "The story begins in the peaceful Shire, where a young Hobbit named Frodo Baggins inherits a mysterious ancient ring, only to discover it is the dangerous \"One Ring\" forged by the Dark Lord Sauron." },
         { h: "Main Quest", t: "Frodo must embark on a perilous journey to destroy the ring in the fires of Mount Doom where it was created, in order to save the world of Middle-earth from ultimate darkness and destruction." },
