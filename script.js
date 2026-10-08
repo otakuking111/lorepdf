@@ -58,9 +58,9 @@
       ],
       note: "",
       previews: [
-        "https://i.postimg.cc/d1KvdfP2/Screenshot-2026-10-07-at-20-58-28.png",
-        "https://i.postimg.cc/xCyQPPn7/Screenshot-2026-10-07-at-20-58-36.png",
-        "https://i.postimg.cc/Kc0Svjzt/Screenshot-2026-10-07-at-20-59-35.png"
+        "https://i.postimg.cc/d1KvdfP2/Screenshot-2026-10-07-at-20-58-28.WebP",
+        "https://i.postimg.cc/xCyQPPn7/Screenshot-2026-10-07-at-20-58-36.WebP",
+        "https://i.postimg.cc/Kc0Svjzt/Screenshot-2026-10-07-at-20-59-35.WebP"
       ]
     },
     {
