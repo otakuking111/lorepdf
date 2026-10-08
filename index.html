@@ -1,11 +1,58 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#5C1D24"><title>LorePDF — Novels</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
-<body data-page="home"><main>
-<section class="band" id="latest"><div class="wrap"><div class="sh"><h2>Latest Additions</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Scroll left">‹</button><button class="arr" data-dir="1" aria-label="Scroll right">›</button></div></div><div class="track" id="latest-track"></div></div></section>
-<section class="wrap sec" id="trending"><div class="sh"><h2>Trending</h2></div><div class="ranks" id="ranks"></div></section>
-<section class="wrap sec" id="series"><div class="sh"><h2>Popular Series</h2></div><div class="sgrid" id="sgrid"></div></section>
-<section class="wrap sec" id="genres"><div class="sh"><h2>Browse by Genre</h2></div><div class="gtabs" id="gtabs"></div><div class="gchips" id="gchips"></div></section>
-<section class="wrap sec" id="library"><div class="sh"><h2>Library</h2><span class="count" id="count"></span></div>
-<div class="tools"><input id="lq" type="search" placeholder="Search the library" autocomplete="off" aria-label="Search the library"><select id="lg" aria-label="Genre"></select><select id="la" aria-label="Author"></select><select id="ls" aria-label="Series"></select><select id="lp" aria-label="Part"></select><button class="btn sm" id="reset" type="button">Reset</button></div>
-<div class="grid" id="lib"></div></section>
-</main><script src="script.js"></script></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LorePDF | Novels to read</title>
+<meta name="description" content="LorePDF is a library of novels. Browse the latest additions, filter by genre, author or series, and start reading.">
+<meta name="theme-color" content="#0d1311">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1311'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23c8a25a' font-family='serif'%3EL%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<main>
+  <section class="wrap sec" id="latest">
+    <h1 class="sec-title">Latest Additions</h1>
+    <div class="grid" id="latest-grid"></div>
+  </section>
+
+  <section class="wrap sec" id="trending" hidden>
+    <h2 class="sec-title">Trending</h2>
+    <div class="grid" id="trending-grid"></div>
+  </section>
+
+  <section class="wrap sec" id="categories">
+    <h2 class="sec-title">Browse by Genre</h2>
+    <div class="chips" id="genre-chips"></div>
+    <details class="all-genres">
+      <summary>All genres</summary>
+      <div class="chips" id="all-genre-chips"></div>
+    </details>
+  </section>
+
+  <section class="wrap sec" id="browse">
+    <h2 class="sec-title">Library</h2>
+    <div class="filters" id="search">
+      <input type="search" id="q" placeholder="Search title, author, genre or series" aria-label="Search novels" autocomplete="off">
+      <select id="f-genre" aria-label="Filter by genre"></select>
+      <select id="f-author" aria-label="Filter by author"></select>
+      <select id="f-series" aria-label="Filter by series"></select>
+      <button type="button" class="link" id="reset">Clear filters</button>
+    </div>
+    <p class="count" id="count" aria-live="polite"></p>
+    <div class="grid" id="lib-grid"></div>
+    <div class="empty" id="empty" hidden>
+      <h3>No novels found</h3>
+      <p>Try a shorter search, or clear the filters to see the whole library.</p>
+      <button type="button" class="btn" id="empty-reset">Clear filters</button>
+    </div>
+  </section>
+</main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="script.js"></script>
+</body>
+</html>
