@@ -85,9 +85,9 @@
       ],
       note: "",
       previews: [
-        "https://i.postimg.cc/Dw6ns6yk/Screenshot-2026-10-07-at-21-25-54.png",
-        "https://i.postimg.cc/0jRLhK2S/Screenshot-2026-10-07-at-21-27-26.png",
-        "https://i.postimg.cc/y8YwqHBy/Screenshot-2026-10-07-at-21-28-21.png"
+        "https://i.pinimg.com/736x/67/b2/c8/67b2c8a2075c32add6cabe43a2ba8f55.WebP",
+        "https://i.pinimg.com/736x/bc/8c/0f/bc8c0fb9fd63b092b6bf8db9180251c4.WebP",
+        "https://i.pinimg.com/736x/04/4c/a8/044ca80456855ef6e20d6d8de48d7f00.WebP"
       ]
     }
   ];
