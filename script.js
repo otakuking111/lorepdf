@@ -58,9 +58,9 @@
       ],
       note: "",
       previews: [
-        "https://i.postimg.cc/d1KvdfP2/Screenshot-2026-10-07-at-20-58-28.WebP",
-        "https://i.postimg.cc/xCyQPPn7/Screenshot-2026-10-07-at-20-58-36.WebP",
-        "https://i.postimg.cc/Kc0Svjzt/Screenshot-2026-10-07-at-20-59-35.WebP"
+        "https://i.postimg.cc/d1KvdfP2/Screenshot-2026-10-07-at-20-58-28.png",
+        "https://i.postimg.cc/xCyQPPn7/Screenshot-2026-10-07-at-20-58-36.png",
+        "https://i.postimg.cc/Kc0Svjzt/Screenshot-2026-10-07-at-20-59-35.png"
       ]
     },
     {
@@ -129,11 +129,23 @@
   const hay = n => [n.title, n.author, n.series, n.category, ...n.genres].join(" ").toLowerCase();
   const uniq = f => [...new Set(DATA.map(f).flat().filter(x => x !== "" && x != null))];
   
+  /* Image fallbacks. Preview images get a retry ladder before any placeholder is shown:
+     1) retry with the browser's default referrer (some hosts reject requests with no referrer)
+     2) retry through an image CDN proxy (avoids host-side hotlink rules)
+     The "unavailable" placeholder appears only after both retries have failed. */
+  const proxied = u => "https://wsrv.nl/?url=" + encodeURIComponent(u.replace(/^https?:\/\//, ""));
   document.addEventListener("error", e => {
     const i = e.target;
     if (i.tagName !== "IMG" || i.dataset.failed || i.closest(".lb")) return;
+    if (i.closest(".slide")) {
+      const orig = i.dataset.orig || (i.dataset.orig = i.getAttribute("src")), t = +i.dataset.try || 0;
+      if (t === 0) { i.dataset.try = 1; i.removeAttribute("loading"); i.referrerPolicy = "strict-origin-when-cross-origin"; i.src = orig; return; }
+      if (t === 1) { i.dataset.try = 2; i.referrerPolicy = "no-referrer"; i.src = proxied(orig); return; }
+    }
     i.dataset.failed = 1; const s = document.createElement("span"); s.className = "ph"; s.textContent = i.dataset.ph || i.alt; i.replaceWith(s);
   }, true);
+  /* Lightbox uses whichever address actually loaded for each preview. */
+  document.addEventListener("load", e => { const i = e.target, s = i.tagName === "IMG" && i.closest(".slide"); if (s && i.dataset.try) lbList[+s.dataset.i] = i.currentSrc || i.src; }, true);
   
   /* ---------- Chrome ---------- */
   document.body.insertAdjacentHTML("afterbegin", `
@@ -267,7 +279,7 @@
   function novelPage() {
     const root = $("#novel"), n = byId(new URLSearchParams(location.search).get("id"));
     if (!n) { document.title = "LorePDF — Not found"; root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="index.html">Browse novels</a></p></div>`; return; }
-    document.title = `${n.title} — LorePDF`; lbList = n.previews;
+    document.title = `${n.title} — LorePDF`; lbList = [...n.previews];
     const pn = (m, label) => m ? `<a class="pn" href="${href(m)}">${cover(m)}<span><small>${label}</small><b>${m.title}</b></span></a>` : "";
     const prev = n.previousPart && byId(n.previousPart), next = n.nextPart && byId(n.nextPart);
     root.innerHTML = `
