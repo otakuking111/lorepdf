@@ -220,9 +220,10 @@
     if (!DATA.length) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
     const sl = seriesList();
     if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, "series.html")).join(""); strip($("#sgrid"), $("#series .arrows"), true); } else $("#series").hidden = true;
+    const bk = (n, i, eager) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, eager)}<h3>${n.title}</h3><p>${n.author}</p></a>`;
     const latest = DATA.filter(n => n.addedAt).sort((a, b) => b.addedAt.localeCompare(a.addedAt)).slice(0, 3);
-    if (latest.length) $("#latest-track").innerHTML = latest.map((n, i) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, true)}<h3>${n.title}</h3><p>${n.author}</p></a>`).join(""); else $("#latest").hidden = true;
-    $("#lcta").innerHTML = `${fan(DATA)}<span class="st"><h3>Browse all novels</h3><p>${DATA.length} ${DATA.length === 1 ? "novel" : "novels"} · search and filter</p></span>`;
+    if (latest.length) $("#latest-track").innerHTML = latest.map((n, i) => bk(n, i, true)).join(""); else $("#latest").hidden = true;
+    $("#lib-track").innerHTML = DATA.slice(0, 12).map((n, i) => bk(n, i, false)).join("");
   }
   
   /* ---------- Popular Series page ---------- */
