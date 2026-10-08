@@ -50,7 +50,7 @@
       previousPart: "fellowship-of-the-ring",
       nextPart: "the-return-of-the-king",
       addedAt: "2026-10-07",
-      readUrl: "",
+      readUrl: "https://salmane.freedev.app/?/6b18981",
       story: [
         { h: "Starting Plot", t: "The Fellowship is broken after a fierce battle; Frodo and Sam continue their journey to Mount Doom alone, while unknowingly tracked by the creature Gollum." },
         { h: "Main Conflict", t: "The remaining members of the broken fellowship (Aragorn, Legolas, and Gimli) travel across Middle-earth to help the kingdoms of men unite and fight against the massive armies of the Dark Lord Sauron and the traitorous wizard Saruman." },
@@ -77,7 +77,7 @@
       previousPart: "the-two-towers",
       nextPart: null,
       addedAt: "2026-10-07",
-      readUrl: "",
+      readUrl: "https://salmane.freedev.app/?/ec0a6c2",
       story: [
         { h: "The Journey's End", t: "Frodo and Sam reach the final stages of their harrowing journey across Mordor, guided by Gollum, facing immense physical and emotional exhaustion to finally cast the One Ring into Mount Doom." },
         { h: "The Great War", t: "Aragorn steps up to claim his rightful place as king, leading the remaining forces of men in a desperate, massive final battle at the Black Gate to distract Sauron's attention and buy time for the Hobbits." },
