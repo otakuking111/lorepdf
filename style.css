@@ -152,3 +152,24 @@ main :focus-visible{outline-color:var(--burg)}.band :focus-visible,.nhero :focus
  .npi>.gl{margin:18px 0 12px}
  .desc{margin-bottom:6px}
 }
+
+/* ===== Homepage palette (scoped: affects index.html only) ===== */
+body[data-page="home"]{--ink:#35201A;--card:#F9F1DD;--line:rgba(74,26,31,.2);--line-2:rgba(74,26,31,.36);background:#E9DBBE linear-gradient(180deg,#F0E5CD 0,#E8D9BA 55%,#E3D2B0 100%)}
+body[data-page="home"] .sec .sh h2{color:#4A1A1F}
+body[data-page="home"] .count{color:#6B4A3A;opacity:1}
+/* banner: Latest Additions */
+body[data-page="home"] .band{background:radial-gradient(ellipse 70% 90% at 50% -10%,rgba(197,160,89,.24),transparent 62%),linear-gradient(180deg,#4A1A1F 0,#2F150E 100%);border-bottom-color:#C5A059}
+body[data-page="home"] .band .sh h2{color:#D9B974}
+body[data-page="home"] .band .bk h3{color:#F7ECD3}
+body[data-page="home"] .band .bk p{color:#E6D4AE;opacity:.9}
+body[data-page="home"] .band .cov{box-shadow:0 16px 30px rgba(0,0,0,.5),0 0 0 1px rgba(197,160,89,.28),inset 3px 0 0 rgba(0,0,0,.18)}
+body[data-page="home"] .band .arr{border-color:#C5A059;color:#D9B974}
+/* section accents */
+body[data-page="home"] .num{color:#6E2530}
+body[data-page="home"] .rank small,body[data-page="home"] .card small{color:#6E2530}
+body[data-page="home"] .rank{background:var(--card)}
+body[data-page="home"] .scard{background:linear-gradient(135deg,#5C1D24 0,#3A1319 100%)}
+body[data-page="home"] .st h3{color:#D9B974}
+body[data-page="home"] .gt.on{background:#4A1A1F;border-color:#4A1A1F}
+body[data-page="home"] .gc.on{background:#D4B26E;border-color:#D4B26E;color:#2F150E}
+body[data-page="home"] .btn.sm{background:#4A1A1F}
