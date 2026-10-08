@@ -5,7 +5,6 @@
    - previousPart / nextPart: the id of the neighbouring part, or null
    - addedAt: "YYYY-MM-DD" — newest dates appear first in Latest Additions
    - genres: any names from GENRE_GROUPS below (category = main genre label)
-   - trending: true shows the book in Trending
    - previews: list of image URLs
    - readUrl: where "Read Now" opens (leave "" until the file link is ready)
    ========================================================================== */
@@ -24,7 +23,6 @@
       previousPart: null,
       nextPart: "the-two-towers",
       addedAt: "2026-10-07",
-      trending: true,
       readUrl: "",
       story: [
         { h: "Starting Plot", t: "The story begins in the peaceful Shire, where a young Hobbit named Frodo Baggins inherits a mysterious ancient ring, only to discover it is the dangerous \"One Ring\" forged by the Dark Lord Sauron." },
@@ -52,7 +50,6 @@
       previousPart: "fellowship-of-the-ring",
       nextPart: "the-return-of-the-king",
       addedAt: "2026-10-07",
-      trending: true,
       readUrl: "",
       story: [
         { h: "Starting Plot", t: "The Fellowship is broken after a fierce battle; Frodo and Sam continue their journey to Mount Doom alone, while unknowingly tracked by the creature Gollum." },
@@ -80,7 +77,6 @@
       previousPart: "the-two-towers",
       nextPart: null,
       addedAt: "2026-10-07",
-      trending: true,
       readUrl: "",
       story: [
         { h: "The Journey's End", t: "Frodo and Sam reach the final stages of their harrowing journey across Mordor, guided by Gollum, facing immense physical and emotional exhaustion to finally cast the One Ring into Mount Doom." },
@@ -117,7 +113,7 @@
       if (!n || !n.id || !n.title) return console.warn("LorePDF: novel skipped (id and title required)", n);
       if (seen.has(n.id)) return console.warn("LorePDF: duplicate id skipped:", n.id);
       seen.add(n.id);
-      const m = { author: "", cover: "", description: "", category: "Novel", series: "", part: null, partLabel: "", story: [], note: "", readUrl: "", trending: false, addedAt: "", previousPart: null, nextPart: null, ...n };
+      const m = { author: "", cover: "", description: "", category: "Novel", series: "", part: null, partLabel: "", story: [], note: "", readUrl: "", addedAt: "", previousPart: null, nextPart: null, ...n };
       m.genres = (n.genres && n.genres.length ? n.genres : [m.category]); m.previews = (n.previews || []).filter(Boolean);
       out.push(m);
     });
@@ -143,7 +139,7 @@
   document.body.insertAdjacentHTML("afterbegin", `
   <header class="hdr"><div class="bar">
     <a class="logo" href="index.html">Lore<b>PDF</b></a>
-    <nav class="nav" id="nav"><a href="index.html#latest">Latest</a><a href="index.html#trending">Trending</a><a href="index.html#library">Browse</a></nav>
+    <nav class="nav" id="nav"><a href="series.html">Series</a><a href="index.html#latest">Latest</a><a href="library.html">Library</a></nav>
     <button class="sbtn" id="sbtn" aria-label="Search"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search</span></button>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
   </div><div class="bd" id="bd"></div></header>
@@ -212,24 +208,40 @@
     }, 4500);
   }
   
+  /* ---------- Series helpers ---------- */
+  const seriesList = () => uniq(n => n.series).map(x => ({ s: x, items: DATA.filter(n => n.series === x).sort((a, b) => (a.part || 0) - (b.part || 0)) })).sort((a, b) => b.items.length - a.items.length || a.s.localeCompare(b.s));
+  const fan = items => `<span class="fan">${items.slice(0, 3).map((n, i) => `<span class="fc" style="--k:${i}">${cover(n)}</span>`).join("")}</span>`;
+  const scard = (x, link) => `<a class="scard" href="${link}">${fan(x.items)}<span class="st"><h3>${x.s}</h3><p>${x.items.length} ${x.items.length === 1 ? "part" : "parts"} · ${x.items[0].author}</p></span></a>`;
+  const emptyMsg = (t, p) => `<div class="empty"><h3>${t}</h3><p>${p}</p></div>`;
+  
   /* ---------- Home ---------- */
   function home() {
-    const empty = !DATA.length;
-    if (empty) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
-    const latest = DATA.filter(n => n.addedAt).sort((a, b) => b.addedAt.localeCompare(a.addedAt)).slice(0, 12);
-    if (latest.length) {
-      $("#latest-track").innerHTML = latest.map((n, i) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, i < 4)}<h3>${n.title}</h3><p>${n.author}</p></a>`).join("");
-      strip($("#latest-track"), $("#latest .arrows"), true);
-    } else $("#latest").hidden = true;
-    const tr = DATA.filter(n => n.trending);
-    if (tr.length) $("#ranks").innerHTML = tr.map((n, i) => `<a class="rank" href="${href(n)}"><span class="num">${i + 1}</span>${cover(n)}<div><h3>${n.title}</h3><p>${n.author}</p><small>${n.genres.slice(0, 2).join(" · ")}</small></div></a>`).join(""); else $("#trending").hidden = true;
-    const series = uniq(n => n.series).map(s => ({ s, items: DATA.filter(n => n.series === s).sort((a, b) => (a.part || 0) - (b.part || 0)) })).sort((a, b) => b.items.length - a.items.length);
-    if (series.length) $("#sgrid").innerHTML = series.map(x => `<button class="scard" data-s="${esc(x.s)}"><span class="fan">${x.items.slice(0, 3).map((n, i) => `<span class="fc" style="--k:${i}">${cover(n)}</span>`).join("")}</span><span class="st"><h3>${x.s}</h3><p>${x.items.length} ${x.items.length === 1 ? "part" : "parts"} · ${x.items[0].author}</p></span></button>`).join(""); else $("#series").hidden = true;
+    if (!DATA.length) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
+    const sl = seriesList();
+    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, "series.html")).join(""); strip($("#sgrid"), $("#series .arrows"), true); } else $("#series").hidden = true;
+    const latest = DATA.filter(n => n.addedAt).sort((a, b) => b.addedAt.localeCompare(a.addedAt)).slice(0, 3);
+    if (latest.length) $("#latest-track").innerHTML = latest.map((n, i) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, true)}<h3>${n.title}</h3><p>${n.author}</p></a>`).join(""); else $("#latest").hidden = true;
+    $("#lcta").innerHTML = `${fan(DATA)}<span class="st"><h3>Browse all novels</h3><p>${DATA.length} ${DATA.length === 1 ? "novel" : "novels"} · search and filter</p></span>`;
+  }
   
-    /* Library state + filters */
-    const st = { q: "", genre: "", author: "", series: "", part: "" };
+  /* ---------- Popular Series page ---------- */
+  function seriesPage() {
+    const all = seriesList(), input = $("#qs");
+    const draw = () => {
+      const w = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+      const hits = all.filter(x => w.every(t => x.s.toLowerCase().includes(t)));
+      $("#count").textContent = `${hits.length} series`;
+      $("#sgrid").innerHTML = hits.length ? hits.map(x => scard(x, `library.html?series=${encodeURIComponent(x.s)}`)).join("") : emptyMsg("No series found", "Try a different name.");
+    };
+    input.value = new URLSearchParams(location.search).get("q") || "";
+    input.oninput = draw; draw();
+  }
+  
+  /* ---------- Library page ---------- */
+  function libraryPage() {
+    const st = { q: "", genre: "", author: "", series: "", part: "" }, PAGE = 24; let shown = PAGE;
     const fill = (id, label, vals) => { $(id).innerHTML = `<option value="">${label}</option>` + vals.map(v => `<option value="${esc(v)}">${id === "#lp" ? "Part " + v : v}</option>`).join(""); };
-    fill("#lg", "All genres", Object.values(GENRE_GROUPS).flat()); fill("#la", "All authors", uniq(n => n.author).sort());
+    fill("#lg", "All genres", [...new Set([...Object.values(GENRE_GROUPS).flat(), ...uniq(n => n.genres)])]); fill("#la", "All authors", uniq(n => n.author).sort());
     fill("#ls", "All series", uniq(n => n.series).sort()); fill("#lp", "Any part", uniq(n => n.part).sort((a, b) => a - b));
     const map = { "#lq": "q", "#lg": "genre", "#la": "author", "#ls": "series", "#lp": "part" };
     const draw = () => {
@@ -237,18 +249,16 @@
       const w = st.q.toLowerCase().split(/\s+/).filter(Boolean);
       const hits = DATA.filter(n => w.every(x => hay(n).includes(x)) && (!st.genre || n.genres.includes(st.genre)) && (!st.author || n.author === st.author) && (!st.series || n.series === st.series) && (!st.part || String(n.part) === st.part));
       $("#count").textContent = `${hits.length} ${hits.length === 1 ? "novel" : "novels"}`;
-      $("#lib").innerHTML = hits.length ? hits.map(n => `<a class="card" href="${href(n)}">${cover(n)}<h3>${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("") : `<div class="empty"><h3>Nothing matches yet</h3><p>Try fewer filters or a different word.</p><button class="btn sm" data-reset>Clear filters</button></div>`;
+      $("#lib").innerHTML = hits.length ? hits.slice(0, shown).map(n => `<a class="card" href="${href(n)}">${cover(n)}<h3>${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("") : `<div class="empty"><h3>Nothing matches yet</h3><p>Try fewer filters or a different word.</p><button class="btn sm" data-reset>Clear filters</button></div>`;
+      $("#more").hidden = hits.length <= shown;
     };
-    const toLib = () => $("#library").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    Object.entries(map).forEach(([id, k]) => $(id).addEventListener(k === "q" ? "input" : "change", e => { st[k] = e.target.value; draw(); }));
-    const reset = () => { Object.keys(st).forEach(k => st[k] = ""); draw(); };
+    Object.entries(map).forEach(([id, k]) => $(id).addEventListener(k === "q" ? "input" : "change", e => { st[k] = e.target.value; shown = PAGE; draw(); }));
+    const reset = () => { Object.keys(st).forEach(k => st[k] = ""); shown = PAGE; draw(); };
     $("#reset").onclick = reset; $("#lib").addEventListener("click", e => { if (e.target.closest("[data-reset]")) reset(); });
-    $("#sgrid").addEventListener("click", e => { const b = e.target.closest(".scard"); if (b) { reset(); st.series = b.dataset.s; draw(); toLib(); } });
-  
-    draw();
+    $("#more").onclick = () => { shown += PAGE; draw(); };
     const p = new URLSearchParams(location.search);
-    ["genre", "series", "author", "part"].forEach(k => { if (p.get(k)) st[k] = p.get(k); }); if (p.get("q")) st.q = p.get("q");
-    if ([...p.keys()].length) { draw(); }
+    ["q", "genre", "series", "author", "part"].forEach(k => { if (p.get(k)) st[k] = p.get(k); });
+    draw();
   }
   
   /* ---------- Novel page ---------- */
@@ -264,7 +274,7 @@
       <div class="npi">
         ${n.series ? `<p class="ser">${n.series}${n.partLabel ? " — " + n.partLabel : ""}</p>` : ""}
         <h1>${n.title}</h1><p class="by">by ${n.author}</p>
-        <div class="gl">${n.genres.map(g => `<a href="index.html?genre=${encodeURIComponent(g)}#library">${g}</a>`).join("")}</div>
+        <div class="gl">${n.genres.map(g => `<a href="library.html?genre=${encodeURIComponent(g)}#library">${g}</a>`).join("")}</div>
         ${n.description ? `<p class="desc">${n.title}, ${n.description}</p>` : ""}
         <a class="btn" href="${n.readUrl ? esc(n.readUrl) : "#previews"}"${n.readUrl ? ' target="_blank" rel="noopener"' : ""}>Read Now</a>
         ${prev || next ? `<div class="pns">${pn(prev, "Previous Part")}${pn(next, "Next Part")}</div>` : ""}
@@ -275,5 +285,5 @@
     strip($("#pv"), $("#previews .arrows"), false);
   }
   
-  try { document.body.dataset.page === "home" ? home() : novelPage(); }
+  try { ({ home, series: seriesPage, library: libraryPage }[document.body.dataset.page] || novelPage)(); }
   catch (err) { console.error(err); const m = $("main"); if (m) m.innerHTML = `<div class="empty pad"><h3>Something went wrong</h3><p><a class="btn" href="index.html">Back to LorePDF</a></p></div>`; }
