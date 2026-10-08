@@ -143,7 +143,7 @@
   document.body.insertAdjacentHTML("afterbegin", `
   <header class="hdr"><div class="bar">
     <a class="logo" href="index.html">Lore<b>PDF</b></a>
-    <nav class="nav" id="nav"><a href="index.html#latest">Latest</a><a href="index.html#trending">Trending</a><a href="index.html#genres">Genres</a><a href="index.html#library">Browse</a></nav>
+    <nav class="nav" id="nav"><a href="index.html#latest">Latest</a><a href="index.html#trending">Trending</a><a href="index.html#library">Browse</a></nav>
     <button class="sbtn" id="sbtn" aria-label="Search"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search</span></button>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
   </div><div class="bd" id="bd"></div></header>
@@ -238,7 +238,6 @@
       const hits = DATA.filter(n => w.every(x => hay(n).includes(x)) && (!st.genre || n.genres.includes(st.genre)) && (!st.author || n.author === st.author) && (!st.series || n.series === st.series) && (!st.part || String(n.part) === st.part));
       $("#count").textContent = `${hits.length} ${hits.length === 1 ? "novel" : "novels"}`;
       $("#lib").innerHTML = hits.length ? hits.map(n => `<a class="card" href="${href(n)}">${cover(n)}<h3>${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("") : `<div class="empty"><h3>Nothing matches yet</h3><p>Try fewer filters or a different word.</p><button class="btn sm" data-reset>Clear filters</button></div>`;
-      $("#gchips").querySelectorAll(".gc").forEach(c => c.classList.toggle("on", c.dataset.g === st.genre));
     };
     const toLib = () => $("#library").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     Object.entries(map).forEach(([id, k]) => $(id).addEventListener(k === "q" ? "input" : "change", e => { st[k] = e.target.value; draw(); }));
@@ -246,16 +245,7 @@
     $("#reset").onclick = reset; $("#lib").addEventListener("click", e => { if (e.target.closest("[data-reset]")) reset(); });
     $("#sgrid").addEventListener("click", e => { const b = e.target.closest(".scard"); if (b) { reset(); st.series = b.dataset.s; draw(); toLib(); } });
   
-    /* Genre browser */
-    const groups = Object.keys(GENRE_GROUPS); let gi = 0;
-    const count = g => DATA.filter(n => n.genres.includes(g)).length;
-    const drawG = () => {
-      $("#gtabs").innerHTML = groups.map((g, i) => `<button class="gt${i === gi ? " on" : ""}" data-i="${i}">${g}</button>`).join("");
-      $("#gchips").innerHTML = GENRE_GROUPS[groups[gi]].map(g => `<button class="gc${g === st.genre ? " on" : ""}${count(g) ? "" : " dim"}" data-g="${esc(g)}">${g}<i>${count(g)}</i></button>`).join("");
-    };
-    $("#gtabs").onclick = e => { const b = e.target.closest(".gt"); if (b) { gi = +b.dataset.i; drawG(); } };
-    $("#gchips").onclick = e => { const b = e.target.closest(".gc"); if (b) { st.genre = st.genre === b.dataset.g ? "" : b.dataset.g; draw(); if (st.genre) toLib(); } };
-    drawG(); draw();
+    draw();
     const p = new URLSearchParams(location.search);
     ["genre", "series", "author", "part"].forEach(k => { if (p.get(k)) st[k] = p.get(k); }); if (p.get("q")) st.q = p.get("q");
     if ([...p.keys()].length) { draw(); }
