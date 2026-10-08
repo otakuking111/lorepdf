@@ -210,6 +210,7 @@
   
   /* ---------- Series helpers ---------- */
   const seriesList = () => uniq(n => n.series).map(x => ({ s: x, items: DATA.filter(n => n.series === x).sort((a, b) => (a.part || 0) - (b.part || 0)) })).sort((a, b) => b.items.length - a.items.length || a.s.localeCompare(b.s));
+  const firstPart = x => x.items.find(n => n.part === 1) || x.items.find(n => n.part != null) || x.items[0];
   const fan = items => `<span class="fan">${items.slice(0, 3).map((n, i) => `<span class="fc" style="--k:${i}">${cover(n)}</span>`).join("")}</span>`;
   const scard = (x, link) => `<a class="scard" href="${link}">${fan(x.items)}<span class="st"><h3>${x.s}</h3><p>${x.items.length} ${x.items.length === 1 ? "part" : "parts"} · ${x.items[0].author}</p></span></a>`;
   const emptyMsg = (t, p) => `<div class="empty"><h3>${t}</h3><p>${p}</p></div>`;
@@ -231,7 +232,7 @@
       const w = input.value.toLowerCase().split(/\s+/).filter(Boolean);
       const hits = all.filter(x => w.every(t => x.s.toLowerCase().includes(t)));
       $("#count").textContent = `${hits.length} series`;
-      $("#sgrid").innerHTML = hits.length ? hits.map(x => scard(x, `library.html?series=${encodeURIComponent(x.s)}`)).join("") : emptyMsg("No series found", "Try a different name.");
+      $("#sgrid").innerHTML = hits.length ? hits.map(x => scard(x, href(firstPart(x)))).join("") : emptyMsg("No series found", "Try a different name.");
     };
     input.value = new URLSearchParams(location.search).get("q") || "";
     input.oninput = draw; draw();
@@ -285,5 +286,6 @@
     strip($("#pv"), $("#previews .arrows"), false);
   }
   
+  document.querySelectorAll(".back").forEach(a => a.addEventListener("click", e => { if (history.length > 1 && document.referrer.startsWith(location.origin)) { e.preventDefault(); history.back(); } }));
   try { ({ home, series: seriesPage, library: libraryPage }[document.body.dataset.page] || novelPage)(); }
   catch (err) { console.error(err); const m = $("main"); if (m) m.innerHTML = `<div class="empty pad"><h3>Something went wrong</h3><p><a class="btn" href="index.html">Back to LorePDF</a></p></div>`; }
