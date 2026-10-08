@@ -151,7 +151,6 @@ body:not([data-page="novel"]) .card small{color:#6E2530}
 body:not([data-page="novel"]) .scard{background:linear-gradient(135deg,#5C1D24 0,#3A1319 100%)}
 body:not([data-page="novel"]) .st h3{color:#D9B974}
 body:not([data-page="novel"]) .btn.sm{background:#4A1A1F}
-body:not([data-page="novel"]) .band .intro{color:#E6D4AE;font-size:.95rem;margin:0 0 6px;max-width:48ch}
 body:not([data-page="novel"]) .sec{padding-top:44px}
 
 /* Popular Series carousel (home) + new pages */
@@ -161,3 +160,7 @@ body:not([data-page="novel"]) .sec{padding-top:44px}
 .more{display:flex;justify-content:center;margin-top:26px}
 @media(min-width:600px){.strack .scard{flex-basis:calc(50% - 7px)}}
 @media(min-width:900px){.strack .scard{flex-basis:calc(33.333% - 10px)}}
+
+/* clickable indicators */
+#series .sh h2 a::after,#library .sh h2 a::after{content:"\2192";display:inline-block;margin-left:.45em;font-size:.72em;color:#A07C3A;transition:transform .25s}
+@media(hover:hover){#series .sh h2 a:hover::after,#library .sh h2 a:hover::after{transform:translateX(4px)}}
