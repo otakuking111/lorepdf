@@ -107,7 +107,7 @@
       previousPart: null,
       nextPart: "fellowship-of-the-ring",
       addedAt: "2026-10-08",
-      readUrl: ""
+      readUrl: "", /* add the Read Now link here when ready */
       story: [],
       note: "",
       previews: [
