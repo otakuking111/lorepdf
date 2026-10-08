@@ -31,9 +31,9 @@
       ],
       note: "(This part is considered the cornerstone of one of the greatest and most famous fantasy series in the history of literature and cinema.)",
       previews: [
-        "https://i.postimg.cc/Vfc9VNDD/Whats-App-Image-2026-10-07-at-19-07-35.jpg",
-        "https://i.postimg.cc/0kxmCByF/Whats-App-Image-2026-10-07-at-19-03-57.jpg",
-        "https://i.postimg.cc/xnqmgHn7/Whats-App-Image-2026-10-07-at-19-03-40.jpg"
+        "https://i.pinimg.com/1200x/fc/b7/91/fcb7917fa40a33616c27079034635001.jpg",
+        "https://i.pinimg.com/1200x/e6/4a/ba/e64aba1d1b7ded4e4f379aad096b2d03.jpg",
+        "https://i.pinimg.com/1200x/e9/82/25/e98225a2993b96ff53f6d1cbff3ef5b4.jpg"
       ]
     },
     {
@@ -58,9 +58,9 @@
       ],
       note: "",
       previews: [
-        "https://i.postimg.cc/d1KvdfP2/Screenshot-2026-10-07-at-20-58-28.png",
-        "https://i.postimg.cc/xCyQPPn7/Screenshot-2026-10-07-at-20-58-36.png",
-        "https://i.postimg.cc/Kc0Svjzt/Screenshot-2026-10-07-at-20-59-35.png"
+        "https://i.pinimg.com/1200x/ed/93/a1/ed93a180f49f1dd43515ffeba36ed521.jpg",
+        "https://i.pinimg.com/1200x/92/d5/1d/92d51d071d53d70a17620fa635e94c3e.jpg",
+        "https://i.pinimg.com/1200x/93/d8/d3/93d8d3bdf013c124b5dc0add3560a353.jpg"
       ]
     },
     {
@@ -85,9 +85,9 @@
       ],
       note: "",
       previews: [
-        "https://i.pinimg.com/736x/67/b2/c8/67b2c8a2075c32add6cabe43a2ba8f55.jpg",
-        "https://i.pinimg.com/736x/bc/8c/0f/bc8c0fb9fd63b092b6bf8db9180251c4.jpg",
-        "https://i.pinimg.com/736x/04/4c/a8/044ca80456855ef6e20d6d8de48d7f00.jpg"
+        "https://i.pinimg.com/1200x/67/b2/c8/67b2c8a2075c32add6cabe43a2ba8f55.jpg",
+        "https://i.pinimg.com/1200x/bc/8c/0f/bc8c0fb9fd63b092b6bf8db9180251c4.jpg",
+        "https://i.pinimg.com/1200x/04/4c/a8/044ca80456855ef6e20d6d8de48d7f00.jpg"
       ]
     }
   ];
