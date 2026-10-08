@@ -189,3 +189,12 @@ body[data-page="home"] #latest-track,body[data-page="home"] #lib-track{padding-b
  body[data-page="home"] #lib-track{flex-wrap:wrap;overflow:visible;gap:30px 20px;scroll-snap-type:none}
  body[data-page="home"] #library .bk{flex:0 0 clamp(170px,14vw,210px)}
 }
+
+/* "Before this series" note (novel page, above Preview) */
+.prew{padding-top:18px;padding-bottom:0}
+.prew+.sec{padding-top:14px}
+.pre{display:flex;align-items:center;gap:12px;max-width:560px;padding:6px 12px;border:1px solid rgba(197,160,89,.5);border-radius:var(--r);background:linear-gradient(135deg,#5C1D24 0,#3A1319 100%);color:var(--paper);font-size:.88rem;line-height:1.35;transition:background .2s}
+.pre .cov{width:32px;flex:none;box-shadow:0 0 0 1px rgba(197,160,89,.45)}
+.pre .ph{font-size:.5rem;padding:2px}
+.pre span{min-width:0}.pre b{color:var(--gold-soft);font-weight:600}.pre b:last-child{white-space:nowrap}
+@media(hover:hover){.pre:hover{background:linear-gradient(135deg,#6B2430 0,#45161D 100%)}}

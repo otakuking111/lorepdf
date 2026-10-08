@@ -3,6 +3,7 @@
    Copy one object, change the fields, add it to the array. That's all.
    - id: unique, used in the URL (novel.html?id=...)
    - previousPart / nextPart: the id of the neighbouring part, or null
+   - prequel (optional): { id, text } — shows a small clickable note above Preview linking to another novel
    - addedAt: "YYYY-MM-DD" — newest dates appear first in Latest Additions
    - genres: any names from GENRE_GROUPS below (category = main genre label)
    - previews: list of image URLs
@@ -22,6 +23,7 @@
       partLabel: "Part #1",
       previousPart: null,
       nextPart: "the-two-towers",
+      prequel: { id: "the-hobbit", text: "The Hobbit takes place earlier in the story." },
       addedAt: "2026-10-07",
       readUrl: "https://salmane.freedev.app/?/c97c3c9",
       story: [
@@ -89,6 +91,30 @@
         "https://i.pinimg.com/1200x/bc/8c/0f/bc8c0fb9fd63b092b6bf8db9180251c4.jpg",
         "https://i.pinimg.com/1200x/04/4c/a8/044ca80456855ef6e20d6d8de48d7f00.jpg"
       ]
+    },
+    {
+      id: "the-hobbit",
+      title: "The Hobbit, or There and Back Again",
+      author: "J.R.R. Tolkien",
+      cover: "https://i.pinimg.com/1200x/46/1b/e8/461be8714cfb9eca8fa58c5572ea8a59.jpg",
+      description: "Bilbo Baggins is a comfort-loving Hobbit whose peaceful life changes when the wizard Gandalf and thirteen dwarves led by Thorin Oakenshield invite him on an unexpected adventure. Their mission is to reclaim the Lonely Mountain and its lost treasure from the dragon Smaug. Along the way, Bilbo faces trolls, goblins, giant spiders, and other dangers. Deep within the Misty Mountains, he encounters Gollum and discovers a mysterious ring that will later play a major role in the fate of Middle-earth.",
+      plainDesc: true, /* show the description as written (no "Title, " prefix) */
+      category: "Fantasy",
+      genres: ["Fantasy", "Adventure", "Classics", "Epic Fantasy"],
+      series: "",   /* standalone prequel: not part of The Lord of the Rings series list */
+      part: null,
+      partLabel: "",
+      previousPart: null,
+      nextPart: "fellowship-of-the-ring",
+      addedAt: "2026-10-08",
+      readUrl: ""
+      story: [],
+      note: "",
+      previews: [
+        "https://i.pinimg.com/1200x/c0/9c/71/c09c7123de7110cad5facbc45a1b0437.jpg",
+        "https://i.pinimg.com/1200x/77/bf/47/77bf479d6df0e50ded396f4906c78aa3.jpg",
+        "https://i.pinimg.com/1200x/06/08/e5/0608e5b395c4fb816f3b990de05ba6dc.jpg"
+      ]
     }
   ];
   /* ============================ END NOVEL DATA ============================ */
@@ -113,11 +139,12 @@
       if (!n || !n.id || !n.title) return console.warn("LorePDF: novel skipped (id and title required)", n);
       if (seen.has(n.id)) return console.warn("LorePDF: duplicate id skipped:", n.id);
       seen.add(n.id);
-      const m = { author: "", cover: "", description: "", category: "Novel", series: "", part: null, partLabel: "", story: [], note: "", readUrl: "", addedAt: "", previousPart: null, nextPart: null, ...n };
+      const m = { author: "", cover: "", description: "", category: "Novel", series: "", part: null, partLabel: "", story: [], note: "", readUrl: "", addedAt: "", previousPart: null, nextPart: null, prequel: null, ...n };
       m.genres = (n.genres && n.genres.length ? n.genres : [m.category]); m.previews = (n.previews || []).filter(Boolean);
       out.push(m);
     });
     out.forEach(n => ["previousPart", "nextPart"].forEach(k => { if (n[k] && !seen.has(n[k])) { console.warn(`LorePDF: ${n.id}.${k} unknown id`); n[k] = null; } }));
+    out.forEach(n => { if (n.prequel && !seen.has(n.prequel.id)) { console.warn(`LorePDF: ${n.id}.prequel unknown id`); n.prequel = null; } });
     return out;
   })();
   const $ = (s, r = document) => r.querySelector(s);
@@ -282,6 +309,7 @@
     document.title = `${n.title} — LorePDF`; lbList = [...n.previews];
     const pn = (m, label) => m ? `<a class="pn" href="${href(m)}">${cover(m)}<span><small>${label}</small><b>${m.title}</b></span></a>` : "";
     const prev = n.previousPart && byId(n.previousPart), next = n.nextPart && byId(n.nextPart);
+    const pre = n.prequel && byId(n.prequel.id);
     root.innerHTML = `
     <section class="nhero" style="--u:url(${esc(n.cover)})"><div class="wrap np">
       <div class="npc">${cover(n, true)}</div>
@@ -289,11 +317,11 @@
         ${n.series ? `<p class="ser">${n.series}${n.partLabel ? " — " + n.partLabel : ""}</p>` : ""}
         <h1>${n.title}</h1><p class="by">by ${n.author}</p>
         <div class="gl">${n.genres.map(g => `<a href="library.html?genre=${encodeURIComponent(g)}#library">${g}</a>`).join("")}</div>
-        ${n.description ? `<p class="desc">${n.title}, ${n.description}</p>` : ""}
+        ${n.description ? `<p class="desc">${n.plainDesc ? "" : n.title + ", "}${n.description}</p>` : ""}
         <a class="btn" href="${n.readUrl ? esc(n.readUrl) : "#previews"}"${n.readUrl ? ' target="_blank" rel="noopener"' : ""}>Read Now</a>
         ${prev || next ? `<div class="pns">${pn(prev, "Previous Part")}${pn(next, "Next Part")}</div>` : ""}
       </div></div></section>
-    ${n.previews.length ? `<section class="wrap sec" id="previews"><div class="sh"><h2>Preview</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Previous">‹</button><button class="arr" data-dir="1" aria-label="Next">›</button></div></div><div class="track pv" id="pv">${n.previews.map((p, i) => `<button class="slide" data-i="${i}" style="--u:url(${esc(p)})" aria-label="Open preview ${i + 1}">${img(n, p, `${n.title} preview ${i + 1}`, true, "Preview unavailable")}</button>`).join("")}</div></section>` : ""}
+    ${pre && n.previews.length ? `<div class="wrap prew"><a class="pre" href="${href(pre)}">${cover(pre)}<span><b>Before this series:</b> ${n.prequel.text} <b>Read it here →</b></span></a></div>` : ""}${n.previews.length ? `<section class="wrap sec" id="previews"><div class="sh"><h2>Preview</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Previous">‹</button><button class="arr" data-dir="1" aria-label="Next">›</button></div></div><div class="track pv" id="pv">${n.previews.map((p, i) => `<button class="slide" data-i="${i}" style="--u:url(${esc(p)})" aria-label="Open preview ${i + 1}">${img(n, p, `${n.title} preview ${i + 1}`, true, "Preview unavailable")}</button>`).join("")}</div></section>` : ""}
     ${n.story.length || n.note ? `<section class="wrap sec story">${n.story.map(s => `<div><h3>${s.h}</h3><p>${s.t}</p></div>`).join("")}${n.note ? `<p class="note">${n.note}</p>` : ""}</section>` : ""}`;
     root.querySelectorAll(".slide").forEach(b => b.onclick = () => showLb(+b.dataset.i));
     strip($("#pv"), $("#previews .arrows"), false);
