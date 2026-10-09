@@ -107,7 +107,7 @@
       previousPart: null,
       nextPart: "fellowship-of-the-ring",
       addedAt: "2026-10-08",
-      readUrl: "", /* add the Read Now link here when ready */
+      readUrl: "https://salmane.freedev.app/?/0f2d528", /* add the Read Now link here when ready */
       story: [],
       note: "",
       previews: [
@@ -130,7 +130,7 @@
         previousPart: null,
         nextPart: "iron-flame",
         addedAt: "2026-10-09",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/ba5283d",
         story: [
         {
         h: "A Dangerous Beginning",
@@ -166,7 +166,7 @@
         previousPart: "fourth-wing",
         nextPart: "onyx-storm",
         addedAt: "2026-10-09",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/812e89e",
         story: [
         {
         h: "The Second Year",
@@ -202,7 +202,7 @@
         previousPart: "iron-flame",
         nextPart: null,
         addedAt: "2026-10-09",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/df9022a",
         story: [
         {
         h: "Beyond the Wards",
