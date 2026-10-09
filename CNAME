@@ -1,1 +1,157 @@
 lorepdf.com
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Figtree:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* كل الأحجام بـ px وكل الكلاسات بـ lp- باش الـ locker ما يخربّق الديزاين */
+  .lp-hero, .lp-hero * { box-sizing: border-box !important; }
+
+  .lp-hero {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    overflow: hidden;
+    background: #3a1c18;
+    border-bottom: 2px solid #c9a45c;
+    border-radius: 0 0 14px 14px;
+    color: #f3e9d8;
+    font-family: 'Figtree', Arial, sans-serif;
+    text-align: left;
+  }
+
+  .lp-bg {
+    position: absolute;
+    inset: -20px;
+    background: url('https://i.pinimg.com/1200x/88/88/cc/8888cc39413b186c8fcc672c0dc8ab15.jpg') center / cover;
+    filter: blur(22px) brightness(.35);
+    z-index: 0;
+  }
+
+  .lp-hero img.lp-cover {
+    position: relative;
+    z-index: 1;
+    width: 84px !important;
+    height: auto !important;
+    max-width: none !important;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .55);
+    flex-shrink: 0;
+    margin: 0 !important;
+  }
+
+  .lp-info { position: relative; z-index: 1; min-width: 0; flex: 1; }
+
+  .lp-hero .lp-series {
+    margin: 0 0 2px !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    font-weight: 500 !important;
+    color: #c9a45c !important;
+  }
+
+  .lp-hero .lp-title {
+    margin: 0 0 3px !important;
+    padding: 0 !important;
+    font-family: 'Bodoni Moda', Georgia, serif !important;
+    font-weight: 700 !important;
+    font-size: 19px !important;
+    line-height: 1.12 !important;
+    color: #f6ecda !important;
+  }
+
+  .lp-hero .lp-author {
+    margin: 0 0 7px !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    font-weight: 400 !important;
+    color: #d8cbb6 !important;
+  }
+
+  .lp-hero .lp-tags {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    margin: 0 0 7px !important;
+    padding: 0 !important;
+  }
+
+  .lp-hero .lp-tags span {
+    display: inline-block !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 2px 8px !important;
+    font-size: 9px !important;
+    line-height: 1.4 !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+    color: #c9a45c !important;
+    border: 1px solid rgba(201, 164, 92, .55) !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+  }
+
+  .lp-hero .lp-desc {
+    margin: 0 !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+    font-weight: 400 !important;
+    color: #e6dac6 !important;
+  }
+
+  /* الكمبيوتر: شوية كبر */
+  @media (min-width: 500px) {
+    .lp-hero { padding: 16px; gap: 16px; }
+    .lp-hero img.lp-cover { width: 105px !important; }
+    .lp-hero .lp-title { font-size: 24px !important; }
+    .lp-hero .lp-series, .lp-hero .lp-author, .lp-hero .lp-desc { font-size: 12px !important; }
+    .lp-hero .lp-tags span { font-size: 10px !important; }
+  }
+
+  /* الهاتف: نخبّيو الوصف باش يبقى صغير */
+  @media (max-width: 499px) {
+    .lp-hero .lp-desc { display: none !important; }
+  }
+</style>
+</head>
+<body style="margin:0;background:#2a1512;">
+
+<div class="lp-hero">
+  <div class="lp-bg"></div>
+
+  <img class="lp-cover"
+       src="https://i.pinimg.com/1200x/88/88/cc/8888cc39413b186c8fcc672c0dc8ab15.jpg"
+       alt="A Clash of Kings">
+
+  <div class="lp-info">
+    <p class="lp-series">A Song of Ice and Fire — Part #2</p>
+    <h1 class="lp-title">A Clash of Kings</h1>
+    <p class="lp-author">by George R. R. Martin</p>
+
+    <div class="lp-tags">
+      <span>Epic Fantasy</span>
+      <span>Fantasy</span>
+      <span>Adventure</span>
+      <span>Political Fiction</span>
+    </div>
+
+    <p class="lp-desc">Part #2 of A Song of Ice and Fire. As rival kings claim the Iron Throne, war spreads across Westeros, alliances shift, and dangerous ambitions threaten to tear the Seven Kingdoms apart.</p>
+  </div>
+</div>
+
+</body>
+</html>
+```
