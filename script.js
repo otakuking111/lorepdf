@@ -598,7 +598,7 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
       Object.entries(map).forEach(([id, k]) => { if ($(id).value !== String(st[k])) $(id).value = st[k]; });
       const w = st.q.toLowerCase().split(/\s+/).filter(Boolean);
       const hits = DATA.filter(n => w.every(x => hay(n).includes(x)) && (!st.genre || n.genres.includes(st.genre)) && (!st.author || n.author === st.author) && (!st.series || n.series === st.series) && (!st.part || String(n.part) === st.part));
-      $("#count").textContent = `${hits.length} ${hits.length === 1 ? "novel" : "novels"}`;
+      $("#count").textContent = `${hits.length} ${hits.length === 1 ? "book" : "books"}`;
       $("#lib").innerHTML = hits.length ? hits.slice(0, shown).map(n => `<a class="card" href="${href(n)}">${cover(n)}<h3>${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("") : `<div class="empty"><h3>Nothing matches yet</h3><p>Try fewer filters or a different word.</p><button class="btn sm" data-reset>Clear filters</button></div>`;
       $("#more").hidden = hits.length <= shown;
     };
