@@ -199,37 +199,52 @@ body[data-page="home"] #latest-track,body[data-page="home"] #lib-track{padding-b
 .pre span{min-width:0}.pre b{color:var(--gold-soft);font-weight:600}.pre b:last-child{white-space:nowrap}
 @media(hover:hover){.pre:hover{background:linear-gradient(135deg,#6B2430 0,#45161D 100%)}}
 
-
-/* View all novels — after the 10th Latest Addition */
+/* View All — after the 10th Latest Addition */
 .latest-view-all {
-    flex: 0 0 150px;
-    min-height: 220px;
+    flex: 0 0 clamp(136px, 42vw, 190px);
+    align-self: stretch;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 12px;
+    scroll-snap-align: start;
     text-decoration: none;
-    color: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.03);
+    color: var(--gold);
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    background: linear-gradient(160deg, #5C1D24 0%, #3A1319 100%);
     transition: background 0.2s ease, border-color 0.2s ease,
-      transform 0.2s ease;
-  }
-  
-  .latest-view-all span {
+    transform 0.2s ease;
+    }
+    
+    .latest-view-all span {
     font-size: 42px;
     line-height: 1;
-  }
-  
-  .latest-view-all small {
+    }
+    
+    .latest-view-all small {
     font-size: 13px;
-    opacity: 0.8;
-  }
-  
-  .latest-view-all:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--paper);
+    opacity: 0.9;
+    }
+    
+    .latest-view-all:active {
+    transform: scale(0.97);
+    }
+    
+    @media (hover: hover) {
+    .latest-view-all:hover {
+    background: linear-gradient(160deg, #6B2430 0%, #45161D 100%);
+    border-color: var(--gold);
     transform: translateY(-3px);
-  }
+    }
+    }
+    
+    @media (min-width: 900px) {
+    body[data-page="home"] #latest .latest-view-all {
+    flex-basis: calc((100% - 32px) / 3);
+    }
+    }
+    
