@@ -311,7 +311,7 @@
         previousPart: "a-clash-of-kings",
         nextPart: "a-feast-for-crows",
         addedAt: "2026-10-09",
-        readUrl: "https://salmane.freedev.app/?/lorepdf",
+        readUrl: "https://salmane.freedev.app/?/4f62751",
         story: [
           {
             h: "A Kingdom in Turmoil",
