@@ -789,15 +789,46 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
   }
   
   /* ---------- Novel page ---------- */
+  /* SEO helpers (novel page): per-novel title, description, canonical, social tags and Book schema */
+  function setMeta(key, val, attr = "name") {
+    let m = document.head.querySelector(`meta[${attr}="${key}"]`);
+    if (!m) { m = document.createElement("meta"); m.setAttribute(attr, key); document.head.appendChild(m); }
+    m.setAttribute("content", val);
+  }
+  function seoNovel(n) {
+    const url = `https://lorepdf.com/novel.html?id=${encodeURIComponent(n.id)}`;
+    const base = `${n.title} by ${n.author}${n.series ? ` — ${n.series}${n.partLabel ? `, ${n.partLabel}` : ""}` : ""}.`;
+    const desc = (base + " " + (n.description || "")).replace(/\s+/g, " ").trim().slice(0, 158);
+    const title = `${n.title} by ${n.author} — Read Online | LorePDF`;
+    document.title = title;
+    let c = document.head.querySelector('link[rel="canonical"]');
+    if (!c) { c = document.createElement("link"); c.rel = "canonical"; document.head.appendChild(c); }
+    c.href = url;
+    setMeta("description", desc);
+    [["og:title", title], ["og:description", desc], ["og:url", url], ["og:image", n.cover], ["og:type", "book"]].forEach(([k, v]) => setMeta(k, v, "property"));
+    [["twitter:title", title], ["twitter:description", desc], ["twitter:image", n.cover]].forEach(([k, v]) => setMeta(k, v));
+    const book = { "@type": "Book", name: n.title, author: { "@type": "Person", name: n.author }, image: n.cover, description: desc, genre: n.genres, inLanguage: "en", url };
+    if (n.series) book.isPartOf = { "@type": "BookSeries", name: n.series };
+    if (n.part != null) book.position = n.part;
+    const crumbs = { "@type": "BreadcrumbList", itemListElement: [["Home", "https://lorepdf.com/"], ["Library", "https://lorepdf.com/library.html"], [n.title, url]].map(([name, item], i) => ({ "@type": "ListItem", position: i + 1, name, item })) };
+    let ldEl = document.getElementById("ld-novel");
+    if (!ldEl) { ldEl = document.createElement("script"); ldEl.type = "application/ld+json"; ldEl.id = "ld-novel"; document.head.appendChild(ldEl); }
+    ldEl.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": [book, crumbs] });
+  }
+  /* Back arrows: go to the previous page on this site, otherwise follow the link */
+  function wireBack() {
+    document.querySelectorAll(".back").forEach(a => { if (a.dataset.wired) return; a.dataset.wired = 1; a.addEventListener("click", e => { if (history.length > 1 && document.referrer.startsWith(location.origin)) { e.preventDefault(); history.back(); } }); });
+  }
+
   function novelPage() {
     const root = $("#novel"), n = byId(new URLSearchParams(location.search).get("id"));
-    if (!n) { document.title = "LorePDF — Not found"; root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="index.html">Browse novels</a></p></div>`; return; }
+    if (!n) { document.title = "LorePDF — Not found"; setMeta("robots", "noindex, follow"); root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="index.html">Browse novels</a></p></div>`; return; }
     document.title = `${n.title} — LorePDF`; lbList = [...n.previews];
     const pn = (m, label) => m ? `<a class="pn" href="${href(m)}">${cover(m)}<span><small>${label}</small><b>${m.title}</b></span></a>` : "";
     const prev = n.previousPart && byId(n.previousPart), next = n.nextPart && byId(n.nextPart);
     const pre = n.prequel && byId(n.prequel.id);
     root.innerHTML = `
-    <section class="nhero" style="--u:url(${esc(n.cover)})"><div class="wrap np">
+    <section class="nhero" style="--u:url(${esc(n.cover)})"><div class="wrap nb"><a class="back" href="index.html" aria-label="Back">←</a></div><div class="wrap np">
       <div class="npc">${cover(n, true)}</div>
       <div class="npi">
         ${n.series ? `<p class="ser">${n.series}${n.partLabel ? " — " + n.partLabel : ""}</p>` : ""}
@@ -809,10 +840,11 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
       </div></div></section>
     ${pre && n.previews.length ? `<div class="wrap prew"><a class="pre" href="${href(pre)}">${cover(pre)}<span><b>Before this series:</b> ${n.prequel.text} <b>Read it here →</b></span></a></div>` : ""}${n.previews.length ? `<section class="wrap sec" id="previews"><div class="sh"><h2>Preview</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Previous">‹</button><button class="arr" data-dir="1" aria-label="Next">›</button></div></div><div class="track pv" id="pv">${n.previews.map((p, i) => `<button class="slide" data-i="${i}" style="--u:url(${esc(p)})" aria-label="Open preview ${i + 1}">${img(n, p, `${n.title} preview ${i + 1}`, true, "Preview unavailable")}</button>`).join("")}</div></section>` : ""}
     ${n.story.length || n.note ? `<section class="wrap sec story">${n.story.map(s => `<div><h3>${s.h}</h3><p>${s.t}</p></div>`).join("")}${n.note ? `<p class="note">${n.note}</p>` : ""}</section>` : ""}`;
+    wireBack(); seoNovel(n);
     root.querySelectorAll(".slide").forEach(b => b.onclick = () => showLb(+b.dataset.i));
     strip($("#pv"), $("#previews .arrows"), false);
   }
   
-  document.querySelectorAll(".back").forEach(a => a.addEventListener("click", e => { if (history.length > 1 && document.referrer.startsWith(location.origin)) { e.preventDefault(); history.back(); } }));
+  wireBack();
   try { ({ home, series: seriesPage, library: libraryPage }[document.body.dataset.page] || novelPage)(); }
   catch (err) { console.error(err); const m = $("main"); if (m) m.innerHTML = `<div class="empty pad"><h3>Something went wrong</h3><p><a class="btn" href="index.html">Back to LorePDF</a></p></div>`; }

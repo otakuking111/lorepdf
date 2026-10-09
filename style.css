@@ -464,3 +464,8 @@ body[data-page="home"] #latest-track,body[data-page="home"] #lib-track{padding-b
 .sdots{display:flex;justify-content:center;gap:8px;margin-top:6px}
 .sdots button{width:8px;height:8px;padding:0;border:0;border-radius:4px;background:rgba(92,29,36,.3);cursor:pointer;transition:width .3s,background .3s}
 .sdots button.on{width:22px;background:var(--burg)}
+/* novel page: back arrow inside the hero */
+.nb{padding-top:14px;padding-bottom:0}
+.nhero .back{border-color:rgba(197,160,89,.75);color:var(--paper);background:rgba(0,0,0,.25)}
+.nhero .back:active{background:var(--gold);color:var(--wood)}
+@media(hover:hover){.nhero .back:hover{background:var(--gold);color:var(--wood)}}
