@@ -42,7 +42,7 @@ small{font-size:.8rem}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}}
 .bk:active,.card:active{transform:scale(.97)}
 .card p{font-size:.88rem;opacity:.75}.card small{color:var(--burg);font-weight:500}
-/* ===== Premium Series Cards ===== */
+/* ===== Premium Series Cards + Animated Part Covers ===== */
 .sgrid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -50,9 +50,8 @@ small{font-size:.8rem}
     }
     
     .scard {
-    --series-gap: 7px;
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
     align-items: center;
     gap: 16px;
     min-width: 0;
@@ -71,58 +70,85 @@ small{font-size:.8rem}
     }
     
     .series-covers {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    align-items: center;
-    gap: var(--series-gap);
-    min-width: 0;
-    }
-    
-    .series-main-cover {
-    position: relative;
     display: block;
     min-width: 0;
-    z-index: 1;
+    width: 100%;
+    padding: 0 12px 0 0;
     }
     
-    .series-main-cover .cov {
+    .series-cover-stack {
+    position: relative;
+    display: block;
     width: 100%;
+    max-width: 180px;
+    aspect-ratio: 2 / 3;
+    margin: 0 auto;
+    isolation: isolate;
+    }
+    
+    .series-cover-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 84%;
+    height: 100%;
+    opacity: 0;
+    z-index: 0;
+    pointer-events: none;
+    transform: translate(18px, 12px) scale(.88);
+    transform-origin: center center;
+    transition:
+    transform .65s cubic-bezier(.2, .7, .2, 1),
+    opacity .45s ease;
+    }
+    
+    .series-cover-item .cov {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
     box-shadow: 0 8px 20px rgba(0, 0, 0, .3);
+    }
+    
+    .series-cover-item.is-front {
+    opacity: 1;
+    z-index: 3;
+    transform: translate(0, 0) scale(1);
+    }
+    
+    .series-cover-item.is-behind-1 {
+    opacity: .9;
+    z-index: 2;
+    transform: translate(12%, 5%) scale(.95);
+    }
+    
+    .series-cover-item.is-behind-2 {
+    opacity: .65;
+    z-index: 1;
+    transform: translate(24%, 10%) scale(.90);
+    }
+    
+    .series-cover-item.is-hidden {
+    opacity: 0;
+    z-index: 0;
+    transform: translate(30%, 13%) scale(.86);
     }
     
     .series-part-badge {
     position: absolute;
     left: 5px;
     bottom: 5px;
-    padding: 3px 6px;
-    border: 1px solid rgba(197, 160, 89, .65);
+    padding: 4px 6px;
+    border: 1px solid rgba(197, 160, 89, .75);
     border-radius: 4px;
-    background: rgba(42, 23, 12, .9);
+    background: rgba(42, 23, 12, .94);
     color: var(--gold);
-    font-size: .58rem;
+    font-size: clamp(.52rem, 1.8vw, .66rem);
     font-weight: 700;
     letter-spacing: .04em;
-    }
-    
-    .series-other-covers {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-content: center;
-    gap: 6px;
-    min-width: 0;
-    }
-    
-    .series-mini-cover {
-    display: block;
-    min-width: 0;
-    overflow: hidden;
-    border-radius: 3px;
-    background: rgba(0, 0, 0, .15);
-    }
-    
-    .series-mini-cover .cov {
-    width: 100%;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, .2);
+    line-height: 1.2;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
     }
     
     .st {
@@ -142,10 +168,14 @@ small{font-size:.8rem}
     }
     
     .st h3 {
+    width: 100%;
+    min-width: 0;
     color: var(--paper);
     font-size: clamp(1.05rem, 4vw, 1.45rem);
     line-height: 1.15;
     overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
     }
     
     .st p {
@@ -157,6 +187,7 @@ small{font-size:.8rem}
     .st .series-author {
     color: var(--gold-soft);
     opacity: 1;
+    overflow-wrap: anywhere;
     }
     
     .series-explore {
@@ -183,16 +214,18 @@ small{font-size:.8rem}
     gap: 20px;
     }
     
+    ```
     .scard {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 14px;
-    padding: 18px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 14px;
+        padding: 18px;
     }
     
-    .series-other-covers {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 7px;
+    .series-covers {
+        padding-right: 8px;
     }
+    ```
+    
     }
     
     @media (min-width: 900px) {
@@ -200,10 +233,13 @@ small{font-size:.8rem}
     grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     
+    ```
     .scard {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    gap: 14px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 14px;
     }
+    ```
+    
     }
     
     @media (hover: hover) {
@@ -213,17 +249,22 @@ small{font-size:.8rem}
     box-shadow: 0 14px 30px rgba(42, 23, 12, .22);
     }
     
+    ```
     .scard:hover .series-explore span {
-    transform: translateX(4px);
+        transform: translateX(4px);
     }
+    ```
+    
     }
     
     @media (prefers-reduced-motion: reduce) {
+    .series-cover-item,
     .scard,
     .series-explore span {
-    transition: none;
+    transition: none !important;
     }
     }
+    
     
 /* library */
 .tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}

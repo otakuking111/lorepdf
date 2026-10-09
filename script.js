@@ -538,12 +538,12 @@
   }
   
   /* ---------- Series helpers ---------- *//* ---------- Series helpers ---------- */
-const seriesList = () =>
+  const seriesList = () =>
     uniq(n => n.series)
-    .map(x => ({
-    s: x,
+    .map(s => ({
+    s,
     items: DATA
-    .filter(n => n.series === x)
+    .filter(n => n.series === s)
     .sort((a, b) => (a.part || 0) - (b.part || 0))
     }))
     .sort((a, b) =>
@@ -555,28 +555,145 @@ const seriesList = () =>
     x.items.find(n => n.part != null) ||
     x.items[0];
     
-    const fan = items => {
-    const first = items.find(n => n.part === 1) ||
-    items.find(n => n.part != null) ||
-    items[0];
-    
-    const rest = items.filter(n => n !== first);
-    
-    return `    <span class="series-covers">       <span class="series-main-cover">
-            ${cover(first)}         <span class="series-part-badge">PART 1</span>       </span>       <span class="series-other-covers">
-            ${rest.map(n =>` <span class="series-mini-cover" title="${n.title}">
-    ${cover(n)} </span>
-    `).join("")}       </span>     </span>
-      `;
-    };
+    const fan = items => `    <span class="series-covers">         <span class="series-cover-stack">
+                ${items.map((n, i) =>`
+    <span
+    class="series-cover-item${i === 0 ? " is-front" : ""}"
+    data-cover-index="${i}"
+    >
+    ${cover(n)} <span class="series-part-badge">
+    PART ${n.part ?? i + 1} </span> </span>
+    `).join("")}         </span>     </span>
+    `;
     
     const scard = (x, link) => {
     const first = firstPart(x);
     
-    return `     <a class="scard" href="${link}">
-          ${fan(x.items)}       <span class="st">         <span class="series-eyebrow">COLLECTION</span>         <h3>${x.s}</h3>         <p>${x.items.length} ${x.items.length === 1 ? "book" : "books"}</p>         <p class="series-author">${first.author}</p>         <span class="series-explore">Explore series <span>→</span></span>       </span>     </a>
-      `;
+    ```
+    return `
+        <a class="scard" href="${link}">
+            ${fan(x.items)}
+            <span class="st">
+                <span class="series-eyebrow">COLLECTION</span>
+                <h3 data-fit-title>${esc(x.s)}</h3>
+                <p>${x.items.length} ${x.items.length === 1 ? "Part" : "Parts"}</p>
+                <p class="series-author">${esc(first.author)}</p>
+                <span class="series-explore">
+                    Explore series <span>→</span>
+                </span>
+            </span>
+        </a>
+    `;
+    ```
+    
     };
+    
+    function updateSeriesCoverStack(card, activeIndex) {
+    const items = [...card.querySelectorAll(".series-cover-item")];
+    const total = items.length;
+    
+    ```
+    items.forEach((item, index) => {
+        item.classList.remove(
+            "is-front",
+            "is-behind-1",
+            "is-behind-2",
+            "is-hidden"
+        );
+    
+        const position = (index - activeIndex + total) % total;
+    
+        if (position === 0) {
+            item.classList.add("is-front");
+        } else if (position === 1) {
+            item.classList.add("is-behind-1");
+        } else if (position === 2) {
+            item.classList.add("is-behind-2");
+        } else {
+            item.classList.add("is-hidden");
+        }
+    });
+    ```
+    
+    }
+    
+    let seriesCoverTimer = null;
+    
+    function initSeriesCoverRotations(root = document) {
+    if (seriesCoverTimer) {
+    clearInterval(seriesCoverTimer);
+    seriesCoverTimer = null;
+    }
+    
+    ```
+    const cards = [...root.querySelectorAll(".scard")];
+    
+    cards.forEach(card => {
+        const items = card.querySelectorAll(".series-cover-item");
+        const savedIndex = Number(card.dataset.activeCoverIndex || 0);
+        const activeIndex = items.length ? savedIndex % items.length : 0;
+    
+        card.dataset.activeCoverIndex = activeIndex;
+        updateSeriesCoverStack(card, activeIndex);
+    });
+    
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
+    
+    seriesCoverTimer = setInterval(() => {
+        cards.forEach(card => {
+            if (!card.isConnected) return;
+    
+            const total = card.querySelectorAll(".series-cover-item").length;
+            if (total < 2) return;
+    
+            const nextIndex =
+                (Number(card.dataset.activeCoverIndex || 0) + 1) % total;
+    
+            card.dataset.activeCoverIndex = nextIndex;
+            updateSeriesCoverStack(card, nextIndex);
+        });
+    }, 1000);
+    ```
+    
+    }
+    
+    function fitSeriesTitles(root = document) {
+    root.querySelectorAll("[data-fit-title]").forEach(title => {
+    title.style.fontSize = "";
+    
+    ```
+        let size = parseFloat(getComputedStyle(title).fontSize) || 23;
+        const minSize = 11;
+    
+        title.style.fontSize = `${size}px`;
+    
+        while (size > minSize && title.scrollHeight > (
+            parseFloat(getComputedStyle(title).lineHeight) * 2.15
+        )) {
+            size -= 1;
+            title.style.fontSize = `${size}px`;
+        }
+    });
+    ```
+    
+    }
+    
+    let seriesTitleResizeTimer = null;
+    
+    if (!window.__lorePdfSeriesResizeBound) {
+    window.__lorePdfSeriesResizeBound = true;
+    
+    ```
+    window.addEventListener("resize", () => {
+        clearTimeout(seriesTitleResizeTimer);
+        seriesTitleResizeTimer = setTimeout(() => fitSeriesTitles(), 100);
+    });
+    ```
+    
+    }
+    
     
   const emptyMsg = (t, p) => `<div class="empty"><h3>${t}</h3><p>${p}</p></div>`;
   
@@ -584,7 +701,8 @@ const seriesList = () =>
   function home() {
     if (!DATA.length) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
     const sl = seriesList();
-    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, "series.html")).join(""); strip($("#sgrid"), $("#series .arrows"), true); } else $("#series").hidden = true;
+    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, "series.html")).join(""); initSeriesCoverRotations($("#sgrid"));
+        fitSeriesTitles($("#sgrid")); } else $("#series").hidden = true;
     const bk = (n, i, eager) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, eager)}<h3>${n.title}</h3><p>${n.author}</p></a>`;
    
 const latest = DATA.filter(n => n.addedAt)
@@ -617,7 +735,8 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
       const w = input.value.toLowerCase().split(/\s+/).filter(Boolean);
       const hits = all.filter(x => w.every(t => x.s.toLowerCase().includes(t)));
       $("#count").textContent = `${hits.length} series`;
-      $("#sgrid").innerHTML = hits.length ? hits.map(x => scard(x, href(firstPart(x)))).join("") : emptyMsg("No series found", "Try a different name.");
+      $("#sgrid").innerHTML = hits.length ? hits.map(x => scard(x, href(firstPart(x)))).join("") : emptyMsg("No series found", "Try a different name."); initSeriesCoverRotations($("#sgrid"));
+      fitSeriesTitles($("#sgrid"));
     };
     input.value = new URLSearchParams(location.search).get("q") || "";
     input.oninput = draw; draw();
