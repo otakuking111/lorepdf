@@ -723,7 +723,7 @@ const seriesList = () =>
   function home() {
     if (!DATA.length) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
     const sl = seriesList();
-    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, "series.html")).join(""); initSeriesCarousel($("#sgrid"));
+    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, href(firstPart(x)))).join(""); initSeriesCarousel($("#sgrid"));
         fitSeriesTitles($("#sgrid")); } else $("#series").hidden = true;
     const bk = (n, i, eager) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, eager)}<h3>${n.title}</h3><p>${n.author}</p></a>`;
    
