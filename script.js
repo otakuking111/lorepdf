@@ -537,163 +537,130 @@
     }, 4500);
   }
   
-  /* ---------- Series helpers ---------- *//* ---------- Series helpers ---------- */
-  const seriesList = () =>
+ /* ---------- Series helpers ---------- */
+const seriesList = () =>
     uniq(n => n.series)
-    .map(s => ({
-    s,
-    items: DATA
-    .filter(n => n.series === s)
-    .sort((a, b) => (a.part || 0) - (b.part || 0))
-    }))
-    .sort((a, b) =>
-    b.items.length - a.items.length || a.s.localeCompare(b.s)
-    );
-    
-    const firstPart = x =>
+      .map(s => ({
+        s,
+        items: DATA
+          .filter(n => n.series === s)
+          .sort((a, b) => (a.part || 0) - (b.part || 0))
+      }))
+      .sort((a, b) => b.items.length - a.items.length || a.s.localeCompare(b.s));
+  
+  const firstPart = x =>
     x.items.find(n => n.part === 1) ||
     x.items.find(n => n.part != null) ||
     x.items[0];
-    
-    const fan = items => `    <span class="series-covers">         <span class="series-cover-stack">
-                ${items.map((n, i) =>`
-    <span
-    class="series-cover-item${i === 0 ? " is-front" : ""}"
-    data-cover-index="${i}"
-    >
-    ${cover(n)} <span class="series-part-badge">
-    PART ${n.part ?? i + 1} </span> </span>
-    `).join("")}         </span>     </span>
-    `;
-    
-    const scard = (x, link) => {
+  
+  const fan = items => `
+    <span class="series-covers">
+      <span class="series-cover-stack">
+        ${items.map((n, i) => `
+          <span class="series-cover-item${i === 0 ? " is-front" : ""}" data-cover-index="${i}">
+            ${cover(n)}
+            <span class="series-part-badge">PART ${n.part ?? i + 1}</span>
+          </span>
+        `).join("")}
+      </span>
+    </span>
+  `;
+  
+  const scard = (x, link) => {
     const first = firstPart(x);
-    
-    
     return `
-        <a class="scard" href="${link}">
-            ${fan(x.items)}
-            <span class="st">
-                <span class="series-eyebrow">COLLECTION</span>
-                <h3 data-fit-title>${esc(x.s)}</h3>
-                <p>${x.items.length} ${x.items.length === 1 ? "Part" : "Parts"}</p>
-                <p class="series-author">${esc(first.author)}</p>
-                <span class="series-explore">
-                    Explore series <span>→</span>
-                </span>
-            </span>
-        </a>
+      <a class="scard" href="${link}">
+        ${fan(x.items)}
+        <span class="st">
+          <span class="series-eyebrow">COLLECTION</span>
+          <h3 data-fit-title>${esc(x.s)}</h3>
+          <p>${x.items.length} ${x.items.length === 1 ? "Part" : "Parts"}</p>
+          <p class="series-author">${esc(first.author)}</p>
+          <span class="series-explore">Explore series <span>→</span></span>
+        </span>
+      </a>
     `;
-    
-    
-    };
-    
-    function updateSeriesCoverStack(card, activeIndex) {
+  };
+  
+  function updateSeriesCoverStack(card, activeIndex) {
     const items = [...card.querySelectorAll(".series-cover-item")];
     const total = items.length;
-    
-    
+  
     items.forEach((item, index) => {
-        item.classList.remove(
-            "is-front",
-            "is-behind-1",
-            "is-behind-2",
-            "is-hidden"
-        );
-    
-        const position = (index - activeIndex + total) % total;
-    
-        if (position === 0) {
-            item.classList.add("is-front");
-        } else if (position === 1) {
-            item.classList.add("is-behind-1");
-        } else if (position === 2) {
-            item.classList.add("is-behind-2");
-        } else {
-            item.classList.add("is-hidden");
-        }
+      item.classList.remove("is-front", "is-behind-1", "is-behind-2", "is-hidden");
+      const position = (index - activeIndex + total) % total;
+  
+      if (position === 0) item.classList.add("is-front");
+      else if (position === 1) item.classList.add("is-behind-1");
+      else if (position === 2) item.classList.add("is-behind-2");
+      else item.classList.add("is-hidden");
     });
-    
-    
-    }
-    
-    let seriesCoverTimer = null;
-    
-    function initSeriesCoverRotations(root = document) {
+  }
+  
+  let seriesCoverTimer = null;
+  
+  function initSeriesCoverRotations(root = document) {
     if (seriesCoverTimer) {
-    clearInterval(seriesCoverTimer);
-    seriesCoverTimer = null;
+      clearInterval(seriesCoverTimer);
+      seriesCoverTimer = null;
     }
-    
-    
+  
     const cards = [...root.querySelectorAll(".scard")];
-    
+  
     cards.forEach(card => {
-        const items = card.querySelectorAll(".series-cover-item");
-        const savedIndex = Number(card.dataset.activeCoverIndex || 0);
-        const activeIndex = items.length ? savedIndex % items.length : 0;
-    
-        card.dataset.activeCoverIndex = activeIndex;
-        updateSeriesCoverStack(card, activeIndex);
+      const items = card.querySelectorAll(".series-cover-item");
+      const savedIndex = Number(card.dataset.activeCoverIndex || 0);
+      const activeIndex = items.length ? savedIndex % items.length : 0;
+  
+      card.dataset.activeCoverIndex = activeIndex;
+      updateSeriesCoverStack(card, activeIndex);
     });
-    
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        return;
-    }
-    
+  
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  
     seriesCoverTimer = setInterval(() => {
-        cards.forEach(card => {
-            if (!card.isConnected) return;
-    
-            const total = card.querySelectorAll(".series-cover-item").length;
-            if (total < 2) return;
-    
-            const nextIndex =
-                (Number(card.dataset.activeCoverIndex || 0) + 1) % total;
-    
-            card.dataset.activeCoverIndex = nextIndex;
-            updateSeriesCoverStack(card, nextIndex);
-        });
+      cards.forEach(card => {
+        if (!card.isConnected) return;
+  
+        const total = card.querySelectorAll(".series-cover-item").length;
+        if (total < 2) return;
+  
+        const nextIndex = (Number(card.dataset.activeCoverIndex || 0) + 1) % total;
+        card.dataset.activeCoverIndex = nextIndex;
+        updateSeriesCoverStack(card, nextIndex);
+      });
     }, 1000);
-    
-    
-    }
-    
-    function fitSeriesTitles(root = document) {
+  }
+  
+  function fitSeriesTitles(root = document) {
     root.querySelectorAll("[data-fit-title]").forEach(title => {
-    title.style.fontSize = "";
-    
-    
-        let size = parseFloat(getComputedStyle(title).fontSize) || 23;
-        const minSize = 11;
-    
+      title.style.fontSize = "";
+  
+      let size = parseFloat(getComputedStyle(title).fontSize) || 23;
+      const minSize = 11;
+  
+      title.style.fontSize = `${size}px`;
+  
+      while (
+        size > minSize &&
+        title.scrollHeight > parseFloat(getComputedStyle(title).lineHeight) * 2.15
+      ) {
+        size -= 1;
         title.style.fontSize = `${size}px`;
-    
-        while (size > minSize && title.scrollHeight > (
-            parseFloat(getComputedStyle(title).lineHeight) * 2.15
-        )) {
-            size -= 1;
-            title.style.fontSize = `${size}px`;
-        }
+      }
     });
-    
-    
-    }
-    
-    let seriesTitleResizeTimer = null;
-    
-    if (!window.__lorePdfSeriesResizeBound) {
+  }
+  
+  let seriesTitleResizeTimer = null;
+  
+  if (!window.__lorePdfSeriesResizeBound) {
     window.__lorePdfSeriesResizeBound = true;
-    
-    ```
+  
     window.addEventListener("resize", () => {
-        clearTimeout(seriesTitleResizeTimer);
-        seriesTitleResizeTimer = setTimeout(() => fitSeriesTitles(), 100);
+      clearTimeout(seriesTitleResizeTimer);
+      seriesTitleResizeTimer = setTimeout(() => fitSeriesTitles(), 100);
     });
-    ```
-    
-    }
-    
+  }
     
   const emptyMsg = (t, p) => `<div class="empty"><h3>${t}</h3><p>${p}</p></div>`;
   
