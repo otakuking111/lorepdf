@@ -239,7 +239,7 @@
         previousPart: null,
         nextPart: "a-clash-of-kings",
         addedAt: "2026-10-09",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/39377cf",
         story: [
           {
             h: "The Great Houses",
