@@ -569,7 +569,7 @@
     const scard = (x, link) => {
     const first = firstPart(x);
     
-    ```
+    
     return `
         <a class="scard" href="${link}">
             ${fan(x.items)}
@@ -584,7 +584,7 @@
             </span>
         </a>
     `;
-    ```
+    
     
     };
     
@@ -592,7 +592,7 @@
     const items = [...card.querySelectorAll(".series-cover-item")];
     const total = items.length;
     
-    ```
+    
     items.forEach((item, index) => {
         item.classList.remove(
             "is-front",
@@ -613,7 +613,7 @@
             item.classList.add("is-hidden");
         }
     });
-    ```
+    
     
     }
     
@@ -625,7 +625,7 @@
     seriesCoverTimer = null;
     }
     
-    ```
+    
     const cards = [...root.querySelectorAll(".scard")];
     
     cards.forEach(card => {
@@ -655,7 +655,7 @@
             updateSeriesCoverStack(card, nextIndex);
         });
     }, 1000);
-    ```
+    
     
     }
     
@@ -663,7 +663,7 @@
     root.querySelectorAll("[data-fit-title]").forEach(title => {
     title.style.fontSize = "";
     
-    ```
+    
         let size = parseFloat(getComputedStyle(title).fontSize) || 23;
         const minSize = 11;
     
@@ -676,7 +676,7 @@
             title.style.fontSize = `${size}px`;
         }
     });
-    ```
+    
     
     }
     
