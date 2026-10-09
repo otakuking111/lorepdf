@@ -404,7 +404,7 @@
           "https://i.pinimg.com/1200x/fc/d3/03/fcd303b1ffae21c9d75e30ce5c243160.jpg",
           "https://i.pinimg.com/1200x/e9/c2/d5/e9c2d55cfa7ab5b0ebba4589a5d937c5.jpg"
         ]
-      },
+      }
         
   ];
   /* ============================ END NOVEL DATA ============================ */
