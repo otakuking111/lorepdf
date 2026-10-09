@@ -265,7 +265,7 @@
         id: "a-clash-of-kings",
         title: "A Clash of Kings",
         author: "George R. R. Martin",
-        cover: "https://i.pinimg.com/1200x/40/fb/e3/40fbe338e3fa95b57fee1609336dea8a.jpg",
+        cover: "https://i.pinimg.com/1200x/88/88/cc/8888cc39413b186c8fcc672c0dc8ab15.jpg",
         description: "Part #2 of A Song of Ice and Fire. As rival claimants fight for the throne, war spreads across Westeros and alliances become increasingly dangerous.",
         category: "Epic Fantasy",
         genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
@@ -301,7 +301,7 @@
         id: "a-storm-of-swords",
         title: "A Storm of Swords",
         author: "George R. R. Martin",
-        cover: "https://i.pinimg.com/1200x/bb/a3/ee/bba3eed0d9e518ac8ad182b2eab34cc1.jpg",
+        cover: "https://i.pinimg.com/236x/7f/34/b0/7f34b053baa94c64497599891be525e0.jpg",
         description: "Part #3 of A Song of Ice and Fire. The war for the Iron Throne intensifies as shifting loyalties, shocking revelations, and dangerous decisions reshape the fate of Westeros.",
         category: "Epic Fantasy",
         genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
@@ -337,7 +337,7 @@
         id: "a-feast-for-crows",
         title: "A Feast for Crows",
         author: "George R. R. Martin",
-        cover: "https://i.pinimg.com/1200x/ab/2e/b2/ab2eb27e9f2055bea7cea380146f17e9.jpg",
+        cover: "https://i.pinimg.com/1200x/c2/18/a2/c218a2da0679d962fe806884e2022fd5.jpg",
         description: "Part #4 of A Song of Ice and Fire. In the aftermath of war, surviving houses struggle to rebuild their power while new rivalries and threats emerge.",
         category: "Epic Fantasy",
         genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
@@ -373,7 +373,7 @@
         id: "a-dance-with-dragons",
         title: "A Dance with Dragons",
         author: "George R. R. Martin",
-        cover: "https://i.pinimg.com/1200x/8a/45/c1/8a45c1231cbdd1de665213dcb5b16cff.jpg",
+        cover: "https://i.pinimg.com/1200x/f9/da/ad/f9daadb705b0ceba81339cdc356f2729.jpg",
         description: "Part #5 of A Song of Ice and Fire. Across a divided world, leaders and survivors confront political unrest, uncertain loyalties, and the growing threat of winter.",
         category: "Epic Fantasy",
         genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
@@ -550,9 +550,28 @@
     const sl = seriesList();
     if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, "series.html")).join(""); strip($("#sgrid"), $("#series .arrows"), true); } else $("#series").hidden = true;
     const bk = (n, i, eager) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, eager)}<h3>${n.title}</h3><p>${n.author}</p></a>`;
-    const latest = DATA.filter(n => n.addedAt).sort((a, b) => b.addedAt.localeCompare(a.addedAt)).slice(0, 3);
-    if (latest.length) $("#latest-track").innerHTML = latest.map((n, i) => bk(n, i, true)).join(""); else $("#latest").hidden = true;
-    $("#lib-track").innerHTML = DATA.slice(0, 12).map((n, i) => bk(n, i, false)).join("");
+   
+const latest = DATA.filter(n => n.addedAt)
+.sort((a, b) =>
+  b.addedAt.localeCompare(a.addedAt) ||
+  DATA.indexOf(b) - DATA.indexOf(a)
+)
+.slice(0, 10);
+
+if (latest.length) {
+$("#latest-track").innerHTML =
+  latest.map((n, i) => bk(n, i, true)).join("") +
+  `<a class="latest-view-all" href="library.html" aria-label="View all novels" title="View all novels">
+    <span>→</span>
+    <small>View All</small>
+  </a>`;
+} else {
+$("#latest").hidden = true;
+}
+
+$("#lib-track").innerHTML = DATA.slice(0, 12)
+.map((n, i) => bk(n, i, false))
+.join("");
   }
   
   /* ---------- Popular Series page ---------- */
