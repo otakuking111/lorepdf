@@ -537,11 +537,47 @@
     }, 4500);
   }
   
-  /* ---------- Series helpers ---------- */
-  const seriesList = () => uniq(n => n.series).map(x => ({ s: x, items: DATA.filter(n => n.series === x).sort((a, b) => (a.part || 0) - (b.part || 0)) })).sort((a, b) => b.items.length - a.items.length || a.s.localeCompare(b.s));
-  const firstPart = x => x.items.find(n => n.part === 1) || x.items.find(n => n.part != null) || x.items[0];
-  const fan = items => `<span class="fan">${items.slice(0, 3).map((n, i) => `<span class="fc" style="--k:${i}">${cover(n)}</span>`).join("")}</span>`;
-  const scard = (x, link) => `<a class="scard" href="${link}">${fan(x.items)}<span class="st"><h3>${x.s}</h3><p>${x.items.length} ${x.items.length === 1 ? "part" : "parts"} · ${x.items[0].author}</p></span></a>`;
+  /* ---------- Series helpers ---------- *//* ---------- Series helpers ---------- */
+const seriesList = () =>
+    uniq(n => n.series)
+    .map(x => ({
+    s: x,
+    items: DATA
+    .filter(n => n.series === x)
+    .sort((a, b) => (a.part || 0) - (b.part || 0))
+    }))
+    .sort((a, b) =>
+    b.items.length - a.items.length || a.s.localeCompare(b.s)
+    );
+    
+    const firstPart = x =>
+    x.items.find(n => n.part === 1) ||
+    x.items.find(n => n.part != null) ||
+    x.items[0];
+    
+    const fan = items => {
+    const first = items.find(n => n.part === 1) ||
+    items.find(n => n.part != null) ||
+    items[0];
+    
+    const rest = items.filter(n => n !== first);
+    
+    return `    <span class="series-covers">       <span class="series-main-cover">
+            ${cover(first)}         <span class="series-part-badge">PART 1</span>       </span>       <span class="series-other-covers">
+            ${rest.map(n =>` <span class="series-mini-cover" title="${n.title}">
+    ${cover(n)} </span>
+    `).join("")}       </span>     </span>
+      `;
+    };
+    
+    const scard = (x, link) => {
+    const first = firstPart(x);
+    
+    return `     <a class="scard" href="${link}">
+          ${fan(x.items)}       <span class="st">         <span class="series-eyebrow">COLLECTION</span>         <h3>${x.s}</h3>         <p>${x.items.length} ${x.items.length === 1 ? "book" : "books"}</p>         <p class="series-author">${first.author}</p>         <span class="series-explore">Explore series <span>→</span></span>       </span>     </a>
+      `;
+    };
+    
   const emptyMsg = (t, p) => `<div class="empty"><h3>${t}</h3><p>${p}</p></div>`;
   
   /* ---------- Home ---------- */
