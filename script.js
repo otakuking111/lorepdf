@@ -662,13 +662,68 @@ const seriesList = () =>
     });
   }
     
+  /* Home page: one series card at a time. After all covers of the current card have been shown, slide to the next card. */
+  function initSeriesCarousel(track) {
+    if (seriesCoverTimer) { clearInterval(seriesCoverTimer); seriesCoverTimer = null; }
+    const cards = [...track.querySelectorAll(".scard")];
+    if (!cards.length) return;
+    track.classList.add("sgrid--carousel");
+
+    const old = track.nextElementSibling;
+    if (old && old.classList.contains("sdots")) old.remove();
+    const dotsBox = document.createElement("div");
+    dotsBox.className = "sdots";
+    dotsBox.innerHTML = cards.length > 1 ? cards.map((_, i) => `<button type="button" aria-label="Series ${i + 1}"></button>`).join("") : "";
+    track.after(dotsBox);
+    const dots = [...dotsBox.children];
+
+    let cur = 0, tick = 0, paused = false, resumeAt = 0, scrollT = null;
+    const covers = c => c.querySelectorAll(".series-cover-item").length;
+    const stepW = () => cards[0].getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap) || 0);
+    const showCover = (c, i) => { c.dataset.activeCoverIndex = i; updateSeriesCoverStack(c, i); };
+    const setDots = () => dots.forEach((d, i) => d.classList.toggle("on", i === cur));
+    const go = (i, smooth = true) => {
+      cur = (i + cards.length) % cards.length; tick = 0;
+      showCover(cards[cur], 0);
+      track.scrollTo({ left: cur * stepW(), behavior: smooth ? "smooth" : "auto" });
+      setDots();
+    };
+    const hold = ms => { resumeAt = Date.now() + ms; };
+
+    cards.forEach(c => showCover(c, 0));
+    setDots();
+    dots.forEach((d, i) => d.onclick = () => { hold(5000); go(i); });
+
+    track.addEventListener("touchstart", () => { paused = true; }, { passive: true });
+    ["touchend", "touchcancel"].forEach(t => track.addEventListener(t, () => { paused = false; hold(4000); }, { passive: true }));
+    track.addEventListener("mouseenter", () => { paused = true; });
+    track.addEventListener("mouseleave", () => { paused = false; hold(1500); });
+    track.addEventListener("scroll", () => {
+      clearTimeout(scrollT);
+      scrollT = setTimeout(() => {
+        const idx = Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / (stepW() || 1))));
+        if (idx !== cur) { cur = idx; tick = 0; showCover(cards[cur], 0); setDots(); }
+      }, 120);
+    }, { passive: true });
+    window.addEventListener("resize", () => go(cur, false));
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    seriesCoverTimer = setInterval(() => {
+      if (paused || document.hidden || Date.now() < resumeAt || !track.isConnected) return;
+      tick++;
+      if (tick < covers(cards[cur])) showCover(cards[cur], tick);
+      else if (cards.length > 1) go(cur + 1);
+      else { tick = 0; showCover(cards[cur], 0); }
+    }, 1500);
+  }
+
   const emptyMsg = (t, p) => `<div class="empty"><h3>${t}</h3><p>${p}</p></div>`;
   
   /* ---------- Home ---------- */
   function home() {
     if (!DATA.length) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
     const sl = seriesList();
-    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, "series.html")).join(""); initSeriesCoverRotations($("#sgrid"));
+    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, "series.html")).join(""); initSeriesCarousel($("#sgrid"));
         fitSeriesTitles($("#sgrid")); } else $("#series").hidden = true;
     const bk = (n, i, eager) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, eager)}<h3>${n.title}</h3><p>${n.author}</p></a>`;
    
