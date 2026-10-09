@@ -223,7 +223,188 @@
         "https://i.pinimg.com/1200x/da/9b/54/da9b54d29fc1ac322d813dc3548fc104.jpg",
         "https://i.pinimg.com/1200x/21/69/bb/2169bbc76b0a7ee2f1698ac699669a46.jpg"
         ]
-        }
+    },
+
+    {
+        id: "a-game-of-thrones",
+        title: "A Game of Thrones",
+        author: "George R. R. Martin",
+        cover: "https://i.pinimg.com/1200x/24/4a/b4/244ab4b95aee380c26bc95fa7b879d13.jpg",
+        description: "Part #1 of A Song of Ice and Fire, an epic fantasy saga of rival noble houses, political intrigue, dangerous ambitions, and a struggle for the Iron Throne.",
+        category: "Epic Fantasy",
+        genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
+        series: "A Song of Ice and Fire",
+        part: 1,
+        partLabel: "Part #1",
+        previousPart: null,
+        nextPart: "a-clash-of-kings",
+        addedAt: "2026-10-09",
+        readUrl: "",
+        story: [
+          {
+            h: "The Great Houses",
+            t: "Noble families across Westeros compete for power as old rivalries threaten to plunge the Seven Kingdoms into conflict."
+          },
+          {
+            h: "A Dangerous Discovery",
+            t: "As the Stark family becomes entangled in the affairs of the royal court, secrets and betrayals put lives at risk."
+          },
+          {
+            h: "Beyond the Wall",
+            t: "Far to the north, an ancient danger begins to emerge beyond the boundaries of the known kingdoms."
+          }
+        ],
+        note: "",
+        previews: [
+          "https://i.pinimg.com/1200x/00/a1/b5/00a1b55ac10a912224158d1c420ba2ad.jpg",
+          "https://i.pinimg.com/1200x/19/79/11/197911f78d60ff4df45fb574220b1de0.jpg",
+          "https://i.pinimg.com/1200x/9a/ad/8e/9aad8ecc65a13d536e998aa4c25cae34.jpg"
+        ]
+      },
+      {
+        id: "a-clash-of-kings",
+        title: "A Clash of Kings",
+        author: "George R. R. Martin",
+        cover: "https://i.pinimg.com/1200x/40/fb/e3/40fbe338e3fa95b57fee1609336dea8a.jpg",
+        description: "Part #2 of A Song of Ice and Fire. As rival claimants fight for the throne, war spreads across Westeros and alliances become increasingly dangerous.",
+        category: "Epic Fantasy",
+        genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
+        series: "A Song of Ice and Fire",
+        part: 2,
+        partLabel: "Part #2",
+        previousPart: "a-game-of-thrones",
+        nextPart: "a-storm-of-swords",
+        addedAt: "2026-10-09",
+        readUrl: "",
+        story: [
+          {
+            h: "War for the Throne",
+            t: "Several powerful leaders claim the right to rule, drawing the Seven Kingdoms into a devastating struggle."
+          },
+          {
+            h: "Shifting Alliances",
+            t: "Political manoeuvres, secret plans, and fragile partnerships shape the fortunes of the competing houses."
+          },
+          {
+            h: "Darkness Approaches",
+            t: "While the kingdoms fight among themselves, troubling forces gather beyond their immediate conflicts."
+          }
+        ],
+        note: "",
+        previews: [
+          "https://i.pinimg.com/1200x/10/72/52/10725207e99377896cedf5a674a93ea0.jpg",
+          "https://i.pinimg.com/1200x/36/7d/87/367d87b2b3166def4f7df831065a6450.jpg",
+          "https://i.pinimg.com/1200x/7d/4c/09/7d4c09b312e3b091242c9e94d1f1350c.jpg"
+        ]
+      },
+      {
+        id: "a-storm-of-swords",
+        title: "A Storm of Swords",
+        author: "George R. R. Martin",
+        cover: "https://i.pinimg.com/1200x/bb/a3/ee/bba3eed0d9e518ac8ad182b2eab34cc1.jpg",
+        description: "Part #3 of A Song of Ice and Fire. The war for the Iron Throne intensifies as shifting loyalties, shocking revelations, and dangerous decisions reshape the fate of Westeros.",
+        category: "Epic Fantasy",
+        genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
+        series: "A Song of Ice and Fire",
+        part: 3,
+        partLabel: "Part #3",
+        previousPart: "a-clash-of-kings",
+        nextPart: "a-feast-for-crows",
+        addedAt: "2026-10-09",
+        readUrl: "",
+        story: [
+          {
+            h: "A Kingdom in Turmoil",
+            t: "The struggle for power reaches a critical stage, testing the strength and loyalty of the rival houses."
+          },
+          {
+            h: "Betrayal and Consequences",
+            t: "Unexpected turns and dangerous political choices change the course of the conflict."
+          },
+          {
+            h: "Threats Beyond the War",
+            t: "The battles for the throne unfold alongside growing dangers that could threaten the entire realm."
+          }
+        ],
+        note: "",
+        previews: [
+          "https://i.pinimg.com/1200x/e2/92/60/e2926096559a6c0bcf449730543ea047.jpg",
+          "https://i.pinimg.com/1200x/e8/32/2d/e8322dc62bd8dfb5c181db0ce787f69c.jpg",
+          "https://i.pinimg.com/1200x/af/b0/a8/afb0a8591f6c4acf439b53ec00f200e4.jpg"
+        ]
+      },
+      {
+        id: "a-feast-for-crows",
+        title: "A Feast for Crows",
+        author: "George R. R. Martin",
+        cover: "https://i.pinimg.com/1200x/ab/2e/b2/ab2eb27e9f2055bea7cea380146f17e9.jpg",
+        description: "Part #4 of A Song of Ice and Fire. In the aftermath of war, surviving houses struggle to rebuild their power while new rivalries and threats emerge.",
+        category: "Epic Fantasy",
+        genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
+        series: "A Song of Ice and Fire",
+        part: 4,
+        partLabel: "Part #4",
+        previousPart: "a-storm-of-swords",
+        nextPart: "a-dance-with-dragons",
+        addedAt: "2026-10-09",
+        readUrl: "",
+        story: [
+          {
+            h: "Aftermath of War",
+            t: "The Seven Kingdoms face the consequences of prolonged conflict as powerful families attempt to secure their positions."
+          },
+          {
+            h: "A Fragile Peace",
+            t: "New political struggles arise as ambitious figures compete to influence the future of the realm."
+          },
+          {
+            h: "New Dangers",
+            t: "Far from the main centres of power, personal journeys and emerging threats continue to reshape the wider story."
+          }
+        ],
+        note: "",
+        previews: [
+          "https://i.pinimg.com/1200x/d8/fa/84/d8fa8436c083974ac569149b210b1595.jpg",
+          "https://i.pinimg.com/1200x/7f/5e/ae/7f5eae689a265ec3b6995f57e3dddfc5.jpg",
+          "https://i.pinimg.com/1200x/3f/a0/63/3fa0639f98aefcb3b9caf2e3840dcf04.jpg"
+        ]
+      },
+      {
+        id: "a-dance-with-dragons",
+        title: "A Dance with Dragons",
+        author: "George R. R. Martin",
+        cover: "https://i.pinimg.com/1200x/8a/45/c1/8a45c1231cbdd1de665213dcb5b16cff.jpg",
+        description: "Part #5 of A Song of Ice and Fire. Across a divided world, leaders and survivors confront political unrest, uncertain loyalties, and the growing threat of winter.",
+        category: "Epic Fantasy",
+        genres: ["Epic Fantasy", "Fantasy", "Adventure", "Political Fiction"],
+        series: "A Song of Ice and Fire",
+        part: 5,
+        partLabel: "Part #5",
+        previousPart: "a-feast-for-crows",
+        nextPart: null,
+        addedAt: "2026-10-09",
+        readUrl: "",
+        story: [
+          {
+            h: "A Land Divided",
+            t: "The struggle for influence continues as competing leaders face unrest and difficult choices across the realm."
+          },
+          {
+            h: "Beyond Familiar Borders",
+            t: "Journeys far from home expose characters to unfamiliar dangers and complicated alliances."
+          },
+          {
+            h: "The Coming Winter",
+            t: "As winter approaches, the consequences of political conflict become increasingly difficult to ignore."
+          }
+        ],
+        note: "",
+        previews: [
+          "https://i.pinimg.com/1200x/81/cd/b6/81cdb6ce17e15ce09dfaee7d65b3390e.jpg",
+          "https://i.pinimg.com/1200x/fc/d3/03/fcd303b1ffae21c9d75e30ce5c243160.jpg",
+          "https://i.pinimg.com/1200x/e9/c2/d5/e9c2d55cfa7ab5b0ebba4589a5d937c5.jpg"
+        ]
+      },
         
   ];
   /* ============================ END NOVEL DATA ============================ */
