@@ -347,7 +347,7 @@
         previousPart: "a-storm-of-swords",
         nextPart: "a-dance-with-dragons",
         addedAt: "2026-10-09",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/fef4153",
         story: [
           {
             h: "Aftermath of War",
@@ -383,7 +383,7 @@
         previousPart: "a-feast-for-crows",
         nextPart: null,
         addedAt: "2026-10-09",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/77660c3",
         story: [
           {
             h: "A Land Divided",
