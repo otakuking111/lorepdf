@@ -115,13 +115,122 @@
         "https://i.pinimg.com/1200x/77/bf/47/77bf479d6df0e50ded396f4906c78aa3.jpg",
         "https://i.pinimg.com/1200x/06/08/e5/0608e5b395c4fb816f3b990de05ba6dc.jpg"
       ]
-    }
+    },
+    {
+        id: "fourth-wing",
+        title: "Fourth Wing",
+        author: "Rebecca Yarros",
+        cover: "https://i.pinimg.com/1200x/ca/8b/10/ca8b10c46050f336b2aea172f98ba534.jpg",
+        description: "Twenty-year-old Violet Sorrengail expected to live a quiet life among books, but her mother orders her to enter Basgiath War College and compete to become a dragon rider. In a world where dragons are deadly and survival is never guaranteed, Violet must rely on her intelligence and determination while uncovering dangerous secrets about her kingdom.",
+        category: "Fantasy Romance",
+        genres: ["Fantasy Romance", "Fantasy", "Romance", "New Adult", "Dragons"],
+        series: "The Empyrean",
+        part: 1,
+        partLabel: "Part #1",
+        previousPart: null,
+        nextPart: "iron-flame",
+        addedAt: "2026-10-09",
+        readUrl: "",
+        story: [
+        {
+        h: "A Dangerous Beginning",
+        t: "Violet Sorrengail is expected to join the Scribe Quadrant, but her mother commands her to enter the brutal Riders Quadrant at Basgiath War College."
+        },
+        {
+        h: "The Dragon Riders",
+        t: "Violet must survive deadly trials and earn a dragon's bond in a world where weakness can mean death."
+        },
+        {
+        h: "Secrets and Survival",
+        t: "As Violet faces dangerous rivals and an increasingly threatening war, she begins to suspect that the kingdom's leaders are hiding a terrible secret."
+        }
+        ],
+        note: "",
+        previews: [
+        "https://i.pinimg.com/1200x/34/10/f4/3410f4e72d9ba8346e9a541d7851626b.jpg",
+        "https://i.pinimg.com/1200x/90/35/e3/9035e31ac3a300bd9d909fa347e4cb9c.jpg",
+        "https://i.pinimg.com/1200x/5a/0a/40/5a0a401f3215c2b85b43b0974e14ba14.jpg"
+        ]
+        },
+        {
+        id: "iron-flame",
+        title: "Iron Flame",
+        author: "Rebecca Yarros",
+        cover: "https://i.pinimg.com/1200x/dd/65/53/dd6553980874fd475008513b5a051885.jpg",
+        description: "Violet Sorrengail survived her first year at Basgiath War College, but the real training is only beginning. Facing brutal challenges and a vice commandant determined to break her, Violet must protect the people she loves while confronting secrets that could threaten everything.",
+        category: "Fantasy Romance",
+        genres: ["Fantasy Romance", "Fantasy", "Romance", "New Adult", "Dragons"],
+        series: "The Empyrean",
+        part: 2,
+        partLabel: "Part #2",
+        previousPart: "fourth-wing",
+        nextPart: "onyx-storm",
+        addedAt: "2026-10-09",
+        readUrl: "",
+        story: [
+        {
+        h: "The Second Year",
+        t: "After surviving the first year at Basgiath, Violet faces even harsher training and new dangers."
+        },
+        {
+        h: "A Test of Loyalty",
+        t: "A ruthless vice commandant pushes Violet toward impossible choices, threatening her relationship and her freedom."
+        },
+        {
+        h: "Secrets Beneath Basgiath",
+        t: "Violet must use her intelligence and determination as she confronts secrets that could change the fate of the kingdom."
+        }
+        ],
+        note: "",
+        previews: [
+        "https://i.pinimg.com/1200x/bd/cb/94/bdcb94593798d30235706c3c4ffa5ccd.jpg",
+        "https://i.pinimg.com/1200x/5d/5d/f3/5d5df378f2f7ab972ccd1d1bd62bb9ec.jpg",
+        "https://i.pinimg.com/1200x/4c/fa/33/4cfa33c88e86a34b89fa4bd2ae93d322.jpg"
+        ]
+        },
+        {
+        id: "onyx-storm",
+        title: "Onyx Storm",
+        author: "Rebecca Yarros",
+        cover: "https://i.pinimg.com/1200x/f8/4a/8d/f84a8dc14c1fcc99ac1ffb3212bc573c.jpg",
+        description: "After eighteen months at Basgiath War College, Violet Sorrengail knows that training alone cannot prepare her for what lies ahead. With danger approaching and the kingdom's protective wards failing, she must travel beyond familiar borders to seek allies and discover truths that could change everything.",
+        category: "Fantasy Romance",
+        genres: ["Fantasy Romance", "Fantasy", "Romance", "New Adult", "Dragons"],
+        series: "The Empyrean",
+        part: 3,
+        partLabel: "Part #3",
+        previousPart: "iron-flame",
+        nextPart: null,
+        addedAt: "2026-10-09",
+        readUrl: "",
+        story: [
+        {
+        h: "Beyond the Wards",
+        t: "Violet must venture beyond the kingdom's failing magical protections to search for allies who may help defend Navarre."
+        },
+        {
+        h: "Dangerous Alliances",
+        t: "As threats grow and trust becomes harder to find, Violet faces difficult choices that put her courage and loyalty to the test."
+        },
+        {
+        h: "A Fight for Everything",
+        t: "Violet risks everything to protect her dragons, her family, her home, and the people she loves."
+        }
+        ],
+        note: "",
+        previews: [
+        "https://i.pinimg.com/1200x/27/3f/f0/273ff06532978fcc3ac11dadca1d8818.jpg",
+        "https://i.pinimg.com/1200x/da/9b/54/da9b54d29fc1ac322d813dc3548fc104.jpg",
+        "https://i.pinimg.com/1200x/21/69/bb/2169bbc76b0a7ee2f1698ac699669a46.jpg"
+        ]
+        }
+        
   ];
   /* ============================ END NOVEL DATA ============================ */
   
   /* Genre families shown in "Browse by Genre". Add a genre by adding its name to a list. */
   const GENRE_GROUPS = {
-    "Romance": ["Romance", "Contemporary Romance", "Historical Romance", "Erotica"],
+    "Romance": ["Romance", "Contemporary Romance", "Historical Romance", "Fantasy Romance", "Erotica"],
     "Fantasy": ["Fantasy", "Epic Fantasy", "Dark Fantasy", "Urban Fantasy", "Magical Realism"],
     "Sci-Fi": ["Science Fiction", "Dystopian", "Speculative Fiction"],
     "Mystery": ["Mystery", "Thriller", "Psychological Thriller", "Crime", "Crime Fiction", "Detective", "Suspense"],
