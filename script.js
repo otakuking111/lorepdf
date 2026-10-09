@@ -275,7 +275,7 @@
         previousPart: "a-game-of-thrones",
         nextPart: "a-storm-of-swords",
         addedAt: "2026-10-09",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/32a9919",
         story: [
           {
             h: "War for the Throne",
