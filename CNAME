@@ -33,7 +33,7 @@ lorepdf.com
   .lp-bg {
     position: absolute;
     inset: -20px;
-    background: url('https://i.pinimg.com/1200x/88/88/cc/8888cc39413b186c8fcc672c0dc8ab15.jpg') center / cover;
+    background: url('https://i.pinimg.com/1200x/ca/8b/10/ca8b10c46050f336b2aea172f98ba534.jpg') center / cover;
     filter: blur(22px) brightness(.35);
     z-index: 0;
   }
@@ -133,22 +133,22 @@ lorepdf.com
   <div class="lp-bg"></div>
 
   <img class="lp-cover"
-       src="https://i.pinimg.com/1200x/88/88/cc/8888cc39413b186c8fcc672c0dc8ab15.jpg"
-       alt="A Clash of Kings">
+       src="https://i.pinimg.com/1200x/ca/8b/10/ca8b10c46050f336b2aea172f98ba534.jpg"
+       alt="Fourth Wing">
 
   <div class="lp-info">
-    <p class="lp-series">A Song of Ice and Fire — Part #2</p>
-    <h1 class="lp-title">A Clash of Kings</h1>
-    <p class="lp-author">by George R. R. Martin</p>
+    <p class="lp-series">The Empyrean — Part #1</p>
+    <h1 class="lp-title">Fourth Wing</h1>
+    <p class="lp-author">by Rebecca Yarros</p>
 
     <div class="lp-tags">
-      <span>Epic Fantasy</span>
+      <span>Romantasy</span>
       <span>Fantasy</span>
+      <span>Dragons</span>
       <span>Adventure</span>
-      <span>Political Fiction</span>
     </div>
 
-    <p class="lp-desc">Part #2 of A Song of Ice and Fire. As rival kings claim the Iron Throne, war spreads across Westeros, alliances shift, and dangerous ambitions threaten to tear the Seven Kingdoms apart.</p>
+    <p class="lp-desc">Part #1 of The Empyrean. Violet Sorrengail is thrust into a brutal war college where aspiring dragon riders must survive deadly trials, fierce rivalries, and dangerous secrets that could change the fate of their kingdom.</p>
   </div>
 </div>
 
