@@ -1,10 +1,65 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://lorepdf.com/</loc></url>
-<url><loc>https://lorepdf.com/series.html</loc></url>
-<url><loc>https://lorepdf.com/library.html</loc></url>
-<url><loc>https://lorepdf.com/novel.html?id=fellowship-of-the-ring</loc></url>
-<url><loc>https://lorepdf.com/novel.html?id=the-two-towers</loc></url>
-<url><loc>https://lorepdf.com/novel.html?id=the-return-of-the-king</loc></url>
-<url><loc>https://lorepdf.com/novel.html?id=the-hobbit</loc></url>
+
+  <url>
+    <loc>https://lorepdf.com/</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/series.html</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/library.html</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=fellowship-of-the-ring</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=the-two-towers</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=the-return-of-the-king</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=the-hobbit</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=fourth-wing</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=iron-flame</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=onyx-storm</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=a-game-of-thrones</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=a-clash-of-kings</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=a-storm-of-swords</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=a-feast-for-crows</loc>
+  </url>
+
+  <url>
+    <loc>https://lorepdf.com/novel.html?id=a-dance-with-dragons</loc>
+  </url>
+
 </urlset>
