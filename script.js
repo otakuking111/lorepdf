@@ -420,7 +420,7 @@
         previousPart: null,
         nextPart: "harry-potter-chamber-of-secrets",
         addedAt: "2026-10-15",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/7f6cc1c&i",
         story: [
           {
             h: "A World of Magic",
