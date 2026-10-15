@@ -404,6 +404,237 @@
           "https://i.pinimg.com/1200x/fc/d3/03/fcd303b1ffae21c9d75e30ce5c243160.jpg",
           "https://i.pinimg.com/1200x/e9/c2/d5/e9c2d55cfa7ab5b0ebba4589a5d937c5.jpg"
         ]
+      },
+      {
+        id: "harry-potter-sorcerers-stone",
+        title: "Harry Potter and the Sorcerer's Stone",
+        author: "J. K. Rowling",
+        cover: "https://i.pinimg.com/1200x/d6/41/19/d64119d7b8494c198bceda5ab6574bb9.jpg",
+        description: "Harry Potter's life changes when he discovers he is a wizard and receives an invitation to Hogwarts School of Witchcraft and Wizardry. As he makes new friends and explores a hidden magical world, he begins uncovering secrets connected to his mysterious past.",
+        plainDesc: true,
+        category: "Fantasy",
+        genres: ["Fantasy", "Adventure", "Young Adult", "Coming of Age"],
+        series: "Harry Potter",
+        part: 1,
+        partLabel: "Part #1",
+        previousPart: null,
+        nextPart: "harry-potter-chamber-of-secrets",
+        addedAt: "2026-10-15",
+        readUrl: "",
+        story: [
+          {
+            h: "A World of Magic",
+            t: "Harry discovers that his ordinary life hides an extraordinary truth: he belongs to a world of witches and wizards."
+          },
+          {
+            h: "Life at Hogwarts",
+            t: "At Hogwarts, Harry forms close friendships, learns about magic, and encounters mysteries that challenge his courage and curiosity."
+          },
+          {
+            h: "A Secret Worth Discovering",
+            t: "Strange events at the school lead Harry and his friends toward a secret that could change everything they thought they knew."
+          }
+        ],
+        note: "",
+        previews: []
+      },
+      {
+        id: "harry-potter-chamber-of-secrets",
+        title: "Harry Potter and the Chamber of Secrets",
+        author: "J. K. Rowling",
+        cover: "https://i.pinimg.com/1200x/8a/cc/58/8acc58f174dee483d38d196aae34d65c.jpg",
+        description: "Harry returns to Hogwarts for another year of magical lessons, but unsettling events soon threaten the school. As students face a mysterious danger, Harry investigates an old legend and searches for the truth behind the Chamber of Secrets.",
+        plainDesc: true,
+        category: "Fantasy",
+        genres: ["Fantasy", "Adventure", "Mystery", "Young Adult"],
+        series: "Harry Potter",
+        part: 2,
+        partLabel: "Part #2",
+        previousPart: "harry-potter-sorcerers-stone",
+        nextPart: "harry-potter-prisoner-of-azkaban",
+        addedAt: "2026-10-15",
+        readUrl: "",
+        story: [
+          {
+            h: "An Unsettling Return",
+            t: "Harry's second year at Hogwarts begins with unusual warnings and events that make the school feel less safe than before."
+          },
+          {
+            h: "The Mystery Deepens",
+            t: "Strange attacks and forgotten school history lead Harry and his friends to investigate a secret hidden within Hogwarts."
+          },
+          {
+            h: "Facing the Truth",
+            t: "Harry must follow the clues, confront his fears, and discover what is behind the danger threatening the school."
+          }
+        ],
+        note: "",
+        previews: []
+      },
+      {
+        id: "harry-potter-prisoner-of-azkaban",
+        title: "Harry Potter and the Prisoner of Azkaban",
+        author: "J. K. Rowling",
+        cover: "https://i.pinimg.com/1200x/89/51/91/895191eb91a194f1ede5fb877b9af0ea.jpg",
+        description: "In his third year at Hogwarts, Harry learns that a dangerous prisoner has escaped from Azkaban. As rumors spread and new threats emerge, Harry begins uncovering truths about his parents, his past, and the people he can trust.",
+        plainDesc: true,
+        category: "Fantasy",
+        genres: ["Fantasy", "Adventure", "Mystery", "Young Adult"],
+        series: "Harry Potter",
+        part: 3,
+        partLabel: "Part #3",
+        previousPart: "harry-potter-chamber-of-secrets",
+        nextPart: "harry-potter-goblet-of-fire",
+        addedAt: "2026-10-15",
+        readUrl: "",
+        story: [
+          {
+            h: "A Prisoner's Escape",
+            t: "News of an escaped prisoner creates fear throughout the wizarding world and brings new uncertainty to Harry's life."
+          },
+          {
+            h: "Secrets from the Past",
+            t: "Harry encounters revelations that challenge what he has been told about his family and the events surrounding his childhood."
+          },
+          {
+            h: "Truth and Loyalty",
+            t: "With help from his friends, Harry must separate rumors from reality and decide whom he can trust."
+          }
+        ],
+        note: "",
+        previews: []
+      },
+      {
+        id: "harry-potter-goblet-of-fire",
+        title: "Harry Potter and the Goblet of Fire",
+        author: "J. K. Rowling",
+        cover: "https://i.pinimg.com/1200x/99/bf/c6/99bfc634bd29fd154a9325b3ffde6c2e.jpg",
+        description: "Harry's fourth year takes an unexpected turn when his name is selected for the dangerous Triwizard Tournament. Faced with demanding tasks, new rivals, and growing uncertainty, he must find the courage to navigate challenges far beyond an ordinary school competition.",
+        plainDesc: true,
+        category: "Fantasy",
+        genres: ["Fantasy", "Adventure", "Mystery", "Young Adult"],
+        series: "Harry Potter",
+        part: 4,
+        partLabel: "Part #4",
+        previousPart: "harry-potter-prisoner-of-azkaban",
+        nextPart: "harry-potter-order-of-the-phoenix",
+        addedAt: "2026-10-15",
+        readUrl: "",
+        story: [
+          {
+            h: "A Tournament Begins",
+            t: "Hogwarts prepares for an international magical competition, bringing excitement and tension to the school."
+          },
+          {
+            h: "Dangerous Challenges",
+            t: "Harry faces difficult tasks that test his magical skills, judgment, and determination."
+          },
+          {
+            h: "A Turning Point",
+            t: "Events surrounding the tournament reveal that a much greater danger is gathering in the wizarding world."
+          }
+        ],
+        note: "",
+        previews: []
+      },
+      {
+        id: "harry-potter-order-of-the-phoenix",
+        title: "Harry Potter and the Order of the Phoenix",
+        author: "J. K. Rowling",
+        cover: "https://i.pinimg.com/1200x/3f/c1/19/3fc119fd0d9e1f72dc9156183a459733.jpg",
+        description: "As the wizarding world becomes divided over the return of a growing threat, Harry faces distrust, pressure, and new responsibilities. At Hogwarts, he and his friends take steps to prepare for dangers that many adults refuse to acknowledge.",
+        plainDesc: true,
+        category: "Fantasy",
+        genres: ["Fantasy", "Adventure", "Young Adult", "Coming of Age"],
+        series: "Harry Potter",
+        part: 5,
+        partLabel: "Part #5",
+        previousPart: "harry-potter-goblet-of-fire",
+        nextPart: "harry-potter-half-blood-prince",
+        addedAt: "2026-10-15",
+        readUrl: "",
+        story: [
+          {
+            h: "A Divided Wizarding World",
+            t: "Conflicting accounts of recent events leave Harry facing skepticism and growing frustration."
+          },
+          {
+            h: "Learning to Stand Together",
+            t: "Harry and his friends find ways to learn, cooperate, and prepare for challenges beyond the classroom."
+          },
+          {
+            h: "Difficult Discoveries",
+            t: "New information about the past and the future forces Harry to confront difficult questions about loyalty and responsibility."
+          }
+        ],
+        note: "",
+        previews: []
+      },
+      {
+        id: "harry-potter-half-blood-prince",
+        title: "Harry Potter and the Half-Blood Prince",
+        author: "J. K. Rowling",
+        cover: "https://i.pinimg.com/1200x/fe/39/0c/fe390c8f19b4fc2dcde43ec0eb709e56.jpg",
+        description: "With danger approaching the wizarding world, Harry begins private lessons that reveal important details about a powerful enemy's past. Meanwhile, a mysterious textbook provides unexpected help while raising questions that become increasingly difficult to ignore.",
+        plainDesc: true,
+        category: "Fantasy",
+        genres: ["Fantasy", "Adventure", "Mystery", "Young Adult"],
+        series: "Harry Potter",
+        part: 6,
+        partLabel: "Part #6",
+        previousPart: "harry-potter-order-of-the-phoenix",
+        nextPart: "harry-potter-deathly-hallows",
+        addedAt: "2026-10-15",
+        readUrl: "",
+        story: [
+          {
+            h: "Lessons from the Past",
+            t: "Harry learns about memories that help explain the history and ambitions of one of the wizarding world's most dangerous figures."
+          },
+          {
+            h: "A Mysterious Textbook",
+            t: "An annotated schoolbook gives Harry unexpected advantages while concealing a puzzle of its own."
+          },
+          {
+            h: "Preparing for What Comes Next",
+            t: "New revelations and growing dangers push Harry closer to understanding the challenge ahead."
+          }
+        ],
+        note: "",
+        previews: []
+      },
+      {
+        id: "harry-potter-deathly-hallows",
+        title: "Harry Potter and the Deathly Hallows",
+        author: "J. K. Rowling",
+        cover: "https://i.pinimg.com/1200x/56/d1/3d/56d13dcf0dda567f45313b2c8dac75eb.jpg",
+        description: "In the final main book of the series, Harry, Ron, and Hermione leave the familiar world of Hogwarts to pursue a dangerous mission. With the wizarding world in turmoil, they must rely on their friendship, courage, and the clues they uncover along the way.",
+        plainDesc: true,
+        category: "Fantasy",
+        genres: ["Fantasy", "Adventure", "Young Adult", "Coming of Age"],
+        series: "Harry Potter",
+        part: 7,
+        partLabel: "Part #7",
+        previousPart: "harry-potter-half-blood-prince",
+        nextPart: null,
+        addedAt: "2026-10-15",
+        readUrl: "",
+        story: [
+          {
+            h: "A Dangerous Mission",
+            t: "Harry and his friends undertake a journey that demands patience, sacrifice, and trust in one another."
+          },
+          {
+            h: "Uncovering the Final Clues",
+            t: "The search brings forgotten history and long-standing mysteries into sharper focus."
+          },
+          {
+            h: "The Final Confrontation",
+            t: "The conflict reaches its decisive stage, bringing Harry's journey toward its conclusion."
+          }
+        ],
+        note: "",
+        previews: []
       }
         
   ];
