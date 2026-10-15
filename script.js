@@ -100,7 +100,7 @@
       description: "Bilbo Baggins is a comfort-loving Hobbit whose peaceful life changes when the wizard Gandalf and thirteen dwarves led by Thorin Oakenshield invite him on an unexpected adventure. Their mission is to reclaim the Lonely Mountain and its lost treasure from the dragon Smaug. Along the way, Bilbo faces trolls, goblins, giant spiders, and other dangers. Deep within the Misty Mountains, he encounters Gollum and discovers a mysterious ring that will later play a major role in the fate of Middle-earth.",
       plainDesc: true, /* show the description as written (no "Title, " prefix) */
       category: "Fantasy",
-      genres: ["Fantasy", "Adventure", "Classics", "Epic Fantasy"],
+      genres: ["Fantasy", "Adventure", "Classic Literature", "Epic Fantasy"],
       series: "",   /* standalone prequel: not part of The Lord of the Rings series list */
       part: null,
       partLabel: "",
@@ -925,6 +925,9 @@ const seriesList = () =>
       seriesTitleResizeTimer = setTimeout(() => fitSeriesTitles(), 100);
     });
   }
+
+  /* re-fit series titles once the web fonts have loaded (font metrics change the line wrapping) */
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitSeriesTitles());
     
   /* Home page: one series card at a time. After all covers of the current card have been shown, slide to the next card. */
   function initSeriesCarousel(track) {

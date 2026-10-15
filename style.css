@@ -495,3 +495,6 @@ body[data-page="home"] #latest-track,body[data-page="home"] #lib-track{padding-b
     box-shadow: -2px 2px 8px rgba(0, 0, 0, .28);
 }
 .series-tag svg { width: 11px; height: 11px; fill: currentColor; flex: none; }
+
+/* visually hidden (still readable by search engines and screen readers) */
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
