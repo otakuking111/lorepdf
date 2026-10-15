@@ -581,7 +581,7 @@ body[data-page="home"] #library .bk{flex:none}
 .nav a{font-size:.92rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:18px 22px;border-left:3px solid transparent}
 .nav a:active{border-left-color:var(--gold);background:rgba(197,160,89,.12)}
 /* home brand strip */
-body[data-page="home"] main::before{content:"Free \00B7  Ad-Free \00B7  Read Online";display:block;padding:9px 12px;text-align:center;background:#4A1A1F;color:var(--gold-soft);font:600 .68rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
+body[data-page="home"] main::before{content:"Always Free \00B7  Never Any Ads";display:block;padding:9px 12px;text-align:center;background:#4A1A1F;color:var(--gold-soft);font:600 .68rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
 /* section headings */
 .sh{margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--line-2)}
 .sh h2{font-size:clamp(1.45rem,6vw,1.8rem)}
