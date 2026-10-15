@@ -469,3 +469,19 @@ body[data-page="home"] #latest-track,body[data-page="home"] #lib-track{padding-b
 .nhero .back{border-color:rgba(197,160,89,.75);color:var(--paper);background:rgba(0,0,0,.25)}
 .nhero .back:active{background:var(--gold);color:var(--wood)}
 @media(hover:hover){.nhero .back:hover{background:var(--gold);color:var(--wood)}}
+/* "Most Popular" badge on series cards */
+.series-popular {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--gold);
+    color: var(--deep);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .28);
+}
