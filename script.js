@@ -457,7 +457,7 @@
         previousPart: "harry-potter-sorcerers-stone",
         nextPart: "harry-potter-prisoner-of-azkaban",
         addedAt: "2026-10-15",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/1b2b128",
         story: [
           {
             h: "An Unsettling Return",
