@@ -475,7 +475,7 @@ body[data-page="home"] #latest-track,body[data-page="home"] #lib-track{padding-b
     border-color: rgba(197, 160, 89, .75);
     box-shadow: 0 8px 24px rgba(42, 23, 12, .13), 0 0 0 1px rgba(197, 160, 89, .22);
 }
-.series-popular {
+.series-tag {
     position: absolute;
     top: 0;
     right: 0;
@@ -494,9 +494,4 @@ body[data-page="home"] #latest-track,body[data-page="home"] #lib-track{padding-b
     pointer-events: none;
     box-shadow: -2px 2px 8px rgba(0, 0, 0, .28);
 }
-.series-popular svg {
-    width: 11px;
-    height: 11px;
-    fill: currentColor;
-    flex: none;
-}
+.series-tag svg { width: 11px; height: 11px; fill: currentColor; flex: none; }
