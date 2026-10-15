@@ -436,7 +436,11 @@
           }
         ],
         note: "",
-        previews: []
+        previews: [
+          "https://i.pinimg.com/1200x/c5/47/e7/c547e734af3f8fd76d7d9851b6e6c894.jpg",
+          "https://i.pinimg.com/1200x/fc/06/50/fc0650f5f3f8cd690a0041c4d813dd0b.jpg",
+          "https://i.pinimg.com/1200x/94/27/f9/9427f982d7fffb7a04c317a07b9db13a.jpg"
+        ]
       },
       {
         id: "harry-potter-chamber-of-secrets",
@@ -469,7 +473,11 @@
           }
         ],
         note: "",
-        previews: []
+        previews: [
+          "https://i.pinimg.com/1200x/ad/57/44/ad574419f295a17e6bbbd34df38bd597.jpg",
+          "https://i.pinimg.com/1200x/c4/e7/bc/c4e7bca40433d4a2aa539ed330ba64c4.jpg",
+          "https://i.pinimg.com/1200x/0f/5f/b4/0f5fb4f0fe962bb456fc7f66ee613991.jpg"
+        ]
       },
       {
         id: "harry-potter-prisoner-of-azkaban",
@@ -502,7 +510,11 @@
           }
         ],
         note: "",
-        previews: []
+        previews: [
+          "https://i.pinimg.com/1200x/83/6a/d9/836ad9ce601ed1f4e04c37b1a24d188b.jpg",
+          "https://i.pinimg.com/1200x/3c/a6/b2/3ca6b24e621466c3647d9480b65741c5.jpg",
+          "https://i.pinimg.com/1200x/fc/79/be/fc79bea09020a1a4fdf4d0f53f4e2ed2.jpg"
+        ]
       },
       {
         id: "harry-potter-goblet-of-fire",
@@ -535,7 +547,11 @@
           }
         ],
         note: "",
-        previews: []
+        previews: [
+          "https://i.pinimg.com/1200x/2a/65/56/2a6556d536fb9e32ea3c68e058324de9.jpg",
+          "https://i.pinimg.com/1200x/8a/8c/d5/8a8cd555db5c2acad9a2b4e1fc8f9ce3.jpg",
+          "https://i.pinimg.com/1200x/ef/92/73/ef92739922ac53a2a590177489c5d7a6.jpg"
+        ]
       },
       {
         id: "harry-potter-order-of-the-phoenix",
@@ -568,7 +584,11 @@
           }
         ],
         note: "",
-        previews: []
+        previews: [
+          "https://i.pinimg.com/1200x/ad/d1/1d/add11dae7d132e54f78190a1b9065a2a.jpg",
+          "https://i.pinimg.com/1200x/37/4c/70/374c70af7abd2f62c800c8d5c7ae6524.jpg",
+          "https://i.pinimg.com/1200x/94/f7/3c/94f73c26198d8f7e44c55b63574a862d.jpg"
+        ]
       },
       {
         id: "harry-potter-half-blood-prince",
@@ -601,7 +621,11 @@
           }
         ],
         note: "",
-        previews: []
+        previews: [
+          "https://i.pinimg.com/1200x/04/96/ca/0496ca0d51ab4f08f251f082e534954f.jpg",
+          "https://i.pinimg.com/1200x/be/35/2c/be352c26a157dd0e2d031660038784ad.jpg",
+          "https://i.pinimg.com/1200x/39/27/ea/3927ea1b5a63363324c7ae0f5932cc00.jpg"
+        ]
       },
       {
         id: "harry-potter-deathly-hallows",
@@ -634,7 +658,11 @@
           }
         ],
         note: "",
-        previews: []
+        previews: [
+          "https://i.pinimg.com/1200x/f8/f0/80/f8f0802a25ef0d90be87f4c59f22e24b.jpg",
+          "https://i.pinimg.com/1200x/5f/98/85/5f9885fed3eb336ac4ca0b0653fd3990.jpg",
+          "https://i.pinimg.com/1200x/4e/98/61/4e986147be2939948db68656979c6455.jpg"
+        ]
       }
         
   ];
