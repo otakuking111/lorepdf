@@ -469,22 +469,34 @@ body[data-page="home"] #latest-track,body[data-page="home"] #lib-track{padding-b
 .nhero .back{border-color:rgba(197,160,89,.75);color:var(--paper);background:rgba(0,0,0,.25)}
 .nhero .back:active{background:var(--gold);color:var(--wood)}
 @media(hover:hover){.nhero .back:hover{background:var(--gold);color:var(--wood)}}
-/* "Most Popular" badge on the series cover stack */
+/* "Most Popular" corner tag on series cards */
+.scard.is-popular {
+    position: relative;
+    border-color: rgba(197, 160, 89, .75);
+    box-shadow: 0 8px 24px rgba(42, 23, 12, .13), 0 0 0 1px rgba(197, 160, 89, .22);
+}
 .series-popular {
     position: absolute;
-    top: 6px;
-    left: 6px;
-    z-index: 6;
-    padding: 4px 7px;
-    border-radius: 4px;
-    background: var(--gold);
+    top: 0;
+    right: 0;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 12px 7px 10px;
+    border-radius: 0 11px 0 10px;
+    background: linear-gradient(135deg, var(--gold-soft), var(--gold));
     color: var(--deep);
-    font-size: clamp(.52rem, 1.8vw, .64rem);
-    font-weight: 700;
-    letter-spacing: .05em;
-    line-height: 1.2;
+    font: 700 .62rem/1 var(--sans);
+    letter-spacing: .09em;
     text-transform: uppercase;
     white-space: nowrap;
     pointer-events: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+    box-shadow: -2px 2px 8px rgba(0, 0, 0, .28);
+}
+.series-popular svg {
+    width: 11px;
+    height: 11px;
+    fill: currentColor;
+    flex: none;
 }

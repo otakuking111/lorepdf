@@ -446,7 +446,7 @@
         id: "harry-potter-chamber-of-secrets",
         title: "Harry Potter and the Chamber of Secrets",
         author: "J. K. Rowling",
-        cover: "https://i.pinimg.com/736x/ab/9d/1f/ab9d1f8bc12138789967dedb95a655e0.jpg",
+        cover: "https://i.pinimg.com/1200x/8a/cc/58/8acc58f174dee483d38d196aae34d65c.jpg",
         description: "Harry returns to Hogwarts for another year of magical lessons, but unsettling events soon threaten the school. As students face a mysterious danger, Harry investigates an old legend and searches for the truth behind the Chamber of Secrets.",
         plainDesc: true,
         category: "Fantasy",
@@ -483,7 +483,7 @@
         id: "harry-potter-prisoner-of-azkaban",
         title: "Harry Potter and the Prisoner of Azkaban",
         author: "J. K. Rowling",
-        cover: "https://i.pinimg.com/1200x/20/67/73/2067735cb2cd6f2cc254274cf839982a.jpg",
+        cover: "https://i.pinimg.com/1200x/89/51/91/895191eb91a194f1ede5fb877b9af0ea.jpg",
         description: "In his third year at Hogwarts, Harry learns that a dangerous prisoner has escaped from Azkaban. As rumors spread and new threats emerge, Harry begins uncovering truths about his parents, his past, and the people he can trust.",
         plainDesc: true,
         category: "Fantasy",
@@ -557,7 +557,7 @@
         id: "harry-potter-order-of-the-phoenix",
         title: "Harry Potter and the Order of the Phoenix",
         author: "J. K. Rowling",
-        cover: "https://i.pinimg.com/1200x/8e/a8/f3/8ea8f315b8decddd10cac50017408591.jpg",
+        cover: "https://i.pinimg.com/1200x/3f/c1/19/3fc119fd0d9e1f72dc9156183a459733.jpg",
         description: "As the wizarding world becomes divided over the return of a growing threat, Harry faces distrust, pressure, and new responsibilities. At Hogwarts, he and his friends take steps to prepare for dangers that many adults refuse to acknowledge.",
         plainDesc: true,
         category: "Fantasy",
@@ -594,7 +594,7 @@
         id: "harry-potter-half-blood-prince",
         title: "Harry Potter and the Half-Blood Prince",
         author: "J. K. Rowling",
-        cover: "https://i.pinimg.com/1200x/79/2a/0c/792a0c12a2f6975b51e7aea7e20cbceb.jpg",
+        cover: "https://i.pinimg.com/1200x/fe/39/0c/fe390c8f19b4fc2dcde43ec0eb709e56.jpg",
         description: "With danger approaching the wizarding world, Harry begins private lessons that reveal important details about a powerful enemy's past. Meanwhile, a mysterious textbook provides unexpected help while raising questions that become increasingly difficult to ignore.",
         plainDesc: true,
         category: "Fantasy",
@@ -631,7 +631,7 @@
         id: "harry-potter-deathly-hallows",
         title: "Harry Potter and the Deathly Hallows",
         author: "J. K. Rowling",
-        cover: "https://i.pinimg.com/236x/e6/90/ff/e690ff6641110f2592c4954c3463b75b.jpg",
+        cover: "https://i.pinimg.com/1200x/56/d1/3d/56d13dcf0dda567f45313b2c8dac75eb.jpg",
         description: "In the final main book of the series, Harry, Ron, and Hermione leave the familiar world of Hogwarts to pursue a dangerous mission. With the wizarding world in turmoil, they must rely on their friendship, courage, and the clues they uncover along the way.",
         plainDesc: true,
         category: "Fantasy",
@@ -812,13 +812,9 @@ const seriesList = () =>
     x.items.find(n => n.part != null) ||
     x.items[0];
   
-  /* Series that show a "Most Popular" badge on their card. Add a series name here to badge it. */
-  const POPULAR_SERIES = ["Harry Potter"];
-  
   const fan = items => `
     <span class="series-covers">
       <span class="series-cover-stack">
-        ${POPULAR_SERIES.includes(items[0] && items[0].series) ? `<span class="series-popular">★ Most Popular</span>` : ""}
         ${items.map((n, i) => `
           <span class="series-cover-item${i === 0 ? " is-front" : ""}" data-cover-index="${i}">
             ${cover(n)}
@@ -829,10 +825,15 @@ const seriesList = () =>
     </span>
   `;
   
+  /* Series that get the "Most Popular" corner tag. Add a series name to this list to badge it. */
+  const POPULAR_SERIES = ["Harry Potter"];
+  const STAR = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.3 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg>`;
+  
   const scard = (x, link) => {
-    const first = firstPart(x);
+    const first = firstPart(x), hot = POPULAR_SERIES.includes(x.s);
     return `
-      <a class="scard" href="${link}">
+      <a class="scard${hot ? " is-popular" : ""}" href="${link}">
+        ${hot ? `<span class="series-popular">${STAR}Most Popular</span>` : ""}
         ${fan(x.items)}
         <span class="st">
           <span class="series-eyebrow">COLLECTION</span>
