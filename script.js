@@ -960,6 +960,8 @@ const seriesList = () =>
     cards.forEach(c => showCover(c, 0));
     setDots();
     dots.forEach((d, i) => d.onclick = () => { hold(5000); go(i); });
+    document.querySelectorAll("#series .arr").forEach(b => b.onclick = () => { hold(5000); go(cur + (+b.dataset.dir)); });
+    const sa = $("#series .arrows"); if (sa) sa.hidden = cards.length < 2;
 
     track.addEventListener("touchstart", () => { paused = true; }, { passive: true });
     ["touchend", "touchcancel"].forEach(t => track.addEventListener(t, () => { paused = false; hold(4000); }, { passive: true }));
@@ -1008,6 +1010,7 @@ $("#latest-track").innerHTML =
     <span>→</span>
     <small>View All</small>
   </a>`;
+strip($("#latest-track"), $("#latest .arrows"), false);
 } else {
 $("#latest").hidden = true;
 }
