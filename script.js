@@ -812,9 +812,13 @@ const seriesList = () =>
     x.items.find(n => n.part != null) ||
     x.items[0];
   
+  /* Series that show a "Most Popular" badge on their card. Add a series name here to badge it. */
+  const POPULAR_SERIES = ["Harry Potter"];
+  
   const fan = items => `
     <span class="series-covers">
       <span class="series-cover-stack">
+        ${POPULAR_SERIES.includes(items[0] && items[0].series) ? `<span class="series-popular">★ Most Popular</span>` : ""}
         ${items.map((n, i) => `
           <span class="series-cover-item${i === 0 ? " is-front" : ""}" data-cover-index="${i}">
             ${cover(n)}
@@ -825,16 +829,12 @@ const seriesList = () =>
     </span>
   `;
   
-  /* Series that show a "Most Popular" badge on their card. Add a series name here to badge it. */
-  const POPULAR_SERIES = ["Harry Potter"];
-  
   const scard = (x, link) => {
     const first = firstPart(x);
     return `
       <a class="scard" href="${link}">
         ${fan(x.items)}
         <span class="st">
-          ${POPULAR_SERIES.includes(x.s) ? `<span class="series-popular">★ Most Popular</span>` : ""}
           <span class="series-eyebrow">COLLECTION</span>
           <h3 data-fit-title>${esc(x.s)}</h3>
           <p>${x.items.length} ${x.items.length === 1 ? "Part" : "Parts"}</p>
