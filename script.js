@@ -494,7 +494,7 @@
         previousPart: "harry-potter-chamber-of-secrets",
         nextPart: "harry-potter-goblet-of-fire",
         addedAt: "2026-10-15",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/a3970b3",
         story: [
           {
             h: "A Prisoner's Escape",
@@ -531,7 +531,7 @@
         previousPart: "harry-potter-prisoner-of-azkaban",
         nextPart: "harry-potter-order-of-the-phoenix",
         addedAt: "2026-10-15",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/75ca942",
         story: [
           {
             h: "A Tournament Begins",
@@ -568,7 +568,7 @@
         previousPart: "harry-potter-goblet-of-fire",
         nextPart: "harry-potter-half-blood-prince",
         addedAt: "2026-10-15",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/91ace49",
         story: [
           {
             h: "A Divided Wizarding World",
@@ -605,7 +605,7 @@
         previousPart: "harry-potter-order-of-the-phoenix",
         nextPart: "harry-potter-deathly-hallows",
         addedAt: "2026-10-15",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/e9879ee",
         story: [
           {
             h: "Lessons from the Past",
@@ -642,7 +642,7 @@
         previousPart: "harry-potter-half-blood-prince",
         nextPart: null,
         addedAt: "2026-10-15",
-        readUrl: "",
+        readUrl: "https://salmane.freedev.app/?/ba893b6",
         story: [
           {
             h: "A Dangerous Mission",
