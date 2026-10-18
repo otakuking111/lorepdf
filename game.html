@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pistol Duel 3D</title>
+<title>Pistol Neon</title>
 <style>
 *,*::before,*::after{box-sizing:border-box}
 :root{color-scheme:dark;--bg:#0e1b24;--fg:#eaf6ff;--ac:#ff6b3d;--cy:#3dd6ff;--gd:#ffd166;--pn:rgba(10,22,30,.96);--ln:#2d4c63;--mut:#8fb3c7;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -341,7 +341,7 @@ function bg(){loadLevel(1);st='menu';msg('');$('fh').className='';$('hint').text
 function startLevel(n){au();hide();loadLevel(n);if(!SV.tut){SV.tut=1;save();st='pause';tutorial(()=>{hide();if(st==='pause')st='play'})}}
 function renderMenu(){const un=SV.un,cnt=Math.max(12,Math.min(SV.best+2,60));let lv='';
  for(let i=1;i<=cnt;i++)lv+=`<button class="lvb${i===SV.best?' cur':''}" data-l="${i}"${i>SV.best?' disabled':''}>${i>SV.best?'🔒':i}</button>`;
- show(`<div class="hero"><div class="logo">PISTOL<span>DUEL</span><em>3D</em></div><p class="tg">Use recoil to fly. Wipe out every enemy gun.</p><div class="stats"><div><b>${SV.best}</b><span>Level reached</span></div><div><b>${un}/${WP.length}</b><span>Weapons</span></div></div></div>
+ show(`<div class="hero"><div class="logo">PISTOL<span>NEON</span></div><p class="tg">Use recoil to fly. Wipe out every enemy gun.</p><div class="stats"><div><b>${SV.best}</b><span>Level reached</span></div><div><b>${un}/${WP.length}</b><span>Weapons</span></div></div></div>
  <div class="sec"><h3>LOADOUT</h3><div class="wg">${WP.map((w,i)=>wCard(w,i,0)).join('')}</div><div class="lg"><span><i style="background:var(--cy)"></i>Recoil</span><span><i style="background:var(--ac)"></i>Fire rate</span><span><i style="background:#7cfc9a"></i>Ammo</span></div><p class="wd"><b>${WP[SV.wp].n}</b> — ${WP[SV.wp].d}</p></div>
  <div class="sec"><h3>MISSIONS</h3><div class="lg2">${lv}</div></div>
  <div class="sec"><h3>SETTINGS</h3>${settingsHTML()}</div>
