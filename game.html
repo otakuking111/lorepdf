@@ -37,7 +37,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 #fx{position:fixed;inset:0;pointer-events:none;background:radial-gradient(transparent 35%,rgba(255,40,70,.6));opacity:0;transition:opacity .4s}#fx.on{opacity:1;transition:none}
 #panel{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,10,14,.62);padding:16px;touch-action:auto}
 #panel.on{display:flex}
-.card{max-width:460px;width:100%;max-height:92vh;overflow:auto;background:var(--pn);border:2px solid var(--cy);border-radius:10px;padding:20px;text-align:center}
+.card{max-width:460px;width:100%;max-height:92vh;max-height:calc(100dvh - 28px);touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;overflow:auto;background:var(--pn);border:2px solid var(--cy);border-radius:10px;padding:20px;text-align:center}
 .card h1{margin:0 0 6px;font-size:clamp(26px,7vw,38px);color:var(--ac)}
 .card p{margin:6px 0;line-height:1.6;font-size:15px}
 .new{border:2px solid var(--gd);background:rgba(255,209,102,.1);border-radius:8px;padding:10px;margin:10px 0;animation:glow 1s ease-in-out infinite alternate}
@@ -57,6 +57,8 @@ button:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .lb{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--cy);margin:12px 0 4px!important}.tg{opacity:.8;font-size:14px;margin:0 0 6px}
 @media (pointer:fine){.tb{min-width:64px;height:64px;opacity:.95;background:rgba(10,22,30,.82);border:2px solid var(--cy);font-size:24px;box-shadow:0 3px 0 rgba(0,0,0,.55)}.tb small{font-size:12px;font-weight:800;letter-spacing:.8px;opacity:1;color:var(--gd)}.tb:hover{opacity:1;border-color:#fff}.tb.on{background:rgba(61,214,255,.5)}#tr{left:88px}#tj{min-width:136px;bottom:calc(92px + env(safe-area-inset-bottom,0px))}#pz,#fs{background:rgba(10,22,30,.82);border-width:2px}}
 @media (pointer:coarse) and (orientation:portrait){.tb,#tj{bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
+.lvb{padding:6px 0;width:38px;font-size:14px}
+@media (max-width:520px),(max-height:480px){#panel{padding:10px}.card{padding:12px}.card h1{font-size:24px}.card p{margin:4px 0;font-size:13px}.tg{font-size:12px}.lb{margin:8px 0 2px!important}.row{margin:5px 0}.wc{width:calc(25% - 6px);padding:6px 2px 4px;font-size:10px}.wc svg{height:24px}.lvb{width:34px;padding:5px 0;font-size:13px}button.o{padding:9px 18px;font-size:16px}}
 </style>
 </head>
 <body>
@@ -72,20 +74,20 @@ const SV={best:1,wp:0,un:1,seen:1,as:1};
 try{Object.assign(SV,JSON.parse(localStorage.getItem('pdr3')||'{}'))}catch(e){}
 const save=()=>{try{localStorage.setItem('pdr3',JSON.stringify(SV))}catch(e){}};
 const WP=[
-{n:'Pistol',d:'Balanced and accurate.',c:0x3dd6ff,rec:10,tq:7,cd:.15,mag:7,rel:.8,pel:1,sp:0,len:1,auto:0,burst:0},
+{n:'Pistol',d:'Balanced and accurate.',c:0x3d8bff,rec:10,tq:7,cd:.15,mag:7,rel:.8,pel:1,sp:0,len:1,auto:0,burst:0},
 {n:'Revolver',d:'Heavy kick. Great for big jumps.',c:0xffc247,rec:14,tq:10,cd:.28,mag:6,rel:1,pel:1,sp:0,len:1.15,auto:0,burst:0},
-{n:'SMG',d:'Rapid fire. Hold to hover.',c:0xb388ff,rec:4.6,tq:3.2,cd:.075,mag:24,rel:1.2,pel:1,sp:.07,len:1,auto:1,burst:0},
-{n:'Gun-Blade',d:'Pistol with a blade. Auto-slashes enemies that get close.',c:0xe8f1f7,rec:9,tq:6,cd:.17,mag:8,rel:.8,pel:1,sp:0,len:1.1,auto:0,burst:0,sw:1},
-{n:'Shotgun',d:'Five pellets, huge recoil.',c:0xff6b3d,rec:20,tq:13,cd:.55,mag:4,rel:1.1,pel:5,sp:.2,len:1.5,auto:0,burst:0},
-{n:'Burst Rifle',d:'Three-round bursts, very accurate.',c:0x7cfc9a,rec:6,tq:4.2,cd:.3,mag:18,rel:1.1,pel:1,sp:.02,len:1.4,auto:0,burst:3},
-{n:'Gatling',d:'Endless spray. Fly with fire.',c:0xff4fd8,rec:3,tq:2.2,cd:.045,mag:60,rel:2.2,pel:1,sp:.1,len:1.3,auto:1,burst:0}];
+{n:'SMG',d:'Rapid fire. Hold to hover.',c:0x1b1b1b,pc:0xffffff,tx:1,rec:4.6,tq:3.2,cd:.075,mag:24,rel:1.2,pel:1,sp:.07,len:1,auto:1,burst:0},
+{n:'Gun-Blade',d:'Pistol with a blade. Auto-slashes enemies that get close.',c:0x8b5a2b,rec:9,tq:6,cd:.17,mag:8,rel:.8,pel:1,sp:0,len:1.1,auto:0,burst:0,sw:1},
+{n:'Shotgun',d:'Five pellets, huge recoil.',c:0xd63a2a,rec:20,tq:13,cd:.55,mag:4,rel:1.1,pel:5,sp:.2,len:1.5,auto:0,burst:0},
+{n:'Burst Rifle',d:'Three-round bursts, very accurate.',c:0x5fbf4a,rec:6,tq:4.2,cd:.3,mag:18,rel:1.1,pel:1,sp:.02,len:1.4,auto:0,burst:3},
+{n:'Gatling',d:'Endless spray. Fly with fire.',c:0x9b59ff,rec:3,tq:2.2,cd:.045,mag:60,rel:2.2,pel:1,sp:.1,len:1.3,auto:1,burst:0}];
 // p=platforms[x,y,w,h]  e=enemies[x,y,type(0 sentry,1 roamer,2 burst,3 fan,4 blader,5 bomb),interval,range]
 const hex=c=>'#'+c.toString(16).padStart(6,'0');
 const IC=[
 c=>`<rect x='10' y='9' width='32' height='8' rx='2' fill='${c}'/><rect x='40' y='11' width='14' height='4' fill='#111'/><path d='M14 17h9l-3 12h-8z' fill='#2c3440'/>`,
 c=>`<rect x='8' y='9' width='28' height='8' rx='2' fill='${c}'/><circle cx='30' cy='13' r='6' fill='#2c3440' stroke='${c}'/><rect x='36' y='11' width='22' height='4' fill='#111'/><path d='M12 17h9l-3 12h-8z' fill='#2c3440'/>`,
-c=>`<rect x='8' y='8' width='34' height='9' rx='2' fill='${c}'/><rect x='40' y='11' width='16' height='3' fill='#111'/><rect x='22' y='17' width='6' height='12' fill='#2c3440'/><path d='M10 17h8l-3 10h-7z' fill='#2c3440'/>`,
-c=>`<rect x='6' y='11' width='22' height='7' rx='2' fill='${c}'/><path d='M9 18h8l-3 10h-8z' fill='#2c3440'/><path d='M28 12h24l8 3-8 3H28z' fill='#e8f1f7'/><rect x='26' y='9' width='3' height='12' fill='#ffd166'/>`,
+c=>`<rect x='8' y='8' width='34' height='9' rx='2' fill='#161616' stroke='#666'/><g fill='#fff'><circle cx='14' cy='12' r='1'/><circle cx='20' cy='14' r='1'/><circle cx='26' cy='11' r='1'/><circle cx='32' cy='14' r='1'/><circle cx='38' cy='11' r='1'/></g><rect x='40' y='11' width='16' height='3' fill='#111'/><rect x='22' y='17' width='6' height='12' fill='#2c3440'/><path d='M10 17h8l-3 10h-7z' fill='#2c3440'/>`,
+c=>`<rect x='6' y='11' width='22' height='7' rx='2' fill='${c}'/><path d='M9 18h8l-3 10h-8z' fill='#2c3440'/><path d='M28 12h24l8 3-8 3H28z' fill='#b8c2cc'/><rect x='26' y='9' width='3' height='12' fill='#ffd166'/>`,
 c=>`<rect x='4' y='12' width='14' height='7' rx='2' fill='#7a4b2a'/><rect x='16' y='9' width='42' height='4' fill='${c}'/><rect x='16' y='14' width='42' height='4' fill='${c}'/><rect x='26' y='19' width='12' height='4' rx='1' fill='#2c3440'/>`,
 c=>`<rect x='2' y='11' width='14' height='8' rx='2' fill='#2c3440'/><rect x='14' y='10' width='26' height='7' rx='2' fill='${c}'/><rect x='38' y='12' width='24' height='3' fill='#111'/><rect x='22' y='6' width='10' height='4' rx='1' fill='#111'/><rect x='24' y='17' width='5' height='9' fill='#2c3440'/>`,
 c=>`<rect x='6' y='11' width='18' height='10' rx='3' fill='#2c3440'/><rect x='22' y='8' width='36' height='3' fill='${c}'/><rect x='22' y='12' width='36' height='3' fill='${c}'/><rect x='22' y='16' width='36' height='3' fill='${c}'/><circle cx='22' cy='13.5' r='6' fill='${c}'/>`];
@@ -127,8 +129,9 @@ const wall=new THREE.Mesh(new THREE.PlaneGeometry(60,40),M(0x20384a));wall.posit
 const grid=new THREE.GridHelper(60,30,0x2d4c63,0x2d4c63);grid.rotation.x=Math.PI/2;grid.position.set(0,6,-1.55);scene.add(grid);
 const sa=[];for(let i=0;i<160;i++)sa.push(Math.random()*50-25,Math.random()*30-2,-1.4);const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(sa,3));const stars=new THREE.Points(sg,new THREE.PointsMaterial({color:0xbfe9ff,size:.12,transparent:true,opacity:.5}));scene.add(stars);
 const EC=[0xe63946,0x3dd6a0,0xffa23d,0xc77dff,0xb8c4ff];
-function mkGun(c,len,sw){const g=new THREE.Group(),l=len||1;if(sw)box(1.5,.1,.06,0xe8f1f7,1.55,-.12,0,g);
- box(1.1*l,.28,.26,c,.3*l,.08,0,g);box(.3,.55,.24,0x222831,-.1,-.3,0,g).rotation.z=.18;box(.4*l,.12,.12,0x111111,.95*l,.1,0,g);box(.1,.1,.1,0xffffff,0,.28,0,g);return g}
+let _dt;function dotTex(){if(_dt)return _dt;const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.fillStyle='#111';x.fillRect(0,0,64,64);x.fillStyle='#fff';for(let i=0;i<4;i++)for(let j=0;j<4;j++){x.beginPath();x.arc(8+i*16+(j%2)*8,8+j*16,3,0,6.3);x.fill()}_dt=new THREE.CanvasTexture(c);return _dt}
+function mkGun(c,len,sw,tx){const g=new THREE.Group(),l=len||1;if(sw)box(1.5,.1,.06,0xb8c2cc,1.55,-.12,0,g);
+ const bd=box(1.1*l,.28,.26,c,.3*l,.08,0,g);if(tx){bd.material.map=dotTex();bd.material.color.set(0xffffff);bd.material.needsUpdate=true}box(.3,.55,.24,0x222831,-.1,-.3,0,g).rotation.z=.18;box(.4*l,.12,.12,0x111111,.95*l,.1,0,g);box(.1,.1,.1,0xffffff,0,.28,0,g);return g}
 const geo=new THREE.SphereGeometry(1,8,8),bm1=new THREE.MeshBasicMaterial({color:0xfff2a8}),bm2=new THREE.MeshBasicMaterial({color:0xff3b3b});
 const LG=new THREE.Group();scene.add(LG);
 const laserG=new THREE.BoxGeometry(1,.05,.05);laserG.translate(.5,0,0);
@@ -157,7 +160,7 @@ function loadLevel(n,retry){clear();lvl=n;if(!retry)deaths=0;D=Math.min(1,(n-1)/
    t:d[2],iv:d[3]*(1-.32*D),amp:Math.max(1.8,d[4]*1.6),tm:-.9-Math.random()*1.3,aim:Math.PI,lock:false,b:0,bt:0,k:0,m,lz,hp,sc:hp>1?1.3:1.1,alive:true});
   m.position.set(d[0],d[1],0)});
  const W=WP[SV.wp];if(!P.m){P.m=new THREE.Group();scene.add(P.m)}
- P.m.clear();const g=mkGun(W.c,W.len,W.sw);while(g.children.length)P.m.add(g.children[0]);sight.position.set(.9*W.len+.25,.1,0);P.m.add(sight);P.m.visible=true;
+ P.m.clear();const g=mkGun(W.c,W.len,W.sw,W.tx);while(g.children.length)P.m.add(g.children[0]);sight.position.set(.9*W.len+.25,.1,0);P.m.add(sight);P.m.visible=true;
  Object.assign(P,{x:-7,y:1,vx:0,vy:0,a:0,w:0,cd:0,rl:0,q:0,buf:0,en:100,gt:0,jb:0,hp:3,inv:1,am:W.mag,alive:true});
  st='play';ts=1;msg('LEVEL '+n,1.2);$('fh').className=n<=2?'on':'';
  $('hint').textContent=n<=2?(matchMedia('(pointer:coarse)').matches?'Tap the screen to fire. ◀ ▶ move, ▲ jump (hold to fly). ⏸ pause.':'Click anywhere / Enter: fire (recoil moves you). A D: move. Space: jump (hold in air = jetpack). P: pause.'):n===6?'New: BOMB — shoot it to blow up nearby enemies. Stay clear!':n===7?'New: BLADER — it dashes and slashes. Dodge the red laser!':'';hud()}
@@ -198,7 +201,7 @@ function hurt(e){if(e.t===5)return boom(e);if(--e.hp>0){spawn(e.x,e.y,0xffffff,8
  if(!en.some(q=>q.alive&&q.t!==5)&&st==='play')win()}
 function hitP(b){if(P.inv>0)return;P.hp--;hud();if(P.hp<=0)return die();
  $('fx').classList.add('on');setTimeout(()=>$('fx').classList.remove('on'),70);P.inv=1.3;P.vx+=Math.sign(b.vx||1)*5;P.vy+=3;shake=.4;spawn(P.x,P.y,0xff5470,10,8,.15);tone(180,.2,'sawtooth',.15,60)}
-function die(){if(!P.alive)return;P.alive=false;P.m.visible=false;spawn(P.x,P.y,WP[SV.wp].c,26,10,.25);spawn(P.x,P.y,0xffffff,8,8);sBoom();shake=.6;deaths++;ts=.35;msg('YOU DIED',1.4);setTimeout(()=>{ts=1;if(st==='play')loadLevel(lvl,1)},1000)}
+function die(){if(!P.alive)return;P.alive=false;P.m.visible=false;spawn(P.x,P.y,WP[SV.wp].pc||WP[SV.wp].c,26,10,.25);spawn(P.x,P.y,0xffffff,8,8);sBoom();shake=.6;deaths++;ts=.35;msg('YOU DIED',1.4);setTimeout(()=>{ts=1;if(st==='play')loadLevel(lvl,1)},1000)}
 function stats(w){return 'Recoil '+'▮'.repeat(Math.round(w.rec/4))+' &nbsp; Fire rate '+'▮'.repeat(Math.max(1,Math.round(.3/w.cd)))+' &nbsp; Ammo '+w.mag}
 function win(){st='win';ts=.3;const nu=Math.min(WP.length,1+Math.floor(lvl/2)),nw=nu>SV.un;
  msg(nw?'NEW WEAPON UNLOCKED!':'LEVEL COMPLETE!',2,nw?'gold':'');if(nw)sUnlock();
@@ -272,13 +275,13 @@ const show=h=>{PN.innerHTML='<div class="card">'+h+'</div>';PN.classList.add('on
 function menu(){st='menu';loadLevel(1);st='menu';msg('');hide();$('fh').className='';$('hint').textContent='';
  let h='<h1>🔫 PISTOL DUEL 3D</h1><p class="tg">Use recoil to fly. Wipe out every enemy. Avoid getting hit.</p><p class="lb">Loadout</p><div class="row">';
  WP.forEach((w,i)=>{h+=wCard(w,i,0)});
- h+='</div><p style="font-size:13px">'+WP[SV.wp].d+'</p><div class="row"><button class="s" id="as">Aim assist: '+(SV.as?'ON':'OFF')+'</button></div><p class="lb">Select Level</p><div class="row">';
- for(let i=1;i<=Math.min(SV.best,24);i++)h+='<button class="s" data-l="'+i+'">'+i+'</button>';
+ h+='</div><p style="font-size:13px">'+WP[SV.wp].d+'</p><div class="row"><button class="s" id="as">Aim assist: '+(SV.as?'ON':'OFF')+'</button></div><p class="lb">Select Level</p><div class="row lvs">';
+ for(let i=1;i<=Math.min(SV.best,24);i++)h+='<button class="s lvb" data-l="'+i+'">'+i+'</button>';
  h+='</div><button class="o" id="pl">Play level '+SV.best+'</button><p class="kh" style="font-size:12px;opacity:.7">Fire: click / tap / Enter &nbsp;•&nbsp; Move: A D / ← → &nbsp;•&nbsp; Jump / hold to fly: Space / W / ↑ &nbsp;•&nbsp; Pause: P &nbsp;•&nbsp; Reload: R</p>';show(h);
  PN.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{SV.wp=+b.dataset.w;SV.seen=Math.max(SV.seen,SV.wp+1);save();menu()});
  PN.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{au();hide();loadLevel(+b.dataset.l)});
  $('as').onclick=()=>{SV.as=SV.as?0:1;save();menu()};$('pl').onclick=()=>{au();hide();loadLevel(SV.best)}}
-function resize(){const w=innerWidth,h=innerHeight,a=w/h,t=Math.tan(22.5*Math.PI/180);R.setSize(w,h);cam.aspect=a;cam.updateProjectionMatrix();vhw=11.2-3.8*clamp((1-a)/.4,0,1);cam.userData.d=Math.max(7.2/t,vhw/(t*a))}
+function resize(){const w=innerWidth,h=innerHeight,a=w/h,t=Math.tan(22.5*Math.PI/180);R.setSize(w,h);cam.aspect=a;cam.updateProjectionMatrix();vhw=11.2;cam.userData.d=Math.max(7.2/t,vhw/(t*a))}
 addEventListener('resize',resize);resize();
 addEventListener('pointerdown',e=>{if(e.target.closest('#panel,.tb,#pz,#fs'))return;press()});
 addEventListener('pointerup',()=>hold=false);addEventListener('pointercancel',()=>hold=false);
