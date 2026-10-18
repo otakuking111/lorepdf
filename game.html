@@ -37,8 +37,9 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 #tj{border-color:rgba(255,209,102,.8)}#tj.on{background:rgba(255,209,102,.4)}
 #tf{border-color:rgba(255,107,61,.85)}#tf.on{background:rgba(255,107,61,.4)}
 @media (pointer:fine){.tb{opacity:.92;background:rgba(10,22,30,.82);box-shadow:0 3px 0 rgba(0,0,0,.55)}.tb:hover{opacity:1;border-color:#fff}#pad{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}#pz,#fs{background:rgba(10,22,30,.82)}}
-@media (pointer:coarse){#tf,.tb small,#hint{display:none!important}#low{bottom:calc(98px + env(safe-area-inset-bottom,0px))}#fh .m{display:inline}#fh .d{display:none}}
+@media (pointer:coarse){#tf,.tb small,#hint{display:none!important}#pad{padding-bottom:calc(44px + env(safe-area-inset-bottom,0px))}#low{bottom:calc(128px + env(safe-area-inset-bottom,0px))}#fh .m{display:inline}#fh .d{display:none}}
 @media (max-height:420px){.tb{width:58px;height:58px;font-size:22px}#low{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
+@media (pointer:coarse) and (max-height:480px){.tb{width:56px;height:56px;font-size:22px;border-radius:15px}#pad{padding-bottom:calc(34px + env(safe-area-inset-bottom,0px))}.grp{gap:14px}#low{bottom:calc(12px + env(safe-area-inset-bottom,0px))}}
 @media (prefers-reduced-motion:reduce){#fh,.new,.stp.big .ic{animation:none}}
 /* panels */
 #panel{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,rgba(14,27,36,.5),rgba(3,8,12,.9));padding:14px;touch-action:auto}
@@ -87,6 +88,7 @@ button.st small{display:block;font-weight:500;color:var(--mut);font-size:12px;ma
 .stp b{display:block;font-size:14px;letter-spacing:.5px}.stp span{font-size:12.5px;color:var(--mut);line-height:1.4}
 .stp.big{border-color:var(--gd);background:rgba(255,209,102,.08)}.stp.big .ic{background:var(--gd);color:#201400;font-size:22px;animation:tap 1.2s ease-in-out infinite}
 @keyframes tap{50%{transform:scale(1.12)}}
+.card.sm{max-width:400px;padding:16px 16px 0}.sm h1{font-size:22px;margin:0}.sm .steps{gap:6px;margin-top:10px}.sm .stp{padding:7px 10px;gap:10px;border-radius:10px}.sm .stp .ic{width:46px;height:34px;font-size:13px}.sm .stp.big .ic{font-size:18px}.sm .stp b{font-size:12.5px}.sm .stp span{font-size:11.5px;line-height:1.3}.sm .foot{margin:10px -16px 0;padding:12px 16px}.sm .foot .o{padding:10px;font-size:16px}
 .new{border:2px solid var(--gd);background:rgba(255,209,102,.1);border-radius:8px;padding:10px;margin:10px 0;animation:glow 1s ease-in-out infinite alternate}
 .new h2{margin:0;color:var(--gd);font-size:20px}
 @keyframes glow{from{box-shadow:0 0 0 rgba(255,209,102,0)}to{box-shadow:0 0 22px rgba(255,209,102,.6)}}
@@ -321,18 +323,20 @@ const show=(h,keep)=>{const o=keep&&PN.firstChild?PN.firstChild.scrollTop:0;PN.i
 const setRow=(id,on,t,s)=>`<button class="st${on?' on':''}" id="${id}"><span>${t}<small>${s}</small></span><i class="pill"></i></button>`;
 const settingsHTML=()=>`<div class="set">${setRow('as',SV.as,'Aim assist','Gently steers your gun toward enemies')}${setRow('snd',!SV.mu,'Sound','Effects &amp; alerts')}<button class="st" id="how"><span>How to play<small>Controls &amp; tips</small></span><span>›</span></button></div>`;
 function tutorial(back){const m=matchMedia('(pointer:coarse)').matches;
- const S=(m?[
- ['👆','TAP ANYWHERE TO FIRE','Touch the screen anywhere outside the buttons. Hold your finger down for automatic weapons.',1],
- ['◀ ▶','MOVE','Use the left and right buttons at the bottom-left.'],
- ['▲','JUMP &amp; FLY','Tap to jump. Hold it in mid-air for a jetpack.']]:[
- ['🖱️','CLICK TO FIRE','Click anywhere or press ENTER. Hold for automatic weapons.',1],
- ['A D','MOVE','A / D or the ← / → arrow keys.'],
- ['SPACE','JUMP &amp; FLY','Space or W to jump. Hold it in mid-air for a jetpack.'],
- ['R · P','RELOAD &amp; PAUSE','Press R to reload and P to pause.']]).concat([
- ['💥','USE THE RECOIL','Every shot kicks you backward — aim down to launch yourself up.'],
- ['🔴','DODGE THE LASER','A red beam warns you just before an enemy fires.']]);
+ const S=m?[
+ ['👆','TAP TO FIRE','Touch anywhere on the screen. Hold for auto weapons.',1],
+ ['◀ ▶','MOVE','Left / right buttons, bottom-left.'],
+ ['▲','JUMP &amp; FLY','Tap to jump. Hold in mid-air to fly.'],
+ ['💥','USE RECOIL','Every shot kicks you back. Aim down to go up.'],
+ ['🔴','DODGE THE LASER','A red beam warns you before enemies fire.']]:[
+ ['🖱️','CLICK TO FIRE','Click anywhere or press ENTER. Hold for auto weapons.',1],
+ ['A D','MOVE','A / D or the ← → arrow keys.'],
+ ['SPACE','JUMP &amp; FLY','Space or W to jump. Hold in mid-air to fly.'],
+ ['R · P','RELOAD / PAUSE','R reloads, P pauses.'],
+ ['💥','USE RECOIL','Every shot kicks you back. Aim down to go up.'],
+ ['🔴','DODGE THE LASER','A red beam warns you before enemies fire.']];
  show('<h1>HOW TO PLAY</h1><div class="steps">'+S.map(s=>`<div class="stp${s[3]?' big':''}"><div class="ic">${s[0]}</div><div><b>${s[1]}</b><span>${s[2]}</span></div></div>`).join('')+'</div><div class="foot"><button class="o" id="ok">GOT IT</button></div>');
- $('ok').onclick=back}
+ PN.firstChild.classList.add('sm');$('ok').onclick=back}
 function bg(){loadLevel(1);st='menu';msg('');$('fh').className='';$('hint').textContent=''}
 function startLevel(n){au();hide();loadLevel(n);if(!SV.tut){SV.tut=1;save();st='pause';tutorial(()=>{hide();if(st==='pause')st='play'})}}
 function renderMenu(){const un=SV.un,cnt=Math.max(12,Math.min(SV.best+2,60));let lv='';
