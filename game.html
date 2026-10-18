@@ -1,957 +1,248 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RECOIL DUEL 3D - Milestone 1</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-            margin: 0;
-            padding: 0;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #0b0e14;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            touch-action: none;
-        }
-        #canvas-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-        #ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-        }
-        .interactive {
-            pointer-events: auto;
-        }
-        /* HUD Top Header */
-        .hud-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 24px;
-            border-radius: 16px;
-            color: #fff;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-        .stat-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .stat-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #94a3b8;
-        }
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #f8fafc;
-        }
-        .stat-value.ammo { color: #f59e0b; }
-        .stat-value.score { color: #10b981; }
-        .stat-value.target { color: #ef4444; }
-
-        /* Mobile Overlay Controls */
-        #mobile-fire-btn {
-            display: none;
-            position: absolute;
-            bottom: 40px;
-            right: 40px;
-            width: 88px;
-            height: 88px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ef4444, #b91c1c);
-            border: 3px solid rgba(255,255,255,0.4);
-            color: white;
-            font-weight: 900;
-            font-size: 1.1rem;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
-            active-transform: scale(0.95);
-        }
-
-        /* Overlay Screens */
-        .modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 15, 26, 0.85);
-            backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-            pointer-events: auto;
-            transition: opacity 0.3s ease;
-        }
-        .modal-card {
-            background: #1e293b;
-            border: 2px solid #334155;
-            padding: 36px 48px;
-            border-radius: 24px;
-            text-align: center;
-            max-width: 440px;
-            width: 90%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            color: #f8fafc;
-        }
-        .modal-card h1 {
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin-bottom: 8px;
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .modal-card p {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-        .btn-primary {
-            width: 100%;
-            padding: 14px 28px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffffff;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-            transition: all 0.2s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
-        }
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-        .controls-hint {
-            margin-top: 18px;
-            font-size: 0.8rem;
-            color: #64748b;
-        }
-
-        /* Sound Toggle */
-        #sound-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid #475569;
-            color: white;
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            z-index: 15;
-        }
-
-        .hidden { display: none !important; }
-    </style>
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pistol Duel 3D</title>
+<style>
+:root{color-scheme:dark;--bg:#0e1b24;--fg:#eaf6ff;--ac:#ff6b3d;--cy:#3dd6ff;--gd:#ffd166;--pn:rgba(10,22,30,.93);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1b24}}
+:root[data-theme="dark"]{--bg:#0e1b24}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--fg);font-family:"Trebuchet MS","Segoe UI",sans-serif;user-select:none;-webkit-user-select:none;touch-action:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+#hud{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;padding:10px 14px;font-size:15px;pointer-events:none;text-shadow:0 2px 4px #000}
+#hud b{color:var(--cy)}#hp{color:#ff5470;letter-spacing:2px}
+#low{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;pointer-events:none;text-shadow:0 2px 4px #000}
+#ammo{font-size:18px;color:var(--cy);letter-spacing:1px}
+#bar{width:140px;height:7px;background:#0a141a;border:1px solid #2d4c63;margin:6px auto 0;border-radius:4px;overflow:hidden}
+#bar i{display:block;height:100%;width:100%;background:var(--cy)}
+#hint{font-size:13px;opacity:.8;margin-top:6px}
+#msg{position:fixed;top:34%;left:0;right:0;text-align:center;font-size:clamp(28px,7.5vw,64px);font-weight:900;text-shadow:0 4px 0 #000;pointer-events:none}
+#msg.gold{color:var(--gd)}
+.tb{position:fixed;bottom:calc(60px + env(safe-area-inset-bottom,0px));width:68px;height:68px;border-radius:50%;background:rgba(61,214,255,.22);border:2px solid var(--cy);color:var(--fg);font-size:28px;display:none;align-items:center;justify-content:center;touch-action:none}
+#tl{left:14px}#tr{left:92px}#tj{right:14px;background:rgba(255,209,102,.22);border-color:var(--gd)}
+@media (pointer:coarse){.tb{display:flex}}
+#panel{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,10,14,.62);padding:16px;touch-action:auto}
+#panel.on{display:flex}
+.card{max-width:460px;width:100%;max-height:92vh;overflow:auto;background:var(--pn);border:2px solid var(--cy);border-radius:10px;padding:20px;text-align:center}
+.card h1{margin:0 0 6px;font-size:clamp(26px,7vw,38px);color:var(--ac)}
+.card p{margin:6px 0;line-height:1.6;font-size:15px}
+.new{border:2px solid var(--gd);background:rgba(255,209,102,.1);border-radius:8px;padding:10px;margin:10px 0;animation:glow 1s ease-in-out infinite alternate}
+.new h2{margin:0;color:var(--gd);font-size:20px}
+@keyframes glow{from{box-shadow:0 0 0 rgba(255,209,102,0)}to{box-shadow:0 0 22px rgba(255,209,102,.6)}}
+.row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+button{font:inherit;font-weight:700;font-size:16px;color:#08151c;background:var(--cy);border:0;border-bottom:4px solid #1b7f9c;border-radius:6px;padding:9px 14px;cursor:pointer}
+button.o{background:var(--ac);border-bottom-color:#a63a17;font-size:18px;padding:11px 22px}
+button.g{background:var(--gd);border-bottom-color:#a67c10}
+button.s{background:#16303d;color:var(--fg);border-bottom-color:#000}
+button.sel{outline:3px solid #fff}
+button:disabled{opacity:.4}
+button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.new{animation:none}}
+</style>
 </head>
 <body>
-
-    <div id="canvas-container"></div>
-
-    <button id="sound-toggle" class="interactive">🔊 Audio: ON</button>
-
-    <div id="ui-layer">
-        <div class="hud-header">
-            <div class="stat-box">
-                <span class="stat-label">Shots Left</span>
-                <span id="ammo-val" class="stat-value ammo">10</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-label">Target HP</span>
-                <span id="target-val" class="stat-value target">3/3</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-label">Score</span>
-                <span id="score-val" class="stat-value score">0</span>
-            </div>
-        </div>
-
-        <button id="mobile-fire-btn" class="interactive">FIRE</button>
-    </div>
-
-    <!-- Start / Menu Overlay -->
-    <div id="start-modal" class="modal-overlay">
-        <div class="modal-card">
-            <h1>RECOIL DUEL</h1>
-            <p>Master physical weapon recoil! Aim your weapon by dragging/moving mouse, fire to launch bullets & propel your gun backward into position!</p>
-            <button id="start-btn" class="btn-primary">START DUEL</button>
-            <div class="controls-hint">
-                Desktop: Mouse to Aim | Click to Fire | 'R' to Reload<br>
-                Mobile: Drag to Aim | Tap FIRE button
-            </div>
-        </div>
-    </div>
-
-    <!-- Game Over Overlay -->
-    <div id="gameover-modal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <h1 id="result-title">VICTORY!</h1>
-            <p id="result-desc">Target eliminated successfully!</p>
-            <button id="restart-btn" class="btn-primary">PLAY AGAIN</button>
-        </div>
-    </div>
-
-    <script>
-        /**
-         * RECOIL DUEL 3D - Engine & Game Logic (Milestone 1)
-         */
-        
-        // --- GAME CONFIG & STATE ---
-        const CONFIG = {
-            maxAmmo: 10,
-            targetMaxHP: 3,
-            recoilForce: 0.85,
-            recoilTorque: 0.3,
-            damping: 0.92,
-            returnSpeed: 0.08,
-            fireCooldown: 250 // ms
-        };
-
-        let state = {
-            isPlaying: false,
-            ammo: CONFIG.maxAmmo,
-            targetHP: CONFIG.targetMaxHP,
-            score: 0,
-            lastFireTime: 0,
-            audioEnabled: true
-        };
-
-        // --- THREE.JS SETUP ---
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0f172a);
-        scene.fog = new THREE.FogExp2(0x0f172a, 0.035);
-
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 2.5, 7);
-        camera.lookAt(0, 1, 0);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        container.appendChild(renderer.domElement);
-
-        // --- LIGHTING ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
-        dirLight.position.set(5, 12, 8);
-        dirLight.castShadow = true;
-        dirLight.shadow.mapSize.width = 1024;
-        dirLight.shadow.mapSize.height = 1024;
-        scene.add(dirLight);
-
-        const pointLight = new THREE.PointLight(0xef4444, 0.8, 10);
-        pointLight.position.set(0, 2, -2);
-        scene.add(pointLight);
-
-        // --- ENVIRONMENT BUILD ---
-        // Arena Floor
-        const floorGeo = new THREE.PlaneGeometry(30, 30);
-        const floorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.2 });
-        const floor = new THREE.Mesh(floorGeo, floorMat);
-        floor.rotation.x = -Math.PI / 2;
-        floor.receiveShadow = true;
-        scene.add(floor);
-
-        // Grid overlay
-        const grid = new THREE.GridHelper(30, 30, 0x38bdf8, 0x334155);
-        grid.position.y = 0.01;
-        scene.add(grid);
-
-        // Arena Pillars
-        for (let i = -1; i <= 1; i += 2) {
-            const pillarGeo = new THREE.BoxGeometry(0.8, 6, 0.8);
-            const pillarMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
-            const pillar = new THREE.Mesh(pillarGeo, pillarMat);
-            pillar.position.set(i * 4.5, 3, -4);
-            pillar.castShadow = true;
-            scene.add(pillar);
-        }
-
-        // --- PLAYER WEAPON CREATION ---
-        const playerGroup = new THREE.Group();
-        const basePos = new THREE.Vector3(0, 1.2, 3);
-        playerGroup.position.copy(basePos);
-        scene.add(playerGroup);
-
-        // Low-poly Gun Assembly
-        const weaponMesh = new THREE.Group();
-        
-        // Gun Body
-        const bodyGeo = new THREE.BoxGeometry(0.3, 0.4, 1.2);
-        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.3, metalness: 0.8 });
-        const body = new THREE.Mesh(bodyGeo, bodyMat);
-        body.castShadow = true;
-        weaponMesh.add(body);
-
-        // Gun Barrel
-        const barrelGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.8, 16);
-        const barrelMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9, roughness: 0.2 });
-        const barrel = new THREE.Mesh(barrelGeo, barrelMat);
-        barrel.rotation.x = Math.PI / 2;
-        barrel.position.set(0, 0.08, -0.8);
-        barrel.castShadow = true;
-        weaponMesh.add(barrel);
-
-        // Handle
-        const handleGeo = new THREE.BoxGeometry(0.25, 0.6, 0.3);
-        const handleMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 });
-        const handle = new THREE.Mesh(handleGeo, handleMat);
-        handle.position.set(0, -0.4, 0.2);
-        handle.rotation.x = -0.2;
-        weaponMesh.add(handle);
-
-        playerGroup.add(weaponMesh);
-
-        // Physics State for Recoil Engine
-        let weaponVel = new THREE.Vector3();
-        let weaponRotVel = new THREE.Vector3();
-
-        // Muzzle Flash Effect Mesh
-        const flashGeo = new THREE.SphereGeometry(0.25, 8, 8);
-        const flashMat = new THREE.MeshBasicMaterial({ color: 0xfcb316, transparent: true, opacity: 0 });
-        const muzzleFlash = newHere is **Milestone 1** for **RECOIL DUEL 3D**, built as a standalone, ultra-optimized single-file HTML5/Three.js 3D application.
-
-This prototype strictly implements **Recoil Physics**, **Physics-based Raycast Target Collision**, **Full UI & State Loop**, and **Bilingual / YouTube Gaming-style aesthetics** (vibrant neon arcade visuals, high readability, punchy feedback, satisfying impact screens).
-
----
-
-### 🕹️ Complete Source Code (`index.html`)
-
-Save the code below as `index.html` and open it directly in any web browser (Chrome, Safari, Edge, Firefox) or host it on GitHub Pages.
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>RECOIL DUEL 3D - Arcade Duelist</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-            margin: 0;
-            padding: 0;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #0d0f18;
-            font-family: 'Segoe UI', Impact, Roboto, sans-serif;
-        }
-        #canvas-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-        /* UI OVERLAYS */
-        .ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-        }
-        .hud-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        .badge {
-            background: rgba(15, 23, 42, 0.85);
-            border: 2px solid #00f0ff;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .badge span {
-            color: #ff0055;
-        }
-        .crosshair {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 5;
-        }
-        .crosshair::before, .crosshair::after {
-            content: '';
-            position: absolute;
-            background: #00f0ff;
-            box-shadow: 0 0 8px #00f0ff;
-        }
-        .crosshair::before { top: 9px; left: 0; width: 20px; height: 2px; }
-        .crosshair::after { top: 0; left: 9px; width: 2px; height: 20px; }
-
-        /* SCREENS & MODALS */
-        .modal {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 20, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            pointer-events: auto;
-            transition: opacity 0.3s ease;
-        }
-        .hidden {
-            display: none !important;
-        }
-        h1 {
-            font-size: 3.5rem;
-            color: #fff;
-            text-shadow: 0 0 20px #ff0055, 0 0 40px #ff0055;
-            margin-bottom: 10px;
-            font-style: italic;
-            text-align: center;
-        }
-        p.subtitle {
-            color: #94a3b8;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .btn {
-            background: linear-gradient(135deg, #ff0055, #ff5500);
-            border: none;
-            color: white;
-            padding: 16px 40px;
-            font-size: 1.4rem;
-            font-weight: 900;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
-            transition: transform 0.1s, box-shadow 0.1s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.9);
-        }
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        /* MOBILE FIRE CONTROLS */
-        #mobile-fire-btn {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #ff0055 0%, #a00035 100%);
-            border: 4px solid #fff;
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.8);
-            color: white;
-            font-weight: 900;
-            font-size: 1.2rem;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            pointer-events: auto;
-            z-index: 15;
-            touch-action: manipulation;
-        }
-
-        @media (max-width: 768px) {
-            #mobile-fire-btn { display: flex; }
-            h1 { font-size: 2.2rem; }
-            .badge { font-size: 0.9rem; padding: 8px 14px; }
-        }
-    </style>
-    <!-- Three.js Library -->
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js](https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js)"></script>
-</head>
-<body>
-
-    <div id="canvas-container"></div>
-    <div class="crosshair"></div>
-
-    <!-- HUD OVERLAY -->
-    <div class="ui-layer">
-        <div class="hud-top">
-            <div class="badge">SCORE: <span id="score-val">0</span></div>
-            <div class="badge">AMMO: <span id="ammo-val">∞</span></div>
-            <div class="badge">TARGET HP: <span id="target-hp">100</span></div>
-        </div>
-    </div>
-
-    <!-- MOBILE FIRE BUTTON -->
-    <div id="mobile-fire-btn">FIRE</div>
-
-    <!-- START / MENU SCREEN -->
-    <div id="start-screen" class="modal">
-        <h1>RECOIL DUEL 3D</h1>
-        <p class="subtitle">Master physics recoil. Aim carefully. Knock out targets!</p>
-        <button class="btn" onclick="startGame()">PLAY PROTOTYPE</button>
-    </div>
-
-    <!-- GAME OVER / WIN SCREEN -->
-    <div id="game-over-screen" class="modal hidden">
-        <h1 id="over-title">TARGET DESTROYED!</h1>
-        <p class="subtitle" id="over-desc">You mastered the weapon recoil control.</p>
-        <button class="btn" onclick="resetGame()">PLAY AGAIN</button>
-    </div>
-
-    <script>
-        // --- GAME ENGINE & VARIABLES ---
-        let scene, camera, renderer;
-        let weaponGroup, barrelMesh, targetMesh;
-        let bullets = [], particles = [];
-        
-        // Physics & Recoil Dynamics
-        let weaponPos = new THREE.Vector3(0, 0, 2);
-        let weaponVelocity = new THREE.Vector3(0, 0, 0);
-        let weaponRot = new THREE.Vector3(0, 0, 0);
-        let weaponRotVel = new THREE.Vector3(0, 0, 0);
-
-        const restPosition = new THREE.Vector3(0, -0.2, 2.5);
-        const restRotation = new THREE.Vector3(0, 0, 0);
-
-        // Gameplay State
-        let isPlaying = false;
-        let score = 0;
-        let targetHealth = 100;
-        let lastShootTime = 0;
-        const FIRE_RATE = 200; // ms between shots
-
-        // Aiming Controls
-        let mousePos = { x: 0, y: 0 };
-        let targetRotation = { x: 0, y: 0 };
-
-        // --- INITIALIZATION ---
-        function init() {
-            const container = document.getElementById('canvas-container');
-
-            // Scene setup
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0d0f18);
-            scene.fog = new THREE.FogExp2(0x0d0f18, 0.03);
-
-            // Camera setup
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.set(0, 0, 5);
-
-            // Renderer setup
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
-            container.appendChild(renderer.domElement);
-
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-
-            const dirLight = new THREE.DirectionalLight(0x00f0ff, 1.2);
-            dirLight.position.set(5, 10, 7);
-            dirLight.castShadow = true;
-            scene.add(dirLight);
-
-            const pointLight = new THREE.PointLight(0xff0055, 1, 10);
-            pointLight.position.set(-3, 2, 0);
-            scene.add(pointLight);
-
-            // Build Objects
-            createEnvironment();
-            createWeapon();
-            createTarget();
-
-            // Event Listeners
-            window.addEventListener('resize', onWindowResize);
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mousedown', (e) => {
-                if (e.button === 0 && isPlaying) shoot();
-            });
-
-            // Touch support for Mobile Aiming
-            window.addEventListener('touchmove', onTouchMove, { passive: false });
-            document.getElementById('mobile-fire-btn').addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (isPlaying) shoot();
-            });
-
-            // Keyboard controls
-            window.addEventListener('keydown', (e) => {
-                if ((e.key === 'r' || e.key === 'R') && !isPlaying) resetGame();
-            });
-
-            // Loop Start
-            animate(0);
-        }
-
-        // --- ARENA ENVIRONMENT ---
-        function createEnvironment() {
-            // Floor Grid Visual
-            const gridHelper = new THREE.GridHelper(40, 40, 0x00f0ff, 0x1e293b);
-            gridHelper.position.y = -2;
-            scene.add(gridHelper);
-
-            // Futuristic Back Wall
-            const wallGeo = new THREE.PlaneGeometry(30, 15);
-            const wallMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.8 });
-            const wall = new THREE.Mesh(wallGeo, wallMat);
-            wall.position.set(0, 3, -10);
-            scene.add(wall);
-        }
-
-        // --- WEAPON CREATION (Stylized Low-Poly Blaster) ---
-        function createWeapon() {
-            weaponGroup = new THREE.Group();
-
-            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
-            const accentMat = new THREE.MeshStandardMaterial({ color: 0xff0055, emissive: 0x550011 });
-
-            // Main Body
-            const bodyGeo = new THREE.BoxGeometry(0.3, 0.4, 1.2);
-            const body = new THREE.Mesh(bodyGeo, bodyMat);
-            weaponGroup.add(body);
-
-            // Barrel
-            const barrelGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.8, 16);
-            barrelMesh = new THREE.Mesh(barrelGeo, bodyMat);
-            barrelMesh.rotation.x = Math.PI / 2;
-            barrelMesh.position.set(0, 0.1, -0.8);
-            weaponGroup.add(barrelMesh);
-
-            // Glowing Core Accent
-            const coreGeo = new THREE.BoxGeometry(0.32, 0.15, 0.6);
-            const core = new THREE.Mesh(coreGeo, accentMat);
-            core.position.set(0, 0.05, -0.1);
-            weaponGroup.add(core);
-
-            // Set initial rest transforms
-            weaponGroup.position.copy(restPosition);
-            scene.add(weaponGroup);
-        }
-
-        // --- TARGET OBJECT ---
-        function createTarget() {
-            const group = new THREE.Group();
-
-            // Outer Ring
-            const ringGeo = new THREE.TorusGeometry(1, 0.1, 16, 32);
-            const ringMat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, emissive: 0x0055aa });
-            const ring = new THREE.Mesh(ringGeo, ringMat);
-
-            // Core
-            const coreGeo = new THREE.CylinderGeometry(0.8, 0.8, 0.2, 32);
-            const coreMat = new THREE.MeshStandardMaterial({ color: 0xff0055, emissive: 0x330011 });
-            const core = new THREE.Mesh(coreGeo, coreMat);
-            core.rotation.x = Math.PI / 2;
-
-            group.add(ring);
-            group.add(core);
-            group.position.set(0, 0, -5);
-
-            targetMesh = group;
-            scene.add(targetMesh);
-        }
-
-        // --- SHOOTING MECHANIC & RECOIL PHYSICS ---
-        function shoot() {
-            const now = performance.now();
-            if (now - lastShootTime < FIRE_RATE) return;
-            lastShootTime = now;
-
-            // 1. RECOIL IMPULSE (PHYSICS)
-            // Push weapon backward, pitch camera/weapon up, and add minor roll
-            weaponVelocity.z += 0.45; // Backward linear recoil
-            weaponVelocity.y += 0.1;  // Upward kick
-            weaponRotVel.x += 0.25;   // Pitch rotation kick
-            weaponRotVel.z += (Math.random() - 0.5) * 0.15; // Random roll torque
-
-            // 2. SPAWN BULLET PROJECTILE
-            const bulletGeo = new THREE.SphereGeometry(0.08, 8, 8);
-            const bulletMat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-            const bullet = new THREE.Mesh(bulletGeo, bulletMat);
-
-            // Position at tip of barrel in world space
-            const barrelWorldPos = new THREE.Vector3();
-            barrelMesh.getWorldPosition(barrelWorldPos);
-            bullet.position.copy(barrelWorldPos);
-
-            // Direction vector based on current weapon orientation
-            const dir = new THREE.Vector3(0, 0, -1);
-            dir.applyQuaternion(weaponGroup.quaternion);
-
-            bullets.push({
-                mesh: bullet,
-                direction: dir,
-                speed: 1.2,
-                life: 0
-            });
-            scene.add(bullet);
-
-            // 3. MUZZLE FLASH EFFECT
-            createMuzzleFlash(barrelWorldPos);
-        }
-
-        function createMuzzleFlash(pos) {
-            const flashGeo = new THREE.SphereGeometry(0.25, 8, 8);
-            const flashMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.9 });
-            const flash = new THREE.Mesh(flashGeo, flashMat);
-            flash.position.copy(pos);
-            scene.add(flash);
-
-            setTimeout(() => {
-                scene.remove(flash);
-                flashGeo.dispose();
-                flashMat.dispose();
-            }, 40);
-        }
-
-        function createImpactParticles(pos) {
-            for (let i = 0; i < 12; i++) {
-                const pGeo = new THREE.BoxGeometry(0.05, 0.05, 0.05);
-                const pMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
-                const p = new THREE.Mesh(pGeo, pMat);
-                p.position.copy(pos);
-
-                const velocity = new THREE.Vector3(
-                    (Math.random() - 0.5) * 0.3,
-                    (Math.random() - 0.5) * 0.3,
-                    Math.random() * 0.3
-                );
-
-                particles.push({ mesh: p, vel: velocity, life: 0, maxLife: 20 });
-                scene.add(p);
-            }
-        }
-
-        // --- UPDATE LOOP & PHYSICS INTEGRATION ---
-        function animate(timestamp) {
-            requestAnimationFrame(animate);
-
-            if (isPlaying) {
-                updateAiming();
-                updateRecoilPhysics();
-                updateBullets();
-                updateParticles();
-                updateTargetAnimation(timestamp);
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        function updateAiming() {
-            // Smoothly interpolate rotation toward aim targets
-            targetRotation.x = mousePos.y * 0.4;
-            targetRotation.y = -mousePos.x * 0.6;
-        }
-
-        function updateRecoilPhysics() {
-            // Apply Spring-Damping (Harmonic Oscillator) to return to rest position
-
-            // 1. Angular Physics Dynamics
-            weaponRot.x += weaponRotVel.x;
-            weaponRot.z += weaponRotVel.z;
-
-            weaponRotVel.x += (targetRotation.x - weaponRot.x) * 0.15; // Spring force
-            weaponRotVel.z += (0 - weaponRot.z) * 0.15;
-
-            weaponRotVel.multiplyScalar(0.75); // Damping friction
-
-            weaponGroup.rotation.x = weaponRot.x;
-            weaponGroup.rotation.y = THREE.MathUtils.lerp(weaponGroup.rotation.y, targetRotation.y, 0.1);
-            weaponGroup.rotation.z = weaponRot.z;
-
-            // 2. Linear Position Physics Dynamics
-            weaponPos.add(weaponVelocity);
-
-            // Damped Spring back to Rest Position
-            const displacement = new THREE.Vector3().subVectors(restPosition, weaponPos);
-            weaponVelocity.add(displacement.multiplyScalar(0.12)); // Spring stiffness
-            weaponVelocity.multiplyScalar(0.72);                  // Dampening
-
-            weaponGroup.position.copy(weaponPos);
-        }
-
-        function updateBullets() {
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                const b = bullets[i];
-                b.mesh.position.addScaledVector(b.direction, b.speed);
-                b.life++;
-
-                // Accurate Raycast Collision Detection with Target
-                const raycaster = new THREE.Raycaster(b.mesh.position, b.direction, 0, b.speed);
-                const intersects = raycaster.intersectObject(targetMesh, true);
-
-                if (intersects.length > 0) {
-                    // HIT REGISTERED!
-                    createImpactParticles(intersects[0].point);
-                    onTargetHit();
-
-                    scene.remove(b.mesh);
-                    b.mesh.geometry.dispose();
-                    bullets.splice(i, 1);
-                    continue;
-                }
-
-                // Cleanup out-of-bounds bullets
-                if (b.life > 60) {
-                    scene.remove(b.mesh);
-                    b.mesh.geometry.dispose();
-                    bullets.splice(i, 1);
-                }
-            }
-        }
-
-        function updateParticles() {
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                p.mesh.position.add(p.vel);
-                p.life++;
-
-                if (p.life >= p.maxLife) {
-                    scene.remove(p.mesh);
-                    p.mesh.geometry.dispose();
-                    particles.splice(i, 1);
-                }
-            }
-        }
-
-        function updateTargetAnimation(time) {
-            if (targetMesh) {
-                // Bobbing & Gentle Floating
-                targetMesh.position.y = Math.sin(time * 0.003) * 0.3;
-                targetMesh.rotation.z += 0.005;
-            }
-        }
-
-        // --- GAME LOGIC & SCORING ---
-        function onTargetHit() {
-            score += 100;
-            targetHealth -= 20;
-
-            document.getElementById('score-val').innerText = score;
-            document.getElementById('target-hp').innerText = Math.max(0, targetHealth);
-
-            // Visual Punch / Screen Shock Effect
-            targetMesh.scale.set(1.2, 1.2, 1.2);
-            setTimeout(() => targetMesh.scale.set(1, 1, 1), 100);
-
-            if (targetHealth <= 0) {
-                triggerVictory();
-            }
-        }
-
-        function triggerVictory() {
-            isPlaying = false;
-            document.getElementById('over-title').innerText = "TARGET ELIMINATED!";
-            document.getElementById('over-desc').innerText = `Final Score: ${score} | Perfect Impulse Control!`;
-            document.getElementById('game-over-screen').classList.remove('hidden');
-        }
-
-        function startGame() {
-            document.getElementById('start-screen').classList.add('hidden');
-            isPlaying = true;
-        }
-
-        function resetGame() {
-            score = 0;
-            targetHealth = 100;
-            document.getElementById('score-val').innerText = '0';
-            document.getElementById('target-hp').innerText = '100';
-            document.getElementById('game-over-screen').classList.add('hidden');
-            weaponPos.copy(restPosition);
-            weaponVelocity.set(0, 0, 0);
-            isPlaying = true;
-        }
-
-        // --- INPUT & EVENT HANDLERS ---
-        function onMouseMove(event) {
-            mousePos.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mousePos.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        }
-
-        function onTouchMove(event) {
-            if (event.touches.length > 0) {
-                mousePos.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
-                mousePos.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
-            }
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        // Launch Game Engine
-        window.onload = init;
-    </script>
+<div id="hud"><span id="hs"></span><span id="hp"></span><span id="he"></span></div>
+<div id="msg"></div>
+<div id="low"><div id="ammo"></div><div id="bar"><i id="bi"></i></div><div id="hint"></div></div>
+<div class="tb" id="tl">◀</div><div class="tb" id="tr">▶</div><div class="tb" id="tj">▲</div>
+<div id="panel"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=id=>document.getElementById(id),PN=$('panel');
+const SV={best:1,wp:0,un:1,seen:1,as:1};
+try{Object.assign(SV,JSON.parse(localStorage.getItem('pdr3')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('pdr3',JSON.stringify(SV))}catch(e){}};
+const WP=[
+{n:'Pistol',d:'Balanced and accurate.',c:0x3dd6ff,rec:10,tq:7,cd:.15,mag:7,rel:.8,pel:1,sp:0,len:1,auto:0,burst:0},
+{n:'Revolver',d:'Heavy kick. Great for big jumps.',c:0xffc247,rec:14,tq:10,cd:.28,mag:6,rel:1,pel:1,sp:0,len:1.15,auto:0,burst:0},
+{n:'SMG',d:'Rapid fire. Hold to hover.',c:0xb388ff,rec:4.6,tq:3.2,cd:.075,mag:24,rel:1.2,pel:1,sp:.07,len:1,auto:1,burst:0},
+{n:'Shotgun',d:'Five pellets, huge recoil.',c:0xff6b3d,rec:20,tq:13,cd:.55,mag:4,rel:1.1,pel:5,sp:.2,len:1.5,auto:0,burst:0},
+{n:'Burst Rifle',d:'Three-round bursts, very accurate.',c:0x7cfc9a,rec:6,tq:4.2,cd:.3,mag:18,rel:1.1,pel:1,sp:.02,len:1.4,auto:0,burst:3},
+{n:'Gatling',d:'Endless spray. Fly with fire.',c:0xff4fd8,rec:3,tq:2.2,cd:.045,mag:60,rel:2.2,pel:1,sp:.1,len:1.3,auto:1,burst:0}];
+// p=platforms[x,y,w,h]  e=enemies[x,y,type(0 sentry,1 roamer,2 burst,3 fan),interval,range]
+const LV=[
+{e:[[6,4,0,3.8,0]]},
+{p:[[0,4,3,.6]],e:[[7,3,0,3.4,0],[3,8,0,3.8,0]]},
+{p:[[-3,5,2.5,.6],[4,3,2.5,.6]],e:[[7,7,1,3.2,2],[0,9.5,0,3,0]]},
+{p:[[0,3,1.2,6]],e:[[6,3,0,2.8,0],[6,8,0,3.2,0],[-6,9,0,3.6,0]]},
+{e:[[6,4,1,2.8,3],[-6,8,1,2.8,2],[0,10,0,3.2,0]]},
+{p:[[-4,6,4,.6],[4,6,4,.6]],e:[[0,9,2,3.4,0],[7,2.5,0,3,0],[-7,3,0,3,0]]},
+{p:[[0,5,6,.6],[0,9,3,.6]],e:[[7,7,1,2.6,3],[-7,7,1,2.6,3],[0,11,3,3.4,0]]},
+{p:[[0,4,2,5]],e:[[0,9,3,2.8,0],[7,5,1,2.4,3],[-7,5,1,2.4,3],[7,10,2,2.8,0],[-7,10,0,2.6,0]]}];
+function gen(n){const k=Math.min(8,3+Math.floor((n-7)/1.5)),p=[],e=[];
+ for(let i=0;i<3;i++)p.push([Math.random()*12-6,3+i*3+Math.random(),2+Math.random()*3,.6]);
+ for(let i=0;i<k;i++)e.push([(Math.random()<.5?-1:1)*(3+Math.random()*5),3+Math.random()*8,Math.floor(Math.random()*4),2.6,2+Math.random()*2]);
+ return{p,e}}
+
+/* audio */
+let AC;const au=()=>{if(!AC)try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}if(AC&&AC.state==='suspended')AC.resume()};
+function tone(f,d,ty,v,f2){if(!AC)return;const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;o.type=ty||'sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f2||f/2,t+d);g.gain.setValueAtTime(v||.2,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d)}
+function noise(d,v){if(!AC)return;const n=AC.sampleRate*d,b=AC.createBuffer(1,n,AC.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);const s=AC.createBufferSource(),g=AC.createGain();s.buffer=b;g.gain.value=v;s.connect(g).connect(AC.destination);s.start()}
+const sShot=()=>{noise(.16,.3);tone(140,.14,'square',.1)},sBoom=()=>{noise(.5,.55);tone(70,.4,'sine',.4)},sThud=v=>tone(90,.1,'sine',Math.min(.2,v/40)),sEn=()=>tone(260,.25,'sawtooth',.05,520),sJump=()=>tone(300,.12,'triangle',.1,600),
+ sUnlock=()=>[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.3,'triangle',.22,f*1.01),i*110));
+
+/* three */
+const R=new THREE.WebGLRenderer({antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;document.body.prepend(R.domElement);
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,.1,200);
+scene.add(new THREE.HemisphereLight(0xffffff,0x334455,.8));
+const dl=new THREE.DirectionalLight(0xffffff,.85);dl.position.set(-6,14,12);dl.castShadow=true;Object.assign(dl.shadow.camera,{left:-16,right:16,top:16,bottom:-6,far:40});dl.shadow.mapSize.set(1024,1024);scene.add(dl);
+const M=(c,e)=>new THREE.MeshLambertMaterial({color:c,emissive:e||0});
+function box(w,h,d,c,x,y,z,p){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;p&&p.add(m);return m}
+const wall=new THREE.Mesh(new THREE.PlaneGeometry(60,40),M(0x20384a));wall.position.set(0,6,-1.6);wall.receiveShadow=true;scene.add(wall);
+const grid=new THREE.GridHelper(60,30,0x2d4c63,0x2d4c63);grid.rotation.x=Math.PI/2;grid.position.set(0,6,-1.55);scene.add(grid);
+function mkGun(c,len){const g=new THREE.Group(),l=len||1;
+ box(1.1*l,.28,.26,c,.3*l,.08,0,g);box(.3,.55,.24,0x222831,-.1,-.3,0,g).rotation.z=.18;box(.4*l,.12,.12,0x111111,.95*l,.1,0,g);box(.1,.1,.1,0xffffff,0,.28,0,g);return g}
+const geo=new THREE.SphereGeometry(1,8,8),bm1=new THREE.MeshBasicMaterial({color:0xfff2a8}),bm2=new THREE.MeshBasicMaterial({color:0xff3b3b});
+const LG=new THREE.Group();scene.add(LG);
+const laserG=new THREE.BoxGeometry(1,.05,.05);laserG.translate(.5,0,0);
+const sight=new THREE.Mesh(laserG,new THREE.MeshBasicMaterial({color:0x3dd6ff,transparent:true,opacity:.22}));sight.scale.x=9;
+
+/* state */
+let st='menu',lvl=1,ts=1,time=0,shake=0,deaths=0,hold=false,msgT=0,D=0,camX=0,camY=5;
+let boxes=[],en=[],bl=[],pt=[];
+const KEY={l:0,r:0,j:0},TB={l:0,r:0,j:0};
+const P={x:-7,y:1,vx:0,vy:0,a:0,w:0,cd:0,rl:0,am:0,q:0,qt:0,buf:0,en:100,gt:0,jb:0,hp:3,inv:0,alive:true,m:null};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function spawn(x,y,c,n,sp,s){for(let i=0;i<n;i++){const m=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:c}));const z=(s||.18)*(.5+Math.random());m.scale.set(z,z,z);m.position.set(x,y,0);scene.add(m);const a=Math.random()*6.28,v=sp*(.3+Math.random());pt.push({m,vx:Math.cos(a)*v,vy:Math.sin(a)*v,vz:(Math.random()-.5)*v,l:.7+Math.random()*.6})}}
+function clear(){LG.clear();boxes=[];en=[];bl.forEach(b=>scene.remove(b.m));bl=[]}
+function loadLevel(n,retry){clear();lvl=n;if(!retry)deaths=0;D=Math.min(1,(n-1)/16);
+ const L=LV[n-1]||gen(n),hue=(n*37%360)/360;
+ wall.material.color.setHSL(hue,.35,.2);scene.background=new THREE.Color().setHSL(hue,.4,.1);
+ const fc=new THREE.Color().setHSL(hue,.3,.35),pc=new THREE.Color().setHSL((hue+.08)%1,.55,.5);
+ const solid=(x,y,w,h,c)=>{boxes.push({x,y,w,h});box(w,h,1.6,c,x,y,0,LG)};
+ solid(0,-.5,40,1,fc);solid(-10.5,6,1,16,fc);solid(10.5,6,1,16,fc);solid(0,12.5,40,1,fc);
+ (L.p||[]).forEach(p=>solid(p[0],p[1],p[2],p[3],pc));
+ L.e.forEach(d=>{const hp=n>=9&&d[2]>0?2:1,m=mkGun(hp>1?0xff7a1a:0xe63946);LG.add(m);
+  const lz=new THREE.Mesh(laserG,new THREE.MeshBasicMaterial({color:0xff2d2d,transparent:true,opacity:.5}));lz.visible=false;LG.add(lz);
+  // enemies are physical hovering gunmen: they roam, dodge and get kicked by their own recoil
+  en.push({ox:d[0],x:d[0],y:d[1],cy:d[1],vx:0,vy:0,w:0,gx:d[0],gy:d[1],hy:d[1],gt:Math.random(),dc:0,sf:(d[2]===1?1:d[2]===0?.5:.75)*(.6+.5*D+(n>=3?.15:0)),
+   t:d[2],iv:d[3]*(1-.32*D),amp:Math.max(1.8,d[4]*1.6),tm:-.9-Math.random()*1.3,aim:Math.PI,lock:false,b:0,bt:0,k:0,m,lz,hp,sc:hp>1?1.3:1.1,alive:true});
+  m.position.set(d[0],d[1],0)});
+ const W=WP[SV.wp];if(!P.m){P.m=new THREE.Group();scene.add(P.m)}
+ P.m.clear();const g=mkGun(W.c,W.len);while(g.children.length)P.m.add(g.children[0]);sight.position.set(.9*W.len+.25,.1,0);P.m.add(sight);P.m.visible=true;
+ Object.assign(P,{x:-7,y:1,vx:0,vy:0,a:0,w:0,cd:0,rl:0,q:0,buf:0,en:100,gt:0,jb:0,hp:3,inv:1,am:W.mag,alive:true});
+ st='play';ts=1;msg('LEVEL '+n,1.2);
+ $('hint').textContent=n<=2?(matchMedia('(pointer:coarse)').matches?'Tap to fire. ◀ ▶ walk, ▲ jump. Hold ▲ in the air to fly.':'Click / Space: fire (recoil moves you). A D / ← →: walk & air-dodge. W / ↑ / Shift: jump (hold in air = jetpack). R: reload.'):'';hud()}
+function msg(t,s,c){const m=$('msg');m.textContent=t;m.className=c||'';msgT=s||0}
+function hud(){$('hs').innerHTML='LEVEL <b>'+lvl+'</b> — '+WP[SV.wp].n;$('hp').textContent='♥'.repeat(Math.max(0,P.hp));$('he').innerHTML='Targets: <b>'+en.filter(e=>e.alive).length+'</b>'}
+
+/* combat */
+const nrm=a=>Math.atan2(Math.sin(a),Math.cos(a));
+function near(){let best=null,bd=.7;for(const e of en)if(e.alive){const d=nrm(Math.atan2(e.y-P.y,e.x-P.x)-P.a);if(Math.abs(d)<Math.abs(bd)){bd=d;best=e}}return best?{e:best,d:bd}:null}
+function bullet(x,y,a,sp,own){const m=new THREE.Mesh(geo,own?bm1:bm2),s=own?.11:.2;m.scale.setScalar(s);m.position.set(x,y,0);scene.add(m);bl.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,own,rc:own?1:0,l:3.5,m,r:s})}
+function shot(){const W=WP[SV.wp],dx=Math.cos(P.a),dy=Math.sin(P.a);let a0=P.a;
+ if(SV.as&&W.pel===1){const t=near();if(t&&Math.abs(t.d)<.1)a0+=t.d}
+ for(let i=0;i<W.pel;i++)bullet(P.x+dx*.8*W.len,P.y+dy*.8*W.len,a0+(Math.random()-.5)*2*W.sp,32,1);
+ P.vx-=dx*W.rec;P.vy-=dy*W.rec;P.w+=W.tq;P.am--;
+ spawn(P.x+dx*.8*W.len,P.y+dy*.8*W.len,0xffd166,3,5,.12);if(W.pel>1||!W.auto)spawn(P.x,P.y+.2,0xc9a227,1,3,.08);shake=Math.max(shake,.05+W.rec/160);sShot()}
+function fire(){const W=WP[SV.wp];if(st!=='play'||!P.alive||P.cd>0||P.rl>0||P.q>0||P.am<=0)return false;
+ shot();P.cd=W.cd+(W.burst?W.burst*.07:0);if(W.burst){P.q=W.burst-1;P.qt=.07}if(P.am<=0)P.rl=W.rel;return true}
+function press(){au();hold=true;if(!fire())P.buf=.15}
+function reload(){const W=WP[SV.wp];if(st==='play'&&P.alive&&P.rl<=0&&P.am<W.mag)P.rl=W.rel}
+function jump(){au();P.jb=.12}
+function hurt(e){if(--e.hp>0){spawn(e.x,e.y,0xffffff,8,8,.12);e.k=.6;e.vy+=3;tone(500,.12,'square',.12);shake=.2;return}
+ e.alive=false;e.m.visible=e.lz.visible=false;spawn(e.x,e.y,0xff7b3d,22,9);spawn(e.x,e.y,0xe63946,12,7,.25);spawn(e.x,e.y,0xffffff,6,12,.1);sBoom();shake=.5;hud();
+ if(!en.some(q=>q.alive)&&st==='play')win()}
+function hitP(b){if(P.inv>0)return;P.hp--;hud();if(P.hp<=0)return die();
+ P.inv=1.3;P.vx+=Math.sign(b.vx||1)*5;P.vy+=3;shake=.4;spawn(P.x,P.y,0xff5470,10,8,.15);tone(180,.2,'sawtooth',.15,60)}
+function die(){if(!P.alive)return;P.alive=false;P.m.visible=false;spawn(P.x,P.y,WP[SV.wp].c,26,10,.25);spawn(P.x,P.y,0xffffff,8,8);sBoom();shake=.6;deaths++;ts=.35;msg('DOWN!',1.4);setTimeout(()=>{ts=1;if(st==='play')loadLevel(lvl,1)},1000)}
+function stats(w){return 'Recoil '+'▮'.repeat(Math.round(w.rec/4))+' &nbsp; Fire rate '+'▮'.repeat(Math.max(1,Math.round(.3/w.cd)))+' &nbsp; Ammo '+w.mag}
+function win(){st='win';ts=.3;const nu=Math.min(WP.length,1+Math.floor(lvl/2)),nw=nu>SV.un;
+ msg(nw?'NEW WEAPON UNLOCKED!':'LEVEL CLEAR!',2,nw?'gold':'');if(nw)sUnlock();
+ setTimeout(()=>{ts=1;SV.un=Math.max(SV.un,nu);SV.best=Math.max(SV.best,lvl+1);save();
+  const stars=deaths===0&&P.hp===3?3:deaths===0?2:1,w=WP[nu-1];
+  show('<h1>Level '+lvl+' clear! '+'⭐'.repeat(stars)+'</h1><p>Failed attempts: '+deaths+'</p>'+
+   (nw?'<div class="new"><h2>🔓 NEW WEAPON UNLOCKED!</h2><p style="font-size:22px;margin:4px 0"><b>'+w.n+'</b></p><p>'+w.d+'</p><p style="font-size:13px">'+stats(w)+'</p></div><button class="g" id="eq">Equip & continue</button><button id="nx">Continue</button>':'<button class="o" id="nx">Next level</button>')+
+   '<button class="s" id="mn">Menu</button>');
+  $('nx').onclick=()=>{hide();loadLevel(lvl+1)};$('mn').onclick=menu;
+  if(nw)$('eq').onclick=()=>{SV.wp=nu-1;SV.seen=nu;save();hide();loadLevel(lvl+1)}},1500)}
+
+/* simulation */
+function col(o,r,b,rest){const cx=Math.max(b.x-b.w/2,Math.min(o.x,b.x+b.w/2)),cy=Math.max(b.y-b.h/2,Math.min(o.y,b.y+b.h/2));
+ const dx=o.x-cx,dy=o.y-cy,d=Math.hypot(dx,dy);if(d>=r)return;let nx,ny,pen;
+ if(d>1e-4){nx=dx/d;ny=dy/d;pen=r-d}else{const lx=o.x-b.x,ly=o.y-b.y,ox=b.w/2-Math.abs(lx),oy=b.h/2-Math.abs(ly);if(ox<oy){nx=Math.sign(lx)||1;ny=0;pen=ox+r}else{nx=0;ny=Math.sign(ly)||1;pen=oy+r}}
+ o.x+=nx*pen;o.y+=ny*pen;if(ny>.6)o.gt=.1;const vn=o.vx*nx+o.vy*ny;
+ if(vn<0){o.vx-=(1+rest)*vn*nx;o.vy-=(1+rest)*vn*ny;const tx=-ny,ty=nx,vt=o.vx*tx+o.vy*ty;o.vx-=vt*.1*tx;o.vy-=vt*.1*ty;o.w*=.85;if(-vn>3){sThud(-vn);spawn(o.x-nx*r,o.y-ny*r,0xcfd8dc,3,2,.1)}}}
+function step(dt){
+ if(P.alive&&st==='play'){const W=WP[SV.wp];
+  P.gt-=dt;P.inv-=dt;P.jb-=dt;
+  const dir=((KEY.r||TB.r)?1:0)-((KEY.l||TB.l)?1:0),gr=P.gt>0;
+  if(gr){ // walking: snappy accel, strong friction, energy refills
+   if(dir){if(dir*P.vx<6)P.vx+=dir*45*dt}else P.vx*=1-9*dt;
+   P.en=Math.min(100,P.en+40*dt)}
+  else if(dir&&P.en>0){P.vx+=dir*30*dt;P.en=Math.max(0,P.en-38*dt)}else P.en=Math.min(100,P.en+(dir?8:30)*dt);
+  if(!gr&&(KEY.j||TB.j)&&P.en>0){P.vy+=34*dt;P.en=Math.max(0,P.en-55*dt);if(Math.random()<dt*30)spawn(P.x,P.y-.4,0xffa34d,1,2,.08)}
+  if(P.jb>0&&gr){P.vy=9;P.gt=0;P.jb=0;sJump();spawn(P.x,P.y-.4,0xcfd8dc,5,3,.1)}
+  P.vy-=20*dt;const sp=Math.hypot(P.vx,P.vy);if(sp>22){P.vx*=22/sp;P.vy*=22/sp}
+  P.vx*=1-.35*dt;P.x+=P.vx*dt;P.y+=P.vy*dt;
+  if(SV.as&&P.cd<=0&&P.rl<=0&&!hold){const t=near();if(t){P.w+=t.d*20*dt;P.w*=1-4.5*dt}}
+  P.w=clamp(P.w,-17,17);P.a+=P.w*dt;P.w*=1-.9*dt;
+  boxes.forEach(b=>col(P,.45,b,.3));
+  P.cd-=dt;if(P.rl>0){P.rl-=dt;if(P.rl<=0)P.am=W.mag}
+  if(P.q>0){P.qt-=dt;if(P.qt<=0){if(P.am>0)shot();P.q--;P.qt=.07;if(P.am<=0&&P.rl<=0)P.rl=W.rel}}
+  if(P.buf>0){P.buf-=dt;if(fire())P.buf=0}
+  if(hold&&W.auto)fire()}
+ const bs=8+6*D,tele=.85-.3*D;
+ en.forEach(e=>{if(!e.alive)return;
+  // roaming goal
+  e.gt-=dt;e.dc-=dt;if(e.gt<=0){e.gt=1.4+Math.random()*1.6-D*.6;e.gx=clamp(e.ox+(Math.random()*2-1)*e.amp,-8.6,8.6);e.gy=clamp(e.hy+(Math.random()*2-1)*2.2,1.6,10.8)}
+  const s=e.sf*(e.lock?.15:1);
+  e.vx+=clamp((e.gx-e.x)*3-e.vx*2.2,-12,12)*s*dt;e.vy+=clamp((e.gy-e.y)*4-e.vy*2.6,-14,14)*s*dt;
+  // dodge incoming player bullets
+  if(e.dc<=0)for(const b of bl){if(!b.own)continue;const v2=b.vx*b.vx+b.vy*b.vy,t=((e.x-b.x)*b.vx+(e.y-b.y)*b.vy)/v2;
+   if(t>0&&t<.28){const qx=b.x+b.vx*t-e.x,qy=b.y+b.vy*t-e.y;if(Math.hypot(qx,qy)<1.1){e.dc=1;if(Math.random()<.15+.6*D){const v=Math.sqrt(v2),nx=b.vy/v,ny=-b.vx/v,sg=(nx*-qx+ny*-qy)>=0?1:-1;e.vx+=nx*sg*8;e.vy+=ny*sg*8}break}}}
+  e.x+=e.vx*dt;e.y+=e.vy*dt;e.vx*=1-.8*dt;e.vy*=1-.8*dt;
+  boxes.forEach(b=>col(e,.5,b,.2));e.cy=e.y;
+  // aim with target leading
+  if(!e.lock){const ta=Math.atan2(P.y+P.vy*.25*D-e.y,P.x+P.vx*.25*D-e.x);e.aim+=nrm(ta-e.aim)*Math.min(1,dt*4)}
+  e.tm+=dt;if(!e.lock&&e.tm>e.iv-tele){e.lock=true;sEn()}
+  if(e.tm>=e.iv){e.lock=false;e.tm=0;e.b=e.t===2?3+(D>.5?1:0):1;e.bt=0}
+  if(e.b>0&&(e.bt-=dt)<=0){const ox=e.x+Math.cos(e.aim)*.9,oy=e.y+Math.sin(e.aim)*.9;
+   if(e.t===3){for(let i=-1;i<=1;i++)bullet(ox,oy,e.aim+i*.26,bs,0)}else bullet(ox,oy,e.aim,bs,0);
+   e.vx-=Math.cos(e.aim)*2;e.vy-=Math.sin(e.aim)*2;
+   e.b--;e.bt=.16-.05*D;e.k=.35;tone(220,.1,'square',.06)}
+  e.k=Math.max(0,e.k-dt*2);e.m.position.set(e.x-Math.cos(e.aim)*e.k,e.y-Math.sin(e.aim)*e.k,0);e.m.rotation.z=e.aim;e.m.scale.set(e.sc,Math.cos(e.aim)<0?-e.sc:e.sc,e.sc);
+  if(Math.random()<dt*14)spawn(e.x,e.y-.45,0xffa34d,1,2,.07);
+  e.lz.visible=e.lock&&e.b===0;e.lz.position.set(e.x,e.y,0);e.lz.rotation.z=e.aim;e.lz.scale.x=24;e.lz.material.opacity=.25+.35*Math.abs(Math.sin(time*18))});
+ for(let i=bl.length-1;i>=0;i--){const b=bl[i];let dead=false;b.l-=dt;const px=b.x,py=b.y;b.x+=b.vx*dt;b.y+=b.vy*dt;
+  for(const q of boxes){if(Math.abs(b.x-q.x)<q.w/2+b.r&&Math.abs(b.y-q.y)<q.h/2+b.r){if(b.rc>0){b.rc--;if(Math.abs(px-q.x)>=q.w/2+b.r)b.vx*=-1;else b.vy*=-1;b.x=px;b.y=py;spawn(b.x,b.y,0xffe08a,3,4,.08)}else{dead=true;spawn(b.x,b.y,0xcfd8dc,3,3,.08)}break}}
+  if(!dead){if(b.own){for(const e of en)if(e.alive&&Math.hypot(b.x-e.x,b.y-e.y)<.7){hurt(e);dead=true;break}}
+   else if(P.alive&&st==='play'&&Math.hypot(b.x-P.x,b.y-P.y)<.4+b.r*.5){hitP(b);dead=true}}
+  if(b.l<=0)dead=true;b.m.position.set(b.x,b.y,0);if(dead){scene.remove(b.m);bl.splice(i,1)}}
+ for(let i=pt.length-1;i>=0;i--){const p=pt[i];p.l-=dt;p.vy-=14*dt;p.m.position.x+=p.vx*dt;p.m.position.y+=p.vy*dt;p.m.position.z+=p.vz*dt;if(p.m.position.y<.1){p.m.position.y=.1;p.vy*=-.4;p.vx*=.7}p.m.rotation.x+=dt*6;if(p.l<=0){scene.remove(p.m);p.m.geometry.dispose();pt.splice(i,1)}}
+ if(P.m&&P.alive){P.m.position.set(P.x,P.y,0);P.m.rotation.z=P.a;P.m.visible=P.inv<=0||Math.floor(time*20)%2===0}}
+
+/* ui */
+const show=h=>{PN.innerHTML='<div class="card">'+h+'</div>';PN.classList.add('on')},hide=()=>PN.classList.remove('on');
+function menu(){st='menu';loadLevel(1);st='menu';msg('');hide();$('hint').textContent='';
+ let h='<h1>🔫 Pistol Duel 3D</h1><p>Walk, jump, and <b>use recoil</b> to fly, flip and aim. Enemy gunmen hover, roam and dodge too. Destroy them all — a red laser warns you before they fire. You have 3 hearts.</p><p>Weapon</p><div class="row">';
+ WP.forEach((w,i)=>{h+=i<SV.un?'<button class="'+(i===SV.wp?'sel':'s')+'" data-w="'+i+'">'+(i>=SV.seen?'★ NEW ':'')+w.n+'</button>':'<button class="s" disabled>🔒 '+w.n+'</button>'});
+ h+='</div><p style="font-size:13px">'+WP[SV.wp].d+'</p><div class="row"><button class="s" id="as">Aim assist: '+(SV.as?'ON':'OFF')+'</button></div><p>Level</p><div class="row">';
+ for(let i=1;i<=Math.min(SV.best,24);i++)h+='<button class="s" data-l="'+i+'">'+i+'</button>';
+ h+='</div><button class="o" id="pl">Play level '+SV.best+'</button><p style="font-size:12px;opacity:.7">Fire: click / tap / Space &nbsp;•&nbsp; Move: A D / ← → &nbsp;•&nbsp; Jump / hold to fly: W / ↑ / Shift &nbsp;•&nbsp; Reload: R</p>';show(h);
+ PN.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{SV.wp=+b.dataset.w;SV.seen=Math.max(SV.seen,SV.wp+1);save();menu()});
+ PN.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{au();hide();loadLevel(+b.dataset.l)});
+ $('as').onclick=()=>{SV.as=SV.as?0:1;save();menu()};$('pl').onclick=()=>{au();hide();loadLevel(SV.best)}}
+function resize(){const w=innerWidth,h=innerHeight,a=w/h,t=Math.tan(22.5*Math.PI/180);R.setSize(w,h);cam.aspect=a;cam.updateProjectionMatrix();cam.userData.d=Math.max(7.2/t,11.2/(t*a))}
+addEventListener('resize',resize);resize();
+addEventListener('pointerdown',e=>{if(e.target.closest('#panel,.tb'))return;press()});
+addEventListener('pointerup',()=>hold=false);addEventListener('pointercancel',()=>hold=false);
+addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();if(!e.repeat)press()}
+ if(e.code==='KeyA'||e.code==='ArrowLeft')KEY.l=1;if(e.code==='KeyD'||e.code==='ArrowRight')KEY.r=1;
+ if(e.code==='KeyW'||e.code==='ArrowUp'||e.code==='ShiftLeft'||e.code==='ShiftRight')KEY.j=1;if(!e.repeat){if(e.code==='KeyW'||e.code==='ArrowUp'||e.code==='ShiftLeft'||e.code==='ShiftRight'){e.preventDefault();jump()}if(e.code==='KeyR')reload()}});
+addEventListener('keyup',e=>{if(e.code==='Space')hold=false;if(e.code==='KeyW'||e.code==='ArrowUp'||e.code==='ShiftLeft'||e.code==='ShiftRight')KEY.j=0;if(e.code==='KeyA'||e.code==='ArrowLeft')KEY.l=0;if(e.code==='KeyD'||e.code==='ArrowRight')KEY.r=0});
+[['tl','l'],['tr','r']].forEach(([id,k])=>{const b=$(id);b.addEventListener('pointerdown',e=>{e.stopPropagation();TB[k]=1});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>TB[k]=0))});
+$('tj').addEventListener('pointerdown',e=>{e.stopPropagation();TB.j=1;jump()});['pointerup','pointerleave','pointercancel'].forEach(ev=>$('tj').addEventListener(ev,()=>TB.j=0));
+let last=performance.now(),acc=0;
+function loop(){requestAnimationFrame(loop);const n=performance.now(),raw=Math.min(.05,(n-last)/1000);last=n;acc+=raw*ts;
+ while(acc>=1/120){if(st!=='menu')step(1/120);else{en.forEach(e=>{e.m.rotation.z=Math.sin(time)*.3+Math.PI});if(P.m)P.m.rotation.z=time}time+=1/120;acc-=1/120}
+ if(msgT>0){msgT-=raw;if(msgT<=0)msg('')}
+ shake*=Math.pow(.0005,raw);const W=WP[SV.wp];$('ammo').textContent=P.rl>0?'RELOADING…':P.am+' / '+W.mag;$('bi').style.width=P.en+'%';
+ const k=1-Math.pow(.02,raw),tx=P.alive?P.x*.08:camX,ty=P.alive?5+(P.y-5)*.12:camY;camX+=(tx-camX)*k;camY+=(ty-camY)*k;
+ cam.position.set(camX+(Math.random()-.5)*shake,camY+(Math.random()-.5)*shake,cam.userData.d);cam.lookAt(camX*.5,camY+1,0);
+ R.render(scene,cam)}
+menu();loop();
+</script>
 </body>
 </html>
