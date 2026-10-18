@@ -17,7 +17,18 @@ canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none}
 #pz{width:46px;height:46px;right:calc(env(safe-area-inset-right) + 12px);top:calc(env(safe-area-inset-top) + 10px);font-size:15px}
 @media (max-height:420px){#fire{width:66px;height:66px;bottom:8px}#jump{width:64px;height:64px;bottom:8px}#swap{width:46px;height:46px;bottom:14px;right:88px}}
 .cd{opacity:.5}
-#ov{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;background:rgba(6,6,20,.62);padding:20px}
+#ov{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;background:rgba(6,6,20,.76);padding:clamp(14px,4vw,28px);box-sizing:border-box;overflow:auto;z-index:20}
+#controlsHelp{display:block}
+#mobileHelp{display:none}
+#tutorial{position:fixed;inset:0;z-index:15;display:none;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;background:rgba(4,5,18,.42);text-align:center;touch-action:none}
+#tutorialCard{max-width:340px;width:100%;padding:22px 18px;border:1px solid rgba(255,227,163,.65);border-radius:22px;background:rgba(9,10,30,.94);box-shadow:0 14px 45px #0008}
+#tutorial h2{margin:0 0 8px;color:#ffe3a3;font-size:clamp(24px,6vw,34px)}
+#tutorial p{font-size:16px;margin:0 auto 16px}
+#tapDemo{width:86px;height:86px;border:3px solid #ffe3a3;border-radius:50%;margin:12px auto 16px;display:grid;place-items:center;font-size:36px;color:#ffe3a3;animation:tapPulse 1s infinite;box-shadow:0 0 0 0 #ffe3a355}
+@keyframes tapPulse{50%{transform:scale(.92);box-shadow:0 0 0 13px #ffe3a300}}
+#rotateHint{display:none;position:fixed;z-index:8;top:calc(env(safe-area-inset-top) + 8px);left:50%;transform:translateX(-50%);padding:7px 12px;border-radius:999px;background:#080a20dd;border:1px solid #ffe3a355;color:#fff;font:600 12px system-ui;white-space:nowrap;pointer-events:none}
+@media (pointer:coarse){#controlsHelp{display:none}#mobileHelp{display:block}#jump{width:88px;height:88px;left:calc(env(safe-area-inset-left) + 18px);bottom:calc(env(safe-area-inset-bottom) + 22px)}#fire{width:88px;height:88px;right:calc(env(safe-area-inset-right) + 18px);bottom:calc(env(safe-area-inset-bottom) + 22px)}#swap{width:56px;height:56px;right:calc(env(safe-area-inset-right) + 118px);bottom:calc(env(safe-area-inset-bottom) + 30px)}#mobileHelp{max-width:28em}}
+@media (pointer:coarse) and (orientation:portrait){#rotateHint{display:block}#jump{width:76px;height:76px}#fire{width:76px;height:76px}#swap{right:calc(env(safe-area-inset-right) + 102px)}}
 h1{margin:0;font-size:clamp(34px,9vw,68px);color:#ffe3a3;text-shadow:0 3px 14px #000}
 p{margin:0;max-width:30em;line-height:1.6;font-size:clamp(14px,3.6vw,18px)}
 #go,#rs,#rv{min-width:190px;min-height:56px;padding:12px 30px;font:700 22px system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#241338;background:#ffd98a;border:0;border-radius:14px;box-shadow:0 5px 0 #a8763a}
@@ -32,9 +43,12 @@ p{margin:0;max-width:30em;line-height:1.6;font-size:clamp(14px,3.6vw,18px)}
 <div id="ov"><h1>Blue Monster Run</h1>
 <p>The Blue Monster is chasing you. Jump over obstacles, collect glowing power orbs, and survive long enough to face it.</p>
 <p><b>During a fight:</b> use Bolt to attack. Collect Flight for automatic shots or Shield to block a hit. Switch powers with Q or ⇄.</p>
-<p><b>Controls:</b> Jump: tap, Space or ↑. Attack / use power: Enter, F, or the ✦ button. Pause: Esc or P.</p>
+<p id="controlsHelp"><b>Keyboard:</b> Jump: Space / ↑. Attack: Enter / F. Switch power: Q. Pause: Esc / P.</p>
+<p id="mobileHelp"><b>Phone controls:</b> Tap the screen or ↑ to jump. During a boss fight, tap ✦ to attack. Hold your phone sideways for a wider, clearer view.</p>
 <p id="bst"></p>
 <button id="go" disabled style="opacity:.6">Loading...</button></div>
+<div id="tutorial" aria-live="polite"><div id="tutorialCard"><h2>Let’s practise!</h2><p>Tap anywhere on the game to make your runner jump over an obstacle. Try it now.</p><div id="tapDemo">👆</div><p><b>Tap the screen to jump</b></p><button id="tutorialGo">Tap to start</button></div></div>
+<div id="rotateHint">Rotate your phone sideways for the best view ↻</div>
 <script>
 (()=>{
 'use strict';
@@ -107,6 +121,7 @@ const BI=[['#070b1f','#1a1a45','#30255a','#1a2549','#101c1b','#2a4d3b','#dfe6ff'
 ['#3a1050','#d05a9a','#ffc2dc','#c8609a','#8a3a6a','#ffe0f0','#ffffff',25],
 ['#2a1a05','#b8741a','#ffe08a','#9a7222','#7a5a1c','#ffe27a','#fff3b0',10]];
 const QUIPS=['Cause of death: leg day skipped for years.', 'He chewed slowly. Even he wanted to feel something.', 'Your family will be told you went to a better place. It was his stomach.', 'Fun fact: this is the most attention you got all year.', 'Nobody noticed you were missing. The monster noticed you were delicious.', 'Your ghost wants a refund. Customer support is also dead.', 'Warning signs were everywhere. You called it a jog.', 'Rest in pieces. Mostly in his digestive system.', 'Monster says sorry. Monster is lying. Monster is full.', 'Your last thought: I should have taken the stairs.', 'Cardio is not optional. Neither is being lunch.', 'Your free trial of the afterlife has started. No cancellation button.'];
+const touchMode=matchMedia('(pointer:coarse)').matches||('ontouchstart' in window);
 let st='menu',own=[],pu=[],pnx=700,bn=0,bnM='',T=0,dist=0,speed=270,runT=0,sF=0,best=0,stage=1,lives=4,phase=0,phT=0,bossMax=135,bossHP=135,abil=0,fcd=0,shT=0,flT=0,shk=0,tM='',tT=0,nsp=500,ct=0,cx0=0,w0=0,wx=0,inv=0,quip='',autoT=0,stageFlash=0,bsh=false,gul=false,burp=false,mph=0,over0=0,last=0;
 const P={x:170,y:GY,vy:0,g:true,buf:0,run:0};
 let OB=[],PJ=[],PT=[];
@@ -114,12 +129,14 @@ let OB=[],PJ=[],PT=[];
 let ac=null;
 function au(){try{if(!ac){const A=window.AudioContext||window.webkitAudioContext;if(A)ac=new A()}if(ac&&ac.state==='suspended')ac.resume()}catch(e){}}
 function tn(f1,f2,d,ty,v){if(!ac||!audioOn||adBusy)return;try{const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();o.type=ty;o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d)}catch(e){}}
-function rs(){const d=Math.min(devicePixelRatio||1,1.5),iw=Math.max(1,innerWidth),ih=Math.max(1,innerHeight);cv.width=Math.round(iw*d);cv.height=Math.round(ih*d);const asp=iw/ih;if(asp*440>=560){H=440;W=440*asp}else{W=560;H=560/asp}sc=cv.width/W;GY=Math.round(H*.76);P.x=Math.max(130,Math.min(220,W*.3));if(P.g)P.y=GY}
+function rs(){const d=Math.min(devicePixelRatio||1,1.5),iw=Math.max(1,innerWidth),ih=Math.max(1,innerHeight);cv.width=Math.round(iw*d);cv.height=Math.round(ih*d);const asp=iw/ih;if(asp<0.82){W=560;H=560/asp;GY=Math.round(H*.72)}else if(asp*440>=560){H=440;W=440*asp;GY=Math.round(H*.76)}else{W=560;H=560/asp;GY=Math.round(H*.76)}sc=cv.width/W;P.x=Math.max(130,Math.min(220,W*.3));if(P.g)P.y=GY}
 addEventListener('resize',rs);rs();
 const toast=m=>{tM=m;tT=1.4};
 const emit=(x,y,n,col)=>{if(PT.length>50)return;for(let i=0;i<n;i++)PT.push({x,y,vx:-60-Math.random()*90,vy:-40-Math.random()*70,l:.5,c:col||'#ffd24a'})};
 function newStage(){phase=0;phT=0;bossMax=80+55*stage;bossHP=bossMax;OB=[];PJ=[];pu=[];pnx=500;fcd=shT=flT=0;P.y=GY;P.vy=0;P.g=true;nsp=500;speed=270;runT=0;inv=1.2;bsh=false;mph=0}
-function begin(){stage=1;lives=4;sF=0;dist=0;abil=0;own=[true,false,false];usedRv=false;newStage();bn=3.5;bnM='STAGE 1|Many stages await you';$('ov').style.display='none';st='play';au()}
+function begin(){stage=1;lives=4;sF=0;dist=0;abil=0;own=[true,false,false];usedRv=false;newStage();bn=0;bnM='';$('ov').style.display='none';st=touchMode?'tutorial':'play';$('tutorial').style.display=touchMode?'flex':'none';au();if(touchMode){P.buf=0;last=0}}
+function startFromTutorial(){if(st!=='tutorial')return;$('tutorial').style.display='none';st='play';P.buf=.12;bn=1.7;bnM='JUMP!|Tap again whenever you need to jump';last=0;au() }
+$('tutorial').addEventListener('pointerdown',e=>{e.preventDefault();startFromTutorial()},{passive:false});$('tutorialGo').addEventListener('click',e=>{e.preventDefault();startFromTutorial()});
 function winStage(){sF+=200;stage++;tn(400,1200,.4,'triangle',.18);shk=.25;newStage();saveNow();bn=2.25;stageFlash=.55;bnM='STAGE '+stage+'|A new world awaits'}
 function startCatch(){if(st!=='play')return;lives--;ct=0;cx0=P.x;w0=wx;gul=burp=false;shk=.3;quip=QUIPS[Math.random()*QUIPS.length|0];tn(300,50,.5,'sawtooth',.16);st='catch';hideB()}
 function endCatch(){P.x=cx0;if(lives<=0){gameOver();return}newStage();bn=2.1;stageFlash=.3;bnM='STAGE '+stage+'|Try again';st='play'}
@@ -140,11 +157,11 @@ else if(abil===1){flT=1.8;autoT=0;fcd=5;toast('Flight: automatic shots!')}
 else if(abil===2){shT=4;fcd=7;toast('Shield: blocks one obstacle!')}
 }
 const swap=()=>{if(st!=='play')return;for(let i=1;i<=3;i++){const n=(abil+i)%3;if(own[n]){abil=n;break}}};
-cv.addEventListener('pointerdown',e=>{e.preventDefault();au();if(st==='catch'){if(ct>.9)endCatch();return}if(st==='play')jump()},{passive:false});
+cv.addEventListener('pointerdown',e=>{e.preventDefault();au();if(st==='tutorial'){startFromTutorial();return}if(st==='catch'){if(ct>.9)endCatch();return}if(st==='play')jump()},{passive:false});
 addEventListener('keydown',e=>{const k=e.code;if(['Space','ArrowUp','Enter','KeyF','KeyQ','ShiftLeft','ShiftRight','Escape','KeyP'].includes(k))e.preventDefault();if(e.repeat)return;au();
 if(k==='Escape'||k==='KeyP'){if(st==='play')pause();else if(st==='pause')resume()}else if(k==='KeyF'||k==='ShiftLeft'||k==='ShiftRight')fire();else if(k==='KeyQ')swap();
-else if(k==='Space'||k==='ArrowUp'){if(st==='play')jump();else if(st==='menu'){if(!$('go').disabled)begin()}else if(st==='over'&&performance.now()-over0>450)playAgain();else if(st==='catch'&&ct>.9)endCatch()}
-else if(k==='Enter'){if(st==='play')fire();else if(st==='pause')resume();else if(st==='menu'){if(!$('go').disabled)begin()}else if(st==='over'&&performance.now()-over0>150)playAgain();else if(st==='catch'&&ct>.9)endCatch()}});
+else if(k==='Space'||k==='ArrowUp'){if(st==='play')jump();else if(st==='tutorial')startFromTutorial();else if(st==='menu'){if(!$('go').disabled)begin()}else if(st==='over'&&performance.now()-over0>450)playAgain();else if(st==='catch'&&ct>.9)endCatch()}
+else if(k==='Enter'){if(st==='play')fire();else if(st==='tutorial')startFromTutorial();else if(st==='pause')resume();else if(st==='menu'){if(!$('go').disabled)begin()}else if(st==='over'&&performance.now()-over0>150)playAgain();else if(st==='catch'&&ct>.9)endCatch()}});
 document.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
 document.addEventListener('contextmenu',e=>e.preventDefault());
 $('jump').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();au();jump()});
@@ -276,9 +293,9 @@ if(tT>0&&st!=='menu'&&bn<=0){c.globalAlpha=Math.min(1,tT*2);c.textAlign='center'
 if(st==='catch'&&ct>1){const maxW=W-32,fs=Math.max(13,Math.min(18,W*.033)),font='700 '+fs+'px '+F,lines=wrapLines(quip,maxW-28,font).slice(0,3),lineH=fs+4,baseY=H*.79,boxH=lines.length*lineH+42,boxY=Math.min(H-boxH-12,Math.max(H*.62,baseY-boxH/2));roundBox(12,boxY,maxW,boxH,13,'rgba(5,5,18,.86)');c.textAlign='center';c.textBaseline='middle';c.font=font;c.fillStyle='#fff';lines.forEach((line,i)=>tx(line,W/2,boxY+13+fs/2+i*lineH));c.font='600 '+Math.max(11,fs-5)+'px '+F;c.fillStyle='#ff9fb0';tx(lives>0?'Attempts left: '+'\u2665'.repeat(lives):'No attempts left',W/2,boxY+boxH-13);c.textBaseline='alphabetic'}
 }
 let sf='';
-function btn(){const v=st==='play'&&phase===1,canSwap=own.filter(Boolean).length>1,k=v+'|'+canSwap+'|'+abil+'|'+Math.ceil(fcd)+'|'+st;if(k===sf)return;sf=k;$('pz').style.display=st==='play'?'flex':'none';$('jump').style.display=st==='play'?'flex':'none';$('fire').style.display=v?'flex':'none';$('swap').style.display=v&&canSwap?'flex':'none';$('fi').textContent=IC[abil]||IC[0];$('fc').textContent=fcd>0?Math.ceil(fcd)+'s':(AB[abil]||'Bolt');$('fire').classList.toggle('cd',fcd>0)}
+function btn(){const v=st==='play'&&phase===1,canSwap=own.filter(Boolean).length>1,k=v+'|'+canSwap+'|'+abil+'|'+Math.ceil(fcd)+'|'+st;if(k===sf)return;sf=k;$('pz').style.display=st==='play'?'flex':'none';$('jump').style.display=st==='play'&&touchMode?'flex':'none';$('fire').style.display=v&&touchMode?'flex':'none';$('swap').style.display=v&&canSwap&&touchMode?'flex':'none';$('fi').textContent=IC[abil]||IC[0];$('fc').textContent=fcd>0?Math.ceil(fcd)+'s':(AB[abil]||'Bolt');$('fire').classList.toggle('cd',fcd>0)}
 function loop(ts){rafId=0;if(hold)return;const dt=last?Math.min((ts-last)/1000,.05):0;last=ts;T+=dt;bn=Math.max(0,bn-dt);stageFlash=Math.max(0,stageFlash-dt);
-if(st==='play')update(dt);else if(st==='catch')catchUp(dt);else if(st==='menu'||st==='over'){dist+=150*dt;mph+=dt*9;wx=P.x-110;for(const q of PT){q.l-=dt}}
+if(st==='play')update(dt);else if(st==='catch')catchUp(dt);else if(st==='menu'||st==='over'||st==='tutorial'){if(st!=='tutorial'){dist+=150*dt;mph+=dt*9}wx=P.x-110;for(const q of PT){q.l-=dt}}
 render();btn();if(!frd){frd=true;SDK.firstFrame()}rafId=requestAnimationFrame(loop)}
 
 init();
