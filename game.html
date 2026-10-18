@@ -10,7 +10,7 @@
 :root[data-theme="dark"]{--bg:#0e1b24}
 html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--fg);font-family:"Trebuchet MS","Segoe UI",sans-serif;user-select:none;-webkit-user-select:none;touch-action:none}
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
-#hud{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;padding:10px 66px 10px 14px;font-size:15px;pointer-events:none;text-shadow:0 2px 4px #000}
+#hud{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;padding:10px 112px 10px 14px;font-size:15px;pointer-events:none;text-shadow:0 2px 4px #000}
 #hud b{color:var(--cy)}#hp{color:#ff5470;letter-spacing:2px}
 #low{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;pointer-events:none;text-shadow:0 2px 4px #000}
 #ammo{font-size:18px;color:var(--cy);letter-spacing:1px}
@@ -28,7 +28,8 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 #tj{right:auto;left:14px;bottom:calc(84px + env(safe-area-inset-bottom,0px));min-width:124px}
 #fh .m{display:none}
 @media (pointer:coarse){.kh,#hint,.tb small,#tf{display:none!important}#fh .m{display:inline}#fh .d{display:none}}
-@media (pointer:coarse) and (orientation:portrait){body{position:fixed;top:0;left:0;width:100vh;width:100dvh;height:100vw;transform-origin:0 0;transform:translateX(100vw) rotate(90deg)}.card{max-height:86vw}#msg{font-size:clamp(24px,7vh,56px)}}
+@media (pointer:coarse){#tj{left:auto;right:14px;bottom:calc(18px + env(safe-area-inset-bottom,0px));min-width:58px}}
+#fs{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:62px;width:42px;height:42px;border-radius:12px;background:rgba(10,22,30,.55);border:1.5px solid rgba(61,214,255,.55);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;touch-action:none}#fs:hover{background:rgba(61,214,255,.3)}
 #pz{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:12px;width:42px;height:42px;border-radius:12px;background:rgba(10,22,30,.55);border:1.5px solid rgba(61,214,255,.55);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;touch-action:none}#pz:hover{background:rgba(61,214,255,.3)}
 #fh{position:fixed;left:50%;top:58%;width:118px;height:118px;margin:-59px 0 0 -59px;border-radius:50%;border:2px dashed rgba(255,209,102,.75);display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;font-weight:700;line-height:1.35;color:var(--gd);pointer-events:none;opacity:0;transition:opacity .4s;animation:pl 1.6s ease-in-out infinite}#fh.on{opacity:1}
 @keyframes pl{50%{transform:scale(1.1)}}@media (prefers-reduced-motion:reduce){#fh{animation:none}}
@@ -57,7 +58,7 @@ button:focus-visible{outline:3px solid #fff;outline-offset:2px}
 <div id="hud"><span id="hs"></span><span id="hp"></span><span id="he"></span></div>
 <div id="msg"></div>
 <div id="low"><div id="ammo"></div><div id="bar"><i id="bi"></i></div><div id="hint"></div></div>
-<div id="fx"></div><div id="fh"><span class="d">CLICK CENTER<br>TO FIRE</span><span class="m">TAP THE<br>SCREEN<br>TO FIRE</span></div><div id="pz" title="Pause (P)">⏸</div><div class="tb" id="tl">◀<small>A / ←</small></div><div class="tb" id="tr">▶<small>D / →</small></div><div class="tb" id="tj">▲<small>W / SPACE</small></div><div class="tb" id="tf">🔫<small>ENTER</small></div>
+<div id="fx"></div><div id="fh"><span class="d">CLICK CENTER<br>TO FIRE</span><span class="m">TAP THE<br>SCREEN<br>TO FIRE</span></div><div id="pz" title="Pause (P)">⏸</div><div id="fs" title="Fullscreen">⛶</div><div class="tb" id="tl">◀<small>A / ←</small></div><div class="tb" id="tr">▶<small>D / →</small></div><div class="tb" id="tj">▲<small>W / SPACE</small></div><div class="tb" id="tf">🔫<small>ENTER</small></div>
 <div id="panel"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -246,9 +247,9 @@ function menu(){st='menu';loadLevel(1);st='menu';msg('');hide();$('fh').classNam
  PN.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{SV.wp=+b.dataset.w;SV.seen=Math.max(SV.seen,SV.wp+1);save();menu()});
  PN.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{au();hide();loadLevel(+b.dataset.l)});
  $('as').onclick=()=>{SV.as=SV.as?0:1;save();menu()};$('pl').onclick=()=>{au();hide();loadLevel(SV.best)}}
-function resize(){const rot=matchMedia('(pointer:coarse) and (orientation:portrait)').matches,w=rot?innerHeight:innerWidth,h=rot?innerWidth:innerHeight,a=w/h,t=Math.tan(22.5*Math.PI/180);R.setSize(w,h);cam.aspect=a;cam.updateProjectionMatrix();cam.userData.d=Math.max(7.2/t,11.2/(t*a))}
+function resize(){const w=innerWidth,h=innerHeight,a=w/h,t=Math.tan(22.5*Math.PI/180);R.setSize(w,h);cam.aspect=a;cam.updateProjectionMatrix();cam.userData.d=Math.max(7.2/t,11.2/(t*a))}
 addEventListener('resize',resize);resize();
-addEventListener('pointerdown',e=>{if(e.target.closest('#panel,.tb,#pz'))return;press()});
+addEventListener('pointerdown',e=>{if(e.target.closest('#panel,.tb,#pz,#fs'))return;press()});
 addEventListener('pointerup',()=>hold=false);addEventListener('pointercancel',()=>hold=false);
 addEventListener('keydown',e=>{if((e.code==='KeyP'||e.code==='Escape')&&!e.repeat){if(st==='pause')resume();else pauseGame();return}if(PN.classList.contains('on'))return;if(e.code==='Enter'){e.preventDefault();if(!e.repeat)press()}if(e.code==='Space'){e.preventDefault();KEY.j=1;if(!e.repeat)jump()}
  if(e.code==='KeyA'||e.code==='ArrowLeft')KEY.l=1;if(e.code==='KeyD'||e.code==='ArrowRight')KEY.r=1;
@@ -256,7 +257,9 @@ addEventListener('keydown',e=>{if((e.code==='KeyP'||e.code==='Escape')&&!e.repea
 addEventListener('keyup',e=>{if(e.code==='Enter')hold=false;if(e.code==='Space')KEY.j=0;if(e.code==='KeyW'||e.code==='ArrowUp'||e.code==='ShiftLeft'||e.code==='ShiftRight')KEY.j=0;if(e.code==='KeyA'||e.code==='ArrowLeft')KEY.l=0;if(e.code==='KeyD'||e.code==='ArrowRight')KEY.r=0});
 [['tl','l'],['tr','r']].forEach(([id,k])=>{const b=$(id);b.addEventListener('pointerdown',e=>{e.stopPropagation();TB[k]=1});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>TB[k]=0))});
 $('tj').addEventListener('pointerdown',e=>{e.stopPropagation();TB.j=1;jump()});['pointerup','pointerleave','pointercancel'].forEach(ev=>$('tj').addEventListener(ev,()=>TB.j=0));
-$('tf').addEventListener('pointerdown',e=>{e.stopPropagation();press()});$('pz').addEventListener('pointerdown',e=>{e.stopPropagation();pauseGame()});addEventListener('blur',pauseGame);
+$('tf').addEventListener('pointerdown',e=>{e.stopPropagation();press()});$('pz').addEventListener('pointerdown',e=>{e.stopPropagation();pauseGame()});
+const fsEl=$('fs'),de=document.documentElement,rq=de.requestFullscreen||de.webkitRequestFullscreen,isFs=()=>document.fullscreenElement||document.webkitFullscreenElement;if(!rq)fsEl.style.display='none';
+fsEl.addEventListener('pointerdown',e=>e.stopPropagation());fsEl.addEventListener('click',()=>{try{isFs()?(document.exitFullscreen||document.webkitExitFullscreen).call(document):rq.call(de)}catch(e){}});addEventListener('blur',pauseGame);
 const kb=[['tl',()=>KEY.l||TB.l],['tr',()=>KEY.r||TB.r],['tj',()=>KEY.j||TB.j],['tf',()=>hold]].map(([i,f])=>({el:$(i),f,s:0}));
 let last=performance.now(),acc=0,lastAt,lastEw;
 function loop(){requestAnimationFrame(loop);const n=performance.now(),raw=Math.min(.033,(n-last)/1000);last=n;acc+=raw*ts;
