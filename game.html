@@ -270,7 +270,7 @@ function step(dt){
 /* ui */
 const show=h=>{PN.innerHTML='<div class="card">'+h+'</div>';PN.classList.add('on')},hide=()=>PN.classList.remove('on');
 function menu(){st='menu';loadLevel(1);st='menu';msg('');hide();$('fh').className='';$('hint').textContent='';
- let h='<h1>🔫 PISTOL DUEL 3D</h1><p class="tg">Use recoil to fly. Wipe out every enemy. Don't get hit.</p><p class="lb">Loadout</p><div class="row">';
+ let h='<h1>🔫 PISTOL DUEL 3D</h1><p class="tg">Use recoil to fly. Wipe out every enemy. Avoid getting hit.</p><p class="lb">Loadout</p><div class="row">';
  WP.forEach((w,i)=>{h+=wCard(w,i,0)});
  h+='</div><p style="font-size:13px">'+WP[SV.wp].d+'</p><div class="row"><button class="s" id="as">Aim assist: '+(SV.as?'ON':'OFF')+'</button></div><p class="lb">Select Level</p><div class="row">';
  for(let i=1;i<=Math.min(SV.best,24);i++)h+='<button class="s" data-l="'+i+'">'+i+'</button>';
