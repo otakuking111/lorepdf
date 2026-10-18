@@ -133,6 +133,14 @@ let _dt;function dotTex(){if(_dt)return _dt;const c=document.createElement('canv
 function mkGun(c,len,sw,tx){const g=new THREE.Group(),l=len||1;if(sw)box(1.5,.1,.06,0xb8c2cc,1.55,-.12,0,g);
  const bd=box(1.1*l,.28,.26,c,.3*l,.08,0,g);if(tx){bd.material.map=dotTex();bd.material.color.set(0xffffff);bd.material.needsUpdate=true}box(.3,.55,.24,0x222831,-.1,-.3,0,g).rotation.z=.18;box(.4*l,.12,.12,0x111111,.95*l,.1,0,g);box(.1,.1,.1,0xffffff,0,.28,0,g);return g}
 const geo=new THREE.SphereGeometry(1,8,8),bm1=new THREE.MeshBasicMaterial({color:0xfff2a8}),bm2=new THREE.MeshBasicMaterial({color:0xff3b3b});
+/* neon player-weapon highlight: cyan outline shell + pulsing halo so the player's gun never blends with enemies */
+let _ht;function haloTex(){if(_ht)return _ht;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,4,64,64,64);g.addColorStop(0,'rgba(80,255,240,.75)');g.addColorStop(.45,'rgba(61,214,255,.32)');g.addColorStop(1,'rgba(61,214,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128);_ht=new THREE.CanvasTexture(c);return _ht}
+const neonMat=new THREE.MeshBasicMaterial({color:0x4dfff0,side:THREE.BackSide,transparent:true,opacity:.9,depthWrite:false});
+let halo=null;
+function addNeon(grp,len){const pad=.09,sh=[];
+ grp.children.slice().forEach(ch=>{if(!ch.isMesh||!ch.geometry.parameters)return;const q=ch.geometry.parameters,o=new THREE.Mesh(ch.geometry,neonMat);o.position.copy(ch.position);o.rotation.copy(ch.rotation);o.scale.set((q.width+pad)/q.width,(q.height+pad)/q.height,(q.depth+pad*2)/q.depth);o.userData.neon=1;sh.push(o)});
+ sh.forEach(o=>grp.add(o));
+ halo=new THREE.Sprite(new THREE.SpriteMaterial({map:haloTex(),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));halo.position.set(.45*(len||1),0,-.4);halo.scale.set(3.4*(len||1)+.6,2.6,1);grp.add(halo)}
 const LG=new THREE.Group();scene.add(LG);
 const laserG=new THREE.BoxGeometry(1,.05,.05);laserG.translate(.5,0,0);
 const sight=new THREE.Mesh(laserG,new THREE.MeshBasicMaterial({color:0x3dd6ff,transparent:true,opacity:.22}));sight.scale.x=9;
@@ -160,7 +168,7 @@ function loadLevel(n,retry){clear();lvl=n;if(!retry)deaths=0;D=Math.min(1,(n-1)/
    t:d[2],iv:d[3]*(1-.32*D),amp:Math.max(1.8,d[4]*1.6),tm:-.9-Math.random()*1.3,aim:Math.PI,lock:false,b:0,bt:0,k:0,m,lz,hp,sc:hp>1?1.3:1.1,alive:true});
   m.position.set(d[0],d[1],0)});
  const W=WP[SV.wp];if(!P.m){P.m=new THREE.Group();scene.add(P.m)}
- P.m.clear();const g=mkGun(W.c,W.len,W.sw,W.tx);while(g.children.length)P.m.add(g.children[0]);sight.position.set(.9*W.len+.25,.1,0);P.m.add(sight);P.m.visible=true;
+ P.m.clear();const g=mkGun(W.c,W.len,W.sw,W.tx);while(g.children.length)P.m.add(g.children[0]);addNeon(P.m,W.len);sight.position.set(.9*W.len+.25,.1,0);P.m.add(sight);P.m.visible=true;
  Object.assign(P,{x:-7,y:1,vx:0,vy:0,a:0,w:0,cd:0,rl:0,q:0,buf:0,en:100,gt:0,jb:0,hp:3,inv:1,am:W.mag,alive:true});
  st='play';ts=1;msg('LEVEL '+n,1.2);$('fh').className=n<=2?'on':'';
  $('hint').textContent=n<=2?(matchMedia('(pointer:coarse)').matches?'Tap the screen to fire. ◀ ▶ move, ▲ jump (hold to fly). ⏸ pause.':'Click anywhere / Enter: fire (recoil moves you). A D: move. Space: jump (hold in air = jetpack). P: pause.'):n===6?'New: BOMB — shoot it to blow up nearby enemies. Stay clear!':n===7?'New: BLADER — it dashes and slashes. Dodge the red laser!':'';hud()}
@@ -268,7 +276,7 @@ function step(dt){
   if(b.l<=0)dead=true;b.m.position.set(b.x,b.y,0);if(dead){scene.remove(b.m);bl.splice(i,1)}}
  for(let i=pt.length-1;i>=0;i--){const p=pt[i];p.l-=dt;p.vy-=14*dt;p.m.position.x+=p.vx*dt;p.m.position.y+=p.vy*dt;p.m.position.z+=p.vz*dt;if(p.m.position.y<.1){p.m.position.y=.1;p.vy*=-.4;p.vx*=.7}p.m.rotation.x+=dt*6;if(p.l<=0){scene.remove(p.m);pt.splice(i,1)}}
  for(let i=exs.length-1;i>=0;i--){const x=exs[i];x.t+=dt;x.m.scale.setScalar(Math.max(.2,x.r*Math.min(1,x.t/.22)));x.m.material.opacity=Math.max(0,.55*(1-x.t/.45));if(x.t>.45){scene.remove(x.m);x.m.material.dispose();exs.splice(i,1)}}
- if(P.m&&P.alive){P.m.position.set(P.x,P.y,0);P.m.rotation.z=P.a;P.m.visible=P.inv<=0||Math.floor(time*20)%2===0}}
+ if(P.m&&P.alive){P.m.position.set(P.x,P.y,0);P.m.rotation.z=P.a;if(halo){const k=.5+.5*Math.sin(time*5);halo.material.opacity=.55+.45*k;neonMat.opacity=.7+.3*k}P.m.visible=P.inv<=0||Math.floor(time*20)%2===0}}
 
 /* ui */
 const show=h=>{PN.innerHTML='<div class="card">'+h+'</div>';PN.classList.add('on')},hide=()=>PN.classList.remove('on');
