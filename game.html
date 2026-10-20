@@ -102,12 +102,14 @@ button:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .card:not(:has(.sec)):not(:has(.steps)){padding-bottom:20px}
 @media (max-width:520px),(max-height:480px){#panel{padding:10px}.card{padding:16px 14px 0}.foot{margin:12px -14px 0;padding:12px 14px}.wg{grid-template-columns:repeat(3,1fr);gap:12px 8px}.wc{padding:10px 4px 8px;font-size:11px}.logo{font-size:34px}.sec{margin-top:16px}}
 /* royal welcome */
-#king{position:fixed;left:50%;top:max(56px,14%);width:min(80vw,320px);transform:translateX(-50%);text-align:center;padding:10px 16px 12px;background:rgba(10,22,30,.86);border:1px solid var(--gd);border-radius:14px;box-shadow:0 0 24px rgba(255,209,102,.3);pointer-events:none;opacity:0;visibility:hidden;z-index:5}
-#king.on{visibility:visible;animation:kingIn 4.5s ease forwards}
+#king{position:fixed;left:50%;top:max(56px,14%);width:min(86vw,380px);transform:translateX(-50%);text-align:center;padding:10px 16px 12px;background:rgba(10,22,30,.86);border:1px solid var(--gd);border-radius:14px;box-shadow:0 0 24px rgba(255,209,102,.3);pointer-events:none;opacity:0;visibility:hidden;z-index:5}
+#king.on{visibility:visible;animation:kingIn 14s ease forwards}
 #king .k1{font-size:12px;font-weight:800;color:var(--cy)}
 #king .k2{font-family:Impact,"Arial Black","Segoe UI",Tahoma,sans-serif;font-size:clamp(26px,7vw,34px);font-weight:900;line-height:1.25;color:var(--gd);text-shadow:0 2px 0 #a67c10,0 0 18px rgba(255,209,102,.5);margin:2px 0 4px}
+#king .kx{position:absolute;top:6px;left:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--ln);color:var(--fg);font-size:14px;line-height:1;cursor:pointer;pointer-events:auto;touch-action:none;-webkit-tap-highlight-color:transparent}
+#king .kx:hover{background:rgba(255,209,102,.3);border-color:var(--gd)}
 #king .k3{font-size:clamp(13px,3.4vw,15px);line-height:1.5;color:var(--fg);text-shadow:0 2px 4px #000}
-@keyframes kingIn{0%{opacity:0;transform:translateX(-50%) translateY(-14px) scale(.94)}8%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}84%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-6px) scale(1)}}
+@keyframes kingIn{0%{opacity:0;transform:translateX(-50%) translateY(-14px) scale(.94)}3%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}92%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-6px) scale(1)}}
 </style>
 </head>
 <body>
@@ -118,7 +120,7 @@ button:focus-visible{outline:3px solid #fff;outline-offset:2px}
 <div id="pz" title="Pause (P)">⏸</div><div id="fs" title="Fullscreen">⛶</div>
 <div id="pad"><div class="grp"><div class="tb" id="tl">◀<small>A / ←</small></div><div class="tb" id="tr">▶<small>D / →</small></div></div><div class="grp"><div class="tb" id="tj">▲<small>W / SPACE</small></div><div class="tb" id="tf">🔫<small>ENTER</small></div></div></div>
 <div id="panel"></div>
-<div id="king" dir="rtl" lang="ar"><div class="k1">♛ أهلاً بالملك ♛</div><div class="k2">سلمان</div><div class="k3">العرش بانتظارك يا جلالة الملك.</div></div>
+<div id="king" dir="rtl" lang="ar"><div class="k1">♛ حضرة صاحب الجلالة ♛</div><div class="k2">الملك سلمان</div><div class="k3">أهلاً بمولاي، أعزّ الله مقامكم وأدام نصركم وعزّكم. المملكة كلها في خدمة جلالتكم.</div><div class="kx" role="button" aria-label="إغلاق">✕</div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const $=id=>document.getElementById(id),PN=$('panel');
@@ -401,8 +403,8 @@ function loop(){requestAnimationFrame(loop);const n=performance.now(),raw=Math.m
 let kq='';
 function zs(){if(SV.zy&&P.sh>0){P.sh--;P.inv=1.3;spawn(P.x,P.y,0x3dd6ff,10,8,.15);tone(700,.15,'triangle',.15,350);hud();return true}return false}
 function kt(x,y){let r=null,bd=1e9;for(const e of en)if(e.alive&&e.t!==5){const d=Math.hypot(e.x-x,e.y-y);if(d<bd){bd=d;r=e}}return r}
-const KB=[['♛ أهلاً بالملك ♛','سلمان','العرش بانتظارك يا جلالة الملك.'],['♛ في أمان الله ♛','سلمان','التاج بانتظارك متى ما عدت.'],['✦ أهلاً بابن أخ الملك ✦','زياد','مكانتك عالية يا زياد، والمملكة ترحب بك.'],['✦ إلى اللقاء ✦','زياد','نراك قريباً يا ابن أخ الملك.']];
-function kingShow(i){const k=$('king');Array.from(k.children).forEach((c,j)=>c.innerHTML=KB[i][j]);k.classList.remove('on');void k.offsetWidth;k.classList.add('on')}
+const KB=[['♛ حضرة صاحب الجلالة ♛','الملك سلمان','أهلاً بمولاي، أعزّ الله مقامكم وأدام نصركم وعزّكم. المملكة كلها في خدمة جلالتكم.'],['♛ في حفظ الله ورعايته ♛','الملك سلمان','نلقاكم على خير يا مولاي، والعرش في انتظار عودة جلالتكم.'],['✦ أهلاً بابن أخ جلالة الملك ✦','زياد','لقد مُنحتَ قدرات خاصة لأنك ابن أخ سيادة جلالة الملك سلمان، نصره الله.'],['✦ إلى اللقاء ✦','زياد','نراك قريباً يا ابن أخ جلالة الملك سلمان.']];
+function kingShow(i){const k=$('king');Array.from(k.children).slice(0,3).forEach((c,j)=>c.innerHTML=KB[i][j]);k.classList.remove('on');void k.offsetWidth;k.classList.add('on')}
 function kingOn(){if(SV.king)return kingOff();SV.king=1;SV.un=WP.length;save();P.am=WP[SV.wp].mag;P.rl=0;
  if(st==='menu'&&$('pl'))renderMenu();else if(st==='pause'&&$('rs')){st='play';pauseGame(1)}
  kingShow(0);au();sUnlock();hud()}
@@ -412,14 +414,15 @@ function kingOff(){SV.king=0;SV.un=Math.max(1,Math.min(WP.length,1+Math.floor((S
 function zyOn(){if(SV.zy)return zyOff();SV.zy=1;save();if(P.alive&&st==='play'){P.hp+=2;P.sh=3}kingShow(2);au();sUnlock();hud()}
 function zyOff(){SV.zy=0;save();if(P.hp>3)P.hp=3;P.sh=0;kingShow(3);au();[659,523,392].forEach((f,i)=>setTimeout(()=>tone(f,.3,'triangle',.22,f*.99),i*130));hud()}
 let kc='';
-addEventListener('keydown',e=>{if(e.target===ki||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key&&e.key.length===1?e.key.toLowerCase():'',c=/^Key[A-Z]$/.test(e.code||'')?e.code[3].toLowerCase():'';kq=(kq+k).slice(-7);kc=(kc+c).slice(-7);if(kq==='salmane'||kc==='salmane'){kq=kc='';kingOn()}else if(kq.slice(-3)==='med'||kc.slice(-3)==='med'){kq=kc='';zyOn()}},true);
+addEventListener('keydown',e=>{if(e.target===ki||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key&&e.key.length===1?e.key.toLowerCase():'',c=/^Key[A-Z]$/.test(e.code||'')?e.code[3].toLowerCase():'';kq=(kq+k).slice(-7);kc=(kc+c).slice(-7);if(kq.slice(-4)==='ysal'||kc.slice(-4)==='ysal'){kq=kc='';kingOn()}else if(kq.slice(-3)==='med'||kc.slice(-3)==='med'){kq=kc='';zyOn()}},true);
 /* secret touch trigger: tap the tagline under the logo, then type the code into a hidden field (phones have no physical keyboard) */
 const ki=document.createElement('input');ki.type='text';ki.autocomplete='off';ki.autocapitalize='none';ki.spellcheck=false;ki.tabIndex=-1;ki.setAttribute('autocorrect','off');ki.setAttribute('aria-hidden','true');
 ki.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;border:0;padding:0;margin:0;font-size:16px;pointer-events:none;z-index:-1';
 document.body.appendChild(ki);
-ki.addEventListener('input',()=>{const v=ki.value.toLowerCase();if(v.includes('salmane')){ki.value='';ki.blur();kingOn()}else if(v.includes('med')){ki.value='';ki.blur();zyOn()}else if(v.length>24)ki.value=v.slice(-12)});
+ki.addEventListener('input',()=>{const v=ki.value.toLowerCase();if(v.includes('ysal')){ki.value='';ki.blur();kingOn()}else if(v.includes('med')){ki.value='';ki.blur();zyOn()}else if(v.length>24)ki.value=v.slice(-12)});
 ki.addEventListener('blur',()=>{ki.value=''});
 PN.addEventListener('click',e=>{if(e.target.closest('.tg'))ki.focus()});
+{const kb2=$('king');kb2.querySelector('.kx').addEventListener('pointerdown',e=>e.stopPropagation());kb2.querySelector('.kx').addEventListener('click',()=>kb2.classList.remove('on'));kb2.addEventListener('animationend',()=>kb2.classList.remove('on'))}
 menu();loop();
 </script>
 </body>
