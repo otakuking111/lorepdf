@@ -102,12 +102,11 @@ button:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .card:not(:has(.sec)):not(:has(.steps)){padding-bottom:20px}
 @media (max-width:520px),(max-height:480px){#panel{padding:10px}.card{padding:16px 14px 0}.foot{margin:12px -14px 0;padding:12px 14px}.wg{grid-template-columns:repeat(3,1fr);gap:12px 8px}.wc{padding:10px 4px 8px;font-size:11px}.logo{font-size:34px}.sec{margin-top:16px}}
 /* royal welcome */
-#king{position:fixed;left:50%;top:max(56px,14%);width:min(92vw,540px);transform:translateX(-50%);text-align:center;padding:16px 20px 18px;background:linear-gradient(rgba(10,22,30,.9),rgba(10,22,30,.78));border:1px solid var(--gd);border-radius:18px;box-shadow:0 0 38px rgba(255,209,102,.35),inset 0 1px 0 rgba(255,255,255,.08);pointer-events:none;opacity:0;visibility:hidden;z-index:5}
-#king.on{visibility:visible;animation:kingIn 7s ease forwards}
-#king .k1{font-size:12px;font-weight:800;letter-spacing:4px;color:var(--cy)}
-#king .k2{font-family:Impact,"Arial Black",sans-serif;font-size:clamp(34px,9vw,56px);line-height:1.05;letter-spacing:6px;color:var(--gd);text-shadow:0 3px 0 #a67c10,0 0 28px rgba(255,209,102,.55);margin:4px 0 8px}
-#king .k3{font-size:clamp(13px,3.4vw,16px);line-height:1.6;color:var(--fg);text-shadow:0 2px 4px #000}
-#king .k4{margin-top:10px;font-size:10.5px;font-weight:800;letter-spacing:2px;color:var(--mut)}
+#king{position:fixed;left:50%;top:max(56px,14%);width:min(80vw,320px);transform:translateX(-50%);text-align:center;padding:10px 16px 12px;background:rgba(10,22,30,.86);border:1px solid var(--gd);border-radius:14px;box-shadow:0 0 24px rgba(255,209,102,.3);pointer-events:none;opacity:0;visibility:hidden;z-index:5}
+#king.on{visibility:visible;animation:kingIn 4.5s ease forwards}
+#king .k1{font-size:12px;font-weight:800;color:var(--cy)}
+#king .k2{font-family:Impact,"Arial Black","Segoe UI",Tahoma,sans-serif;font-size:clamp(26px,7vw,34px);font-weight:900;line-height:1.25;color:var(--gd);text-shadow:0 2px 0 #a67c10,0 0 18px rgba(255,209,102,.5);margin:2px 0 4px}
+#king .k3{font-size:clamp(13px,3.4vw,15px);line-height:1.5;color:var(--fg);text-shadow:0 2px 4px #000}
 @keyframes kingIn{0%{opacity:0;transform:translateX(-50%) translateY(-14px) scale(.94)}8%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}84%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-6px) scale(1)}}
 </style>
 </head>
@@ -119,11 +118,11 @@ button:focus-visible{outline:3px solid #fff;outline-offset:2px}
 <div id="pz" title="Pause (P)">⏸</div><div id="fs" title="Fullscreen">⛶</div>
 <div id="pad"><div class="grp"><div class="tb" id="tl">◀<small>A / ←</small></div><div class="tb" id="tr">▶<small>D / →</small></div></div><div class="grp"><div class="tb" id="tj">▲<small>W / SPACE</small></div><div class="tb" id="tf">🔫<small>ENTER</small></div></div></div>
 <div id="panel"></div>
-<div id="king"><div class="k1">♛ &nbsp;ROYAL PROCLAMATION&nbsp; ♛</div><div class="k2">SALMANE</div><div class="k3">All hail the one true King of Pistol Neon. The arena bows, the bullets kneel, and every gun in the realm now answers to your command alone. Rise, Your Majesty — and reign.</div><div class="k4">INVINCIBLE · ENDLESS AMMO · INSTANT FIRE · ONE-SHOT KILLS · MAGIC BULLETS · FULL ARSENAL</div></div>
+<div id="king" dir="rtl" lang="ar"><div class="k1">♛ أهلاً بالملك ♛</div><div class="k2">سلمان</div><div class="k3">العرش بانتظارك يا جلالة الملك.</div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const $=id=>document.getElementById(id),PN=$('panel');
-const SV={best:1,wp:0,un:1,seen:1,as:1,mu:0,tut:0,king:0};
+const SV={best:1,wp:0,un:1,seen:1,as:1,mu:0,tut:0,king:0,zy:0};
 try{Object.assign(SV,JSON.parse(localStorage.getItem('pdr3')||'{}'))}catch(e){}
 const save=()=>{try{localStorage.setItem('pdr3',JSON.stringify(SV))}catch(e){}};
 const WP=[
@@ -226,7 +225,7 @@ function loadLevel(n,retry){clear();lvl=n;if(!retry)deaths=0;D=Math.min(1,(n-1)/
   m.position.set(d[0],d[1],0)});
  const W=WP[SV.wp];if(!P.m){P.m=new THREE.Group();scene.add(P.m)}
  P.m.clear();const g=mkGun(W.c,W.len,W.sw,W.tx);while(g.children.length)P.m.add(g.children[0]);addNeon(P.m,W.len);sight.position.set(.9*W.len+.25,.1,0);P.m.add(sight);P.m.visible=true;
- Object.assign(P,{x:-7,y:1,vx:0,vy:0,a:0,w:0,cd:0,rl:0,q:0,buf:0,en:100,gt:0,jb:0,hp:3,inv:1,am:W.mag,alive:true});
+ Object.assign(P,{x:-7,y:1,vx:0,vy:0,a:0,w:0,cd:0,rl:0,q:0,buf:0,en:100,gt:0,jb:0,hp:SV.zy?5:3,inv:1,am:W.mag,alive:true});
  st='play';ts=1;msg('LEVEL '+n,1.2);$('fh').className=n<=2?'on':'';
  $('hint').textContent=n<=2?(matchMedia('(pointer:coarse)').matches?'Tap the screen to fire. ◀ ▶ move, ▲ jump (hold to fly). ⏸ pause.':'Click anywhere / Enter: fire (recoil moves you). A D: move. Space: jump (hold in air = jetpack). P: pause.'):n===6?'New: BOMB — shoot it to blow up nearby enemies. Stay clear!':n===7?'New: BLADER — it dashes and slashes. Dodge the red laser!':'';hud()}
 function msg(t,s,c){const m=$('msg');m.textContent=t;m.className=c||'';msgT=s||0}
@@ -235,7 +234,7 @@ function hud(){$('hs').innerHTML='LEVEL <b>'+lvl+'</b> — '+WP[SV.wp].n;$('hp')
 /* combat */
 const nrm=a=>Math.atan2(Math.sin(a),Math.cos(a));
 function near(){let best=null,bd=.7;for(const e of en)if(e.alive&&e.t!==5){const d=nrm(Math.atan2(e.y-P.y,e.x-P.x)-P.a);if(Math.abs(d)<Math.abs(bd)){bd=d;best=e}}return best?{e:best,d:bd}:null}
-function bullet(x,y,a,sp,own){const m=new THREE.Mesh(geo,own?bm1:bm2),s=own?.11:.2;m.scale.setScalar(s);m.position.set(x,y,0);scene.add(m);bl.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,own,rc:own?1:0,l:3.5,m,r:s})}
+function bullet(x,y,a,sp,own){const m=new THREE.Mesh(geo,own?bm1:bm2),s=own?.11:.2;m.scale.setScalar(s);m.position.set(x,y,0);scene.add(m);bl.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,own,rc:own?(SV.zy?3:1):0,l:3.5,m,r:s})}
 function shot(){const W=WP[SV.wp],dx=Math.cos(P.a),dy=Math.sin(P.a);let a0=P.a;
  if(SV.as&&W.pel===1){const t=near();if(t&&Math.abs(t.d)<.1)a0+=t.d}
  if(SV.king){const t=kt(P.x,P.y);if(t)a0=Math.atan2(t.y-P.y,t.x-P.x)}
@@ -265,7 +264,7 @@ function stats(w){return 'Recoil '+'▮'.repeat(Math.round(w.rec/4))+' &nbsp; Fi
 function win(){st='win';ts=.3;const nu=Math.min(WP.length,1+Math.floor(lvl/2)),nw=nu>SV.un;
  msg(nw?'NEW WEAPON UNLOCKED!':'LEVEL COMPLETE!',2,nw?'gold':'');if(nw)sUnlock();
  setTimeout(()=>{ts=1;SV.un=Math.max(SV.un,nu);SV.best=Math.max(SV.best,lvl+1);save();
-  const stars=deaths===0&&P.hp===3?3:deaths===0?2:1,w=WP[nu-1];
+  const stars=deaths===0&&P.hp===(SV.zy?5:3)?3:deaths===0?2:1,w=WP[nu-1];
   show('<h1>Level '+lvl+' Complete! '+'⭐'.repeat(stars)+'</h1><p>Deaths: '+deaths+'</p>'+
    (nw?'<div class="new"><h2>🔓 NEW WEAPON UNLOCKED!</h2><p style="font-size:22px;margin:4px 0"><b>'+w.n+'</b></p><p>'+w.d+'</p><p style="font-size:13px">'+stats(w)+'</p></div><button class="g" id="eq">Equip & continue</button> <button id="nx">Continue</button>':'<button class="o" id="nx">Next level</button>')+
    ' <button class="s" id="mn">Main Menu</button>');
@@ -293,7 +292,7 @@ function step(dt){
   if(SV.as&&P.cd<=0&&P.rl<=0&&!hold){const t=near();if(t){P.w+=t.d*20*dt;P.w*=1-4.5*dt}}
   P.w=clamp(P.w,-17,17);P.a+=P.w*dt;P.w*=1-.9*dt;
   boxes.forEach(b=>col(P,.45,b,.3));
-  P.cd-=dt;if(P.rl>0){P.rl-=dt;if(P.rl<=0)P.am=W.mag}
+  P.cd-=dt*(SV.zy?1.6:1);if(P.rl>0){P.rl-=dt*(SV.zy?3:1);if(P.rl<=0)P.am=W.mag}
   if(P.q>0){P.qt-=dt;if(P.qt<=0){if(P.am>0)shot();P.q--;P.qt=.07;if(P.am<=0&&P.rl<=0)P.rl=W.rel}}
   if(P.buf>0){P.buf-=dt;if(fire())P.buf=0}
   if(hold&&W.auto)fire();if(W.sw){P.sc-=dt;if(P.sc<=0)for(const e of en)if(e.alive&&e.t!==5&&Math.hypot(e.x-P.x,e.y-P.y)<2.1){P.sc=.45;slashFx(e);e.hp=1;hurt(e);break}}}
@@ -401,7 +400,7 @@ function loop(){requestAnimationFrame(loop);const n=performance.now(),raw=Math.m
 /* secret code */
 let kq='';
 function kt(x,y){let r=null,bd=1e9;for(const e of en)if(e.alive&&e.t!==5){const d=Math.hypot(e.x-x,e.y-y);if(d<bd){bd=d;r=e}}return r}
-const KB=[Array.from($('king').children).map(c=>c.innerHTML),['♛ &nbsp;ROYAL FAREWELL&nbsp; ♛','SALMANE','The crown rests, Your Majesty — yet a king never truly leaves his realm. Speak your name once more, and the throne will be waiting for you.','KING MODE DEACTIVATED']];
+const KB=[['♛ أهلاً بالملك ♛','سلمان','العرش بانتظارك يا جلالة الملك.'],['♛ في أمان الله ♛','سلمان','التاج بانتظارك متى ما عدت.'],['✦ أهلاً بابن أخ الملك ✦','زياد','مكانتك عالية يا زياد، والمملكة ترحب بك.'],['✦ إلى اللقاء ✦','زياد','نراك قريباً يا ابن أخ الملك.']];
 function kingShow(i){const k=$('king');Array.from(k.children).forEach((c,j)=>c.innerHTML=KB[i][j]);k.classList.remove('on');void k.offsetWidth;k.classList.add('on')}
 function kingOn(){if(SV.king)return kingOff();SV.king=1;SV.un=WP.length;save();P.am=WP[SV.wp].mag;P.rl=0;
  if(st==='menu'&&$('pl'))renderMenu();else if(st==='pause'&&$('rs')){st='play';pauseGame(1)}
@@ -409,13 +408,15 @@ function kingOn(){if(SV.king)return kingOff();SV.king=1;SV.un=WP.length;save();P
 function kingOff(){SV.king=0;SV.un=Math.max(1,Math.min(WP.length,1+Math.floor((SV.best-1)/2)));const wk=SV.wp>=SV.un;if(wk)SV.wp=0;save();
  if(st==='menu'&&$('pl')){if(wk)bg();renderMenu()}else if(st==='pause'&&$('rs')){if(wk){hide();loadLevel(lvl,1)}else{st='play';pauseGame(1)}}else if(st==='play'&&wk)loadLevel(lvl,1);
  kingShow(1);au();[784,659,523,392].forEach((f,i)=>setTimeout(()=>tone(f,.3,'triangle',.22,f*.99),i*130));hud()}
+function zyOn(){if(SV.zy)return zyOff();SV.zy=1;save();if(P.alive&&st==='play')P.hp+=2;kingShow(2);au();sUnlock();hud()}
+function zyOff(){SV.zy=0;save();if(P.hp>3)P.hp=3;kingShow(3);au();[659,523,392].forEach((f,i)=>setTimeout(()=>tone(f,.3,'triangle',.22,f*.99),i*130));hud()}
 let kc='';
-addEventListener('keydown',e=>{if(e.target===ki||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key&&e.key.length===1?e.key.toLowerCase():'',c=/^Key[A-Z]$/.test(e.code||'')?e.code[3].toLowerCase():'';kq=(kq+k).slice(-7);kc=(kc+c).slice(-7);if(kq==='salmane'||kc==='salmane'){kq=kc='';kingOn()}},true);
+addEventListener('keydown',e=>{if(e.target===ki||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key&&e.key.length===1?e.key.toLowerCase():'',c=/^Key[A-Z]$/.test(e.code||'')?e.code[3].toLowerCase():'';kq=(kq+k).slice(-7);kc=(kc+c).slice(-7);if(kq==='salmane'||kc==='salmane'){kq=kc='';kingOn()}else if(kq.slice(-3)==='med'||kc.slice(-3)==='med'){kq=kc='';zyOn()}},true);
 /* secret touch trigger: tap the tagline under the logo, then type the code into a hidden field (phones have no physical keyboard) */
 const ki=document.createElement('input');ki.type='text';ki.autocomplete='off';ki.autocapitalize='none';ki.spellcheck=false;ki.tabIndex=-1;ki.setAttribute('autocorrect','off');ki.setAttribute('aria-hidden','true');
 ki.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;border:0;padding:0;margin:0;font-size:16px;pointer-events:none;z-index:-1';
 document.body.appendChild(ki);
-ki.addEventListener('input',()=>{const v=ki.value.toLowerCase();if(v.includes('salmane')){ki.value='';ki.blur();kingOn()}else if(v.length>24)ki.value=v.slice(-12)});
+ki.addEventListener('input',()=>{const v=ki.value.toLowerCase();if(v.includes('salmane')){ki.value='';ki.blur();kingOn()}else if(v.includes('med')){ki.value='';ki.blur();zyOn()}else if(v.length>24)ki.value=v.slice(-12)});
 ki.addEventListener('blur',()=>{ki.value=''});
 PN.addEventListener('click',e=>{if(e.target.closest('.tg'))ki.focus()});
 menu();loop();
