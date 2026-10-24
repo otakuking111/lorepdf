@@ -726,8 +726,8 @@
   /* ---------- Chrome ---------- */
   document.body.insertAdjacentHTML("afterbegin", `
   <header class="hdr"><div class="bar">
-    <a class="logo" href="index.html">Lore<b>PDF</b></a>
-    <nav class="nav" id="nav"><a href="series.html">Series</a><a href="index.html#latest">Latest</a><a href="library.html">Library</a></nav>
+    <a class="logo" href="./">Lore<b>PDF</b></a>
+    <nav class="nav" id="nav"><a href="series.html">Series</a><a href="./#latest">Latest</a><a href="library.html">Library</a></nav>
     <button class="sbtn" id="sbtn" aria-label="Search"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search</span></button>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
   </div><div class="bd" id="bd"></div></header>
@@ -735,7 +735,7 @@
     <div class="srow"><input id="sin" type="search" enterkeyhint="search" placeholder="Title, author, genre or series" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="x" id="sx" aria-label="Close search">✕</button></div>
     <div class="res" id="sres"></div></div></div>
   <div class="lb" id="lb" hidden role="dialog" aria-label="Preview"><button class="x lx" aria-label="Close preview">✕</button><div class="stage"><img alt=""></div><div class="lbar"><button class="x lp" aria-label="Previous image">‹</button><span class="lc"></span><button class="x ln" aria-label="Next image">›</button></div></div>`);
-  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><a class="logo" href="index.html">Lore<b>PDF</b></a><p>© ${new Date().getFullYear()} LorePDF</p></footer>`);
+  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><a class="logo" href="./">Lore<b>PDF</b></a><p>© ${new Date().getFullYear()} LorePDF</p></footer>`);
   const nav = $("#nav"), burger = $("#burger"), sov = $("#sov"), sin = $("#sin"), lb = $("#lb");
   const syncLock = () => document.body.classList.toggle("lock", !sov.hidden || !lb.hidden || nav.classList.contains("open"));
   const setMenu = o => { nav.classList.toggle("open", o); $("#bd").classList.toggle("on", o); burger.setAttribute("aria-expanded", o); syncLock(); };
@@ -1032,6 +1032,7 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     };
     input.value = new URLSearchParams(location.search).get("q") || "";
     input.oninput = draw; draw();
+    setLd("ld-list", { "@type": "ItemList", name: "Novel Series", itemListElement: all.map((x, i) => ({ "@type": "ListItem", position: i + 1, name: x.s, url: "https://lorepdf.com/" + href(firstPart(x)) })) });
   }
   
   /* ---------- Library page ---------- */
@@ -1056,6 +1057,7 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     const p = new URLSearchParams(location.search);
     ["q", "genre", "series", "author", "part"].forEach(k => { if (p.get(k)) st[k] = p.get(k); });
     draw();
+    setLd("ld-list", { "@type": "ItemList", name: "LorePDF Library", itemListElement: DATA.map((n, i) => ({ "@type": "ListItem", position: i + 1, name: n.title, url: "https://lorepdf.com/" + href(n) })) });
   }
   
   /* ---------- Novel page ---------- */
@@ -1065,25 +1067,36 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     if (!m) { m = document.createElement("meta"); m.setAttribute(attr, key); document.head.appendChild(m); }
     m.setAttribute("content", val);
   }
+  function setLd(id, obj) {
+    let el = document.getElementById(id);
+    if (!el) { el = document.createElement("script"); el.type = "application/ld+json"; el.id = id; document.head.appendChild(el); }
+    el.textContent = JSON.stringify({ "@context": "https://schema.org", ...obj });
+  }
+  const clip = (t, max) => { t = t.replace(/\s+/g, " ").trim(); if (t.length <= max) return t; const c = t.slice(0, max - 1); return c.slice(0, c.lastIndexOf(" ") > 60 ? c.lastIndexOf(" ") : c.length).replace(/[,;:\-—\s]+$/, "") + "…"; };
   function seoNovel(n) {
     const url = `https://lorepdf.com/novel.html?id=${encodeURIComponent(n.id)}`;
-    const base = `${n.title} by ${n.author}${n.series ? ` — ${n.series}${n.partLabel ? `, ${n.partLabel}` : ""}` : ""}.`;
-    const desc = (base + " " + (n.description || "")).replace(/\s+/g, " ").trim().slice(0, 158);
-    const title = `${n.title} by ${n.author} — Read Online | LorePDF`;
+    const ser = n.series && n.part != null && !n.title.includes(n.series) ? `${n.series} #${n.part}` : "";
+    /* Title: first candidate that fits ~64 characters (Google cuts longer titles) */
+    const cands = ser
+      ? [`${n.title} (${ser}) — Read Online | LorePDF`, `${n.title} (${ser}) | LorePDF`, `${n.title} by ${n.author} | LorePDF`, `${n.title} | LorePDF`]
+      : [`${n.title} by ${n.author} — Read Online | LorePDF`, `${n.title} by ${n.author} | LorePDF`, `${n.title} | LorePDF`];
+    const title = cands.find(t => t.length <= 64) || cands[cands.length - 1];
+    /* Description: who/what/which series + first plot sentence (more specific = better click-through) */
+    const lead = `${n.title} by ${n.author}${n.series ? `, ${n.part != null ? `book ${n.part} of ` : "from "}${n.series}` : ""}.`;
+    const plot = (n.story[0] && n.story[0].t) || n.description || "";
+    const desc = clip(`${lead} ${plot}`, 158);
     document.title = title;
     let c = document.head.querySelector('link[rel="canonical"]');
     if (!c) { c = document.createElement("link"); c.rel = "canonical"; document.head.appendChild(c); }
     c.href = url;
     setMeta("description", desc);
-    [["og:title", title], ["og:description", desc], ["og:url", url], ["og:image", n.cover], ["og:type", "book"]].forEach(([k, v]) => setMeta(k, v, "property"));
-    [["twitter:title", title], ["twitter:description", desc], ["twitter:image", n.cover]].forEach(([k, v]) => setMeta(k, v));
-    const book = { "@type": "Book", name: n.title, author: { "@type": "Person", name: n.author }, image: n.cover, description: desc, genre: n.genres, inLanguage: "en", url };
+    [["og:title", title], ["og:description", desc], ["og:url", url], ["og:image", n.cover], ["og:image:alt", `${n.title} cover`], ["og:type", "book"]].forEach(([k, v]) => setMeta(k, v, "property"));
+    [["twitter:title", title], ["twitter:description", desc], ["twitter:image", n.cover], ["twitter:image:alt", `${n.title} cover`]].forEach(([k, v]) => setMeta(k, v));
+    const book = { "@type": "Book", "@id": url + "#book", name: n.title, author: { "@type": "Person", name: n.author }, image: n.cover, description: desc, genre: n.genres, inLanguage: "en", url };
     if (n.series) book.isPartOf = { "@type": "BookSeries", name: n.series };
     if (n.part != null) book.position = n.part;
     const crumbs = { "@type": "BreadcrumbList", itemListElement: [["Home", "https://lorepdf.com/"], ["Library", "https://lorepdf.com/library.html"], [n.title, url]].map(([name, item], i) => ({ "@type": "ListItem", position: i + 1, name, item })) };
-    let ldEl = document.getElementById("ld-novel");
-    if (!ldEl) { ldEl = document.createElement("script"); ldEl.type = "application/ld+json"; ldEl.id = "ld-novel"; document.head.appendChild(ldEl); }
-    ldEl.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": [book, crumbs] });
+    setLd("ld-novel", { "@graph": [book, crumbs] });
   }
   /* Back arrows: go to the previous page on this site, otherwise follow the link */
   function wireBack() {
@@ -1092,13 +1105,15 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
 
   function novelPage() {
     const root = $("#novel"), n = byId(new URLSearchParams(location.search).get("id"));
-    if (!n) { document.title = "LorePDF — Not found"; setMeta("robots", "noindex, follow"); root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="index.html">Browse novels</a></p></div>`; return; }
+    if (!n) { document.title = "LorePDF — Not found"; setMeta("robots", "noindex, follow"); root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="./">Browse novels</a></p></div>`; return; }
     document.title = `${n.title} — LorePDF`; lbList = [...n.previews];
     const pn = (m, label) => m ? `<a class="pn" href="${href(m)}">${cover(m)}<span><small>${label}</small><b>${m.title}</b></span></a>` : "";
     const prev = n.previousPart && byId(n.previousPart), next = n.nextPart && byId(n.nextPart);
     const pre = n.prequel && byId(n.prequel.id);
+    const rel = DATA.filter(m => m.id !== n.id).map(m => ({ m, sc: (m.series && m.series === n.series ? 100 : 0) + (m.author === n.author ? 40 : 0) + m.genres.filter(g => n.genres.includes(g)).length * 5 }))
+      .filter(x => x.sc > 0).sort((a, b) => b.sc - a.sc || DATA.indexOf(a.m) - DATA.indexOf(b.m)).slice(0, 10).map(x => x.m);
     root.innerHTML = `
-    <section class="nhero" style="--u:url(${esc(n.cover)})"><div class="wrap nb"><a class="back" href="index.html" aria-label="Back">←</a></div><div class="wrap np">
+    <section class="nhero" style="--u:url(${esc(n.cover)})"><div class="wrap nb"><a class="back" href="./" aria-label="Back">←</a></div><div class="wrap np">
       <div class="npc">${cover(n, true)}</div>
       <div class="npi">
         ${n.series ? `<p class="ser">${n.series}${n.partLabel ? " — " + n.partLabel : ""}</p>` : ""}
@@ -1109,12 +1124,14 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
         ${prev || next ? `<div class="pns">${pn(prev, "Previous Part")}${pn(next, "Next Part")}</div>` : ""}
       </div></div></section>
     ${pre && n.previews.length ? `<div class="wrap prew"><a class="pre" href="${href(pre)}">${cover(pre)}<span><b>Before this series:</b> ${n.prequel.text} <b>Read it here →</b></span></a></div>` : ""}${n.previews.length ? `<section class="wrap sec" id="previews"><div class="sh"><h2>Preview</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Previous">‹</button><button class="arr" data-dir="1" aria-label="Next">›</button></div></div><div class="track pv" id="pv">${n.previews.map((p, i) => `<button class="slide" data-i="${i}" style="--u:url(${esc(p)})" aria-label="Open preview ${i + 1}">${img(n, p, `${n.title} preview ${i + 1}`, true, "Preview unavailable")}</button>`).join("")}</div></section>` : ""}
-    ${n.story.length || n.note ? `<section class="wrap sec story">${n.story.map(s => `<div><h3>${s.h}</h3><p>${s.t}</p></div>`).join("")}${n.note ? `<p class="note">${n.note}</p>` : ""}</section>` : ""}`;
+    ${n.story.length || n.note ? `<section class="wrap sec story">${n.story.map(s => `<div><h3>${s.h}</h3><p>${s.t}</p></div>`).join("")}${n.note ? `<p class="note">${n.note}</p>` : ""}</section>` : ""}
+    ${rel.length ? `<section class="wrap sec" id="related"><div class="sh"><h2>You May Also Like</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Scroll left">‹</button><button class="arr" data-dir="1" aria-label="Scroll right">›</button></div></div><div class="track" id="rel-track">${rel.map((m, i) => `<a class="bk" style="--i:${i}" href="${href(m)}">${cover(m)}<h3>${m.title}</h3><p>${m.author}</p></a>`).join("")}</div></section>` : ""}`;
     wireBack(); seoNovel(n);
+    if (rel.length) strip($("#rel-track"), $("#related .arrows"), false);
     root.querySelectorAll(".slide").forEach(b => b.onclick = () => showLb(+b.dataset.i));
     strip($("#pv"), $("#previews .arrows"), false);
   }
   
   wireBack();
   try { ({ home, series: seriesPage, library: libraryPage }[document.body.dataset.page] || novelPage)(); }
-  catch (err) { console.error(err); const m = $("main"); if (m) m.innerHTML = `<div class="empty pad"><h3>Something went wrong</h3><p><a class="btn" href="index.html">Back to LorePDF</a></p></div>`; }
+  catch (err) { console.error(err); const m = $("main"); if (m) m.innerHTML = `<div class="empty pad"><h3>Something went wrong</h3><p><a class="btn" href="./">Back to LorePDF</a></p></div>`; }
