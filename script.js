@@ -1121,7 +1121,7 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
         <div class="gl">${n.genres.map(g => `<a href="library.html?genre=${encodeURIComponent(g)}#library">${g}</a>`).join("")}</div>
         ${n.description ? `<p class="desc">${n.plainDesc ? "" : n.title + ", "}${n.description}</p>` : ""}
         <a class="btn" href="${n.readUrl ? esc(n.readUrl) : "#previews"}"${n.readUrl ? ' target="_blank" rel="noopener"' : ""}>Read Now</a>
-        ${prev || next ? `<div class="pns">${pn(prev, "Previous Part")}${pn(next, "Next Part")}</div>` : ""}
+        ${prev || next ? `<div class="pns">${pn(next, "Next Part")}${pn(prev, "Previous Part")}</div>` : ""}
       </div></div></section>
     ${pre && n.previews.length ? `<div class="wrap prew"><a class="pre" href="${href(pre)}">${cover(pre)}<span><b>Before this series:</b> ${n.prequel.text} <b>Read it here →</b></span></a></div>` : ""}${n.previews.length ? `<section class="wrap sec" id="previews"><div class="sh"><h2>Preview</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Previous">‹</button><button class="arr" data-dir="1" aria-label="Next">›</button></div></div><div class="track pv" id="pv">${n.previews.map((p, i) => `<button class="slide" data-i="${i}" style="--u:url(${esc(p)})" aria-label="Open preview ${i + 1}">${img(n, p, `${n.title} preview ${i + 1}`, true, "Preview unavailable")}</button>`).join("")}</div></section>` : ""}
     ${n.story.length || n.note ? `<section class="wrap sec story">${n.story.map(s => `<div><h3>${s.h}</h3><p>${s.t}</p></div>`).join("")}${n.note ? `<p class="note">${n.note}</p>` : ""}</section>` : ""}
