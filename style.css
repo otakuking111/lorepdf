@@ -314,9 +314,6 @@ small{font-size:.8rem}
 @media(hover:hover){.nav a:hover{opacity:1;color:var(--gold)}.sbtn:hover,.arr:not(:disabled):hover{background:var(--gold);color:var(--wood)}.bk:hover,.card:hover,.scard:hover{transform:translateY(-5px)}.btn:hover{transform:translateY(-2px);background:var(--gold-soft)}.btn.sm:hover{background:var(--wood)}.pn:hover{background:rgba(197,160,89,.2)}.gl a:hover{background:var(--gold);color:var(--wood)}.row:hover{background:rgba(197,160,89,.14)}}
 @media(min-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:26px 20px}.tools{grid-template-columns:2fr 1fr 1fr}.tools input{grid-column:1/-1}.sgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.slide{flex-basis:70%}.sbtn span{display:inline}.sbtn{padding:0 16px}}
 @media(min-width:900px){.tools{grid-template-columns:2fr 1fr 1fr 1fr 1fr auto}.tools input{grid-column:auto}.np{grid-template-columns:300px minmax(0,1fr);gap:56px;justify-items:start;text-align:left;padding-top:48px;padding-bottom:52px}.npc{width:100%}.gl{justify-content:flex-start}.desc{margin-left:0}.npi .btn{width:auto;min-width:240px}.pns{grid-template-columns:repeat(2,minmax(0,1fr));max-width:560px}.pns:has(.pn:only-child){grid-template-columns:minmax(0,280px)}.slide{flex-basis:calc(50% - 6px)}.sgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.bk{flex-basis:200px}}
-/* Home brand strip — visible on mobile and desktop */
-body[data-page="home"] main::before{content:"Always Free \00B7  Never Any Ads";display:block;padding:9px 12px;text-align:center;background:#4A1A1F;color:var(--gold-soft);font:600 .68rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
-
 @media(max-width:799px){
  .burger{display:flex}
  .nav{position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;margin:0;background:#3B1A17;border-bottom:2px solid var(--gold);opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .25s,transform .25s,visibility 0s .25s;z-index:2}
@@ -584,7 +581,7 @@ body[data-page="home"] #library .bk{flex:none}
 .nav a{font-size:.92rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:18px 22px;border-left:3px solid transparent}
 .nav a:active{border-left-color:var(--gold);background:rgba(197,160,89,.12)}
 /* home brand strip */
-
+body[data-page="home"] main::before{content:"Always Free \00B7  Never Any Ads";display:block;padding:9px 12px;text-align:center;background:#4A1A1F;color:var(--gold-soft);font:600 .68rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
 /* section headings */
 .sh{margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--line-2)}
 .sh h2{font-size:clamp(1.45rem,6vw,1.8rem)}
