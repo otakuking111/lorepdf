@@ -623,3 +623,6 @@ body[data-page="home"] #lib-track{display:grid;grid-template-columns:repeat(2,mi
 /* footer */
 .ftr{margin-top:36px;padding-top:22px}
 }
+.ro-intro{max-width:64ch;margin:0 0 22px;line-height:1.65;opacity:.88}
+.ro-note{margin:0 0 22px;opacity:.9}
+.ro-note a,.ser a{color:inherit;text-decoration:underline;text-underline-offset:3px}

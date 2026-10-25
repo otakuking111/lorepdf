@@ -1116,7 +1116,7 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     <section class="nhero" style="--u:url(${esc(n.cover)})"><div class="wrap nb"><a class="back" href="./" aria-label="Back">←</a></div><div class="wrap np">
       <div class="npc">${cover(n, true)}</div>
       <div class="npi">
-        ${n.series ? `<p class="ser">${n.series}${n.partLabel ? " — " + n.partLabel : ""}</p>` : ""}
+        ${n.series ? `<p class="ser">${n.series}${n.partLabel ? " — " + n.partLabel : ""}${ORDER_PAGES[n.series] ? ` · <a href="${ORDER_PAGES[n.series]}">Reading order</a>` : ""}</p>` : ""}
         <h1>${n.title}</h1><p class="by">by ${n.author}</p>
         <div class="gl">${n.genres.map(g => `<a href="library.html?genre=${encodeURIComponent(g)}#library">${g}</a>`).join("")}</div>
         ${n.description ? `<p class="desc">${n.plainDesc ? "" : n.title + ", "}${n.description}</p>` : ""}
@@ -1132,6 +1132,21 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     strip($("#pv"), $("#previews .arrows"), false);
   }
   
+  /* ---------- Reading order pages (one per series) ---------- */
+  const ORDER_PAGES = { "Harry Potter": "harry-potter-books-in-order.html", "The Lord of the Rings": "lord-of-the-rings-books-in-order.html", "A Song of Ice and Fire": "a-song-of-ice-and-fire-books-in-order.html", "The Empyrean": "fourth-wing-books-in-order.html" };
+  function orderPage() {
+    const name = document.body.dataset.series, list = $("#olist");
+    const parts = DATA.filter(n => n.series === name).sort((a, b) => (a.part == null ? 99 : a.part) - (b.part == null ? 99 : b.part));
+    if (!parts.length) { list.innerHTML = emptyMsg("No books yet", "Check back soon."); return; }
+    $("#count").textContent = `${parts.length} ${parts.length === 1 ? "book" : "books"}`;
+    list.innerHTML = parts.map((n, i) => `<a class="card" href="${href(n)}">${cover(n, i < 4)}<h3>${n.part != null ? n.part + ". " : ""}${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("");
+    const pre = parts[0].prequel && byId(parts[0].prequel.id);
+    if (pre) $("#onote").innerHTML = `<p class="ro-note">Optional prequel: <a href="${href(pre)}">${pre.title}</a> — ${parts[0].prequel.text}</p>`;
+    const canon = (document.querySelector('link[rel="canonical"]') || {}).href || location.href;
+    setLd("ld-list", { "@type": "ItemList", name: document.title, itemListElement: parts.map((n, i) => ({ "@type": "ListItem", position: i + 1, name: n.title, url: "https://lorepdf.com/" + href(n) })) });
+    wireBack();
+  }
+  
   wireBack();
-  try { ({ home, series: seriesPage, library: libraryPage }[document.body.dataset.page] || novelPage)(); }
+  try { ({ home, series: seriesPage, library: libraryPage, order: orderPage }[document.body.dataset.page] || novelPage)(); }
   catch (err) { console.error(err); const m = $("main"); if (m) m.innerHTML = `<div class="empty pad"><h3>Something went wrong</h3><p><a class="btn" href="./">Back to LorePDF</a></p></div>`; }
