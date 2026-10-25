@@ -736,7 +736,7 @@
     <div class="res" id="sres"></div></div></div>
   <div class="lb" id="lb" hidden role="dialog" aria-label="Preview"><button class="x lx" aria-label="Close preview">✕</button><div class="stage"><img alt=""></div><div class="lbar"><button class="x lp" aria-label="Previous image">‹</button><span class="lc"></span><button class="x ln" aria-label="Next image">›</button></div></div>`);
   const ORDER_PAGES = { "Harry Potter": "harry-potter-books-in-order.html", "The Lord of the Rings": "lord-of-the-rings-books-in-order.html", "A Song of Ice and Fire": "a-song-of-ice-and-fire-books-in-order.html", "The Empyrean": "fourth-wing-books-in-order.html" };
-  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><a class="logo" href="./">Lore<b>PDF</b></a><nav class="flinks" aria-label="Reading orders">${Object.entries(ORDER_PAGES).map(([k, v]) => `<a href="${v}">${k.replace(/^The /, "")} Reading Order</a>`).join("")}</nav><p>© ${new Date().getFullYear()} LorePDF</p></footer>`);
+  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><div class="ftr-in"><div class="ftr-brand"><a class="logo" href="./">Lore<b>PDF</b></a><p class="ftr-tag">Novels and book series to read online. Always free, never any ads.</p></div><nav class="ftr-col" aria-label="Reading orders"><h4>Reading Orders</h4><ul>${Object.entries(ORDER_PAGES).map(([k, v]) => `<li><a href="${v}">${k.replace(/^The /, "")}</a></li>`).join("")}</ul></nav><nav class="ftr-col" aria-label="Explore"><h4>Explore</h4><ul><li><a href="./">Home</a></li><li><a href="series.html">All Series</a></li><li><a href="library.html">Library</a></li></ul></nav></div><div class="ftr-bot"><div class="ftr-bot-in"><p>© ${new Date().getFullYear()} LorePDF. All rights reserved.</p><button class="ftr-top" type="button" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top <span aria-hidden="true">↑</span></button></div></div></footer>`);
   const nav = $("#nav"), burger = $("#burger"), sov = $("#sov"), sin = $("#sin"), lb = $("#lb");
   const syncLock = () => document.body.classList.toggle("lock", !sov.hidden || !lb.hidden || nav.classList.contains("open"));
   const setMenu = o => { nav.classList.toggle("open", o); $("#bd").classList.toggle("on", o); burger.setAttribute("aria-expanded", o); syncLock(); };
@@ -1140,9 +1140,26 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     const parts = DATA.filter(n => n.series === name).sort((a, b) => (a.part == null ? 99 : a.part) - (b.part == null ? 99 : b.part));
     if (!parts.length) { list.innerHTML = emptyMsg("No books yet", "Check back soon."); return; }
     $("#count").textContent = `${parts.length} ${parts.length === 1 ? "book" : "books"}`;
-    list.innerHTML = parts.map((n, i) => `<a class="card" href="${href(n)}">${cover(n, i < 4)}<h3>${n.part != null ? n.part + ". " : ""}${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("");
+    list.className = "rolist";
+    list.innerHTML = parts.map((n, i) => `<a class="ro-row" style="--i:${i}" href="${href(n)}"><span class="ro-n" aria-hidden="true">${n.part != null ? n.part : i + 1}</span>${cover(n, i < 4)}<span class="ro-b"><span class="ro-lab">${esc(n.partLabel || n.category)}</span><h3>${n.title}</h3><span class="ro-au">${n.author}</span><span class="ro-tags">${[n.category, ...(n.genres || [])].filter((g, k, a) => g && a.indexOf(g) === k).slice(0, 3).map(g => `<i>${esc(g)}</i>`).join("")}</span></span><span class="ro-go" aria-hidden="true"><b>Read</b><em>→</em></span></a>`).join("");
     const first = parts[0], pre = first.prequel && byId(first.prequel.id);
-    $("#onote").innerHTML = `<p class="ro-start"><a class="btn" href="${href(first)}">Start with ${first.part === 1 ? "Part 1" : first.title}</a></p>` + (pre ? `<p class="ro-note">Optional prequel: <a href="${href(pre)}">${pre.title}</a> — ${first.prequel.text}</p>` : "");
+    $("#onote").innerHTML = (pre ? `<p class="ro-note">Optional prequel: <a href="${href(pre)}">${pre.title}</a> — ${first.prequel.text}</p>` : "");
+
+    /* Hero banner */
+    (function () {
+      const sec = list.closest("section"), sh = sec.querySelector(".sh"), h2 = sh.querySelector("h2"),
+        intro = sec.querySelector(".ro-intro"), cnt = $("#count"), note = $("#onote");
+      const hero = document.createElement("section");
+      hero.className = "rohero"; hero.style.setProperty("--u", `url("${first.cover}")`);
+      hero.innerHTML = `<div class="wrap rohero-in"><a class="back" href="series.html" aria-label="Back to all series">←</a><div class="rohero-grid"><div class="rohero-txt"><span class="rohero-eye">Reading Order</span><div class="rohero-h"></div><p class="rohero-meta"><span>${esc(first.author)}</span><i aria-hidden="true"></i><span class="rohero-cnt"></span></p><div class="rohero-intro"></div><a class="btn rohero-cta" href="${href(first)}">Start with Part 1</a><div class="rohero-note"></div></div><div class="rohero-fan" aria-hidden="true">${parts.slice(0, 3).map((n, i) => `<span class="rf rf${i}">${cover(n, true)}</span>`).join("")}</div></div></div>`;
+      hero.querySelector(".rohero-h").appendChild(h2);
+      hero.querySelector(".rohero-cnt").appendChild(cnt);
+      if (intro) hero.querySelector(".rohero-intro").appendChild(intro);
+      hero.querySelector(".rohero-note").appendChild(note);
+      sh.remove();
+      sec.insertAdjacentHTML("afterbegin", `<div class="ro-lh"><span>Read in this order</span></div>`);
+      main.insertBefore(hero, sec);
+    })();
     /* "Read Also": compact series cards under the books, with the same "All Series" link as the home page */
     const others = seriesList().filter(x => x.s !== name).slice(0, 8);
     if (others.length) {
