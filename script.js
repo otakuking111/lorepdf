@@ -1144,10 +1144,11 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     const first = parts[0], pre = first.prequel && byId(first.prequel.id);
     $("#onote").innerHTML = `<p class="ro-start"><a class="btn" href="${href(first)}">Start with ${first.part === 1 ? "Part 1" : first.title}</a></p>` + (pre ? `<p class="ro-note">Optional prequel: <a href="${href(pre)}">${pre.title}</a> — ${first.prequel.text}</p>` : "");
     /* "Read Also": compact series cards under the books, with the same "All Series" link as the home page */
-    const others = seriesList().filter(x => x.s !== name).slice(0, 4);
+    const others = seriesList().filter(x => x.s !== name).slice(0, 8);
     if (others.length) {
       const rs = x => `<a class="rs-card" href="${seriesLink(x)}"><span class="rs-fan">${x.items.slice(0, 3).map((n, i) => `<span class="rs-c rs-c${i}">${cover(n)}</span>`).reverse().join("")}</span><span class="rs-txt"><span class="rs-eye">Collection</span><h3>${esc(x.s)}</h3><span class="rs-meta">${x.items.length} ${x.items.length === 1 ? "Part" : "Parts"} · ${esc(firstPart(x).author)}</span><span class="rs-go">Explore series →</span></span></a>`;
-      main.insertAdjacentHTML("beforeend", `<section class="wrap sec ro-more"><div class="sh"><h2>Read Also</h2><div class="shr"><a class="all" href="series.html">All Series <span aria-hidden="true">→</span></a></div></div><div class="rs-grid">${others.map(rs).join("")}</div></section>`);
+      main.insertAdjacentHTML("beforeend", `<section class="wrap sec ro-more"><div class="sh"><h2>Read Also</h2><div class="shr"><div class="arrows"><button class="arr" data-dir="-1" aria-label="Scroll left">‹</button><button class="arr" data-dir="1" aria-label="Scroll right">›</button></div><a class="all" href="series.html">All Series <span aria-hidden="true">→</span></a></div></div><div class="rs-track" id="rs-track">${others.map(rs).join("")}</div></section>`);
+      strip($("#rs-track"), $(".ro-more .arrows"), false);
     }
     setLd("ld-list", { "@type": "ItemList", name: document.title, itemListElement: parts.map((n, i) => ({ "@type": "ListItem", position: i + 1, name: n.title, url: "https://lorepdf.com/" + href(n) })) });
     wireBack();
