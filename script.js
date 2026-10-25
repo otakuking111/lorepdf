@@ -1136,15 +1136,20 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
   
   /* ---------- Reading order pages (one per series) ---------- */
   function orderPage() {
-    const name = document.body.dataset.series, list = $("#olist");
+    const name = document.body.dataset.series, list = $("#olist"), main = $("main");
     const parts = DATA.filter(n => n.series === name).sort((a, b) => (a.part == null ? 99 : a.part) - (b.part == null ? 99 : b.part));
     if (!parts.length) { list.innerHTML = emptyMsg("No books yet", "Check back soon."); return; }
     $("#count").textContent = `${parts.length} ${parts.length === 1 ? "book" : "books"}`;
     list.innerHTML = parts.map((n, i) => `<a class="card" href="${href(n)}">${cover(n, i < 4)}<h3>${n.part != null ? n.part + ". " : ""}${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("");
-    const pre = parts[0].prequel && byId(parts[0].prequel.id);
-    const first = parts[0];
+    const first = parts[0], pre = first.prequel && byId(first.prequel.id);
     $("#onote").innerHTML = `<p class="ro-start"><a class="btn" href="${href(first)}">Start with ${first.part === 1 ? "Part 1" : first.title}</a></p>` + (pre ? `<p class="ro-note">Optional prequel: <a href="${href(pre)}">${pre.title}</a> — ${first.prequel.text}</p>` : "");
-    const canon = (document.querySelector('link[rel="canonical"]') || {}).href || location.href;
+    /* "Read Also": other series as suggestions under the books + an "All Series" button */
+    const others = seriesList().filter(x => x.s !== name).slice(0, 4);
+    if (others.length) {
+      main.insertAdjacentHTML("beforeend", `<section class="wrap sec ro-more"><div class="sh"><h2>Read Also</h2></div><div class="sgrid" id="osgrid">${others.map(x => scard(x, seriesLink(x))).join("")}</div><p class="ro-all"><a class="btn" href="series.html">All Series</a></p></section>`);
+      initSeriesCoverRotations($("#osgrid"));
+      fitSeriesTitles($("#osgrid"));
+    }
     setLd("ld-list", { "@type": "ItemList", name: document.title, itemListElement: parts.map((n, i) => ({ "@type": "ListItem", position: i + 1, name: n.title, url: "https://lorepdf.com/" + href(n) })) });
     wireBack();
   }
