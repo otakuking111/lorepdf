@@ -735,7 +735,8 @@
     <div class="srow"><input id="sin" type="search" enterkeyhint="search" placeholder="Title, author, genre or series" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="x" id="sx" aria-label="Close search">✕</button></div>
     <div class="res" id="sres"></div></div></div>
   <div class="lb" id="lb" hidden role="dialog" aria-label="Preview"><button class="x lx" aria-label="Close preview">✕</button><div class="stage"><img alt=""></div><div class="lbar"><button class="x lp" aria-label="Previous image">‹</button><span class="lc"></span><button class="x ln" aria-label="Next image">›</button></div></div>`);
-  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><a class="logo" href="./">Lore<b>PDF</b></a><p>© ${new Date().getFullYear()} LorePDF</p></footer>`);
+  const ORDER_PAGES = { "Harry Potter": "harry-potter-books-in-order.html", "The Lord of the Rings": "lord-of-the-rings-books-in-order.html", "A Song of Ice and Fire": "a-song-of-ice-and-fire-books-in-order.html", "The Empyrean": "fourth-wing-books-in-order.html" };
+  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><a class="logo" href="./">Lore<b>PDF</b></a><nav class="flinks" aria-label="Reading orders">${Object.entries(ORDER_PAGES).map(([k, v]) => `<a href="${v}">${k.replace(/^The /, "")} Reading Order</a>`).join("")}</nav><p>© ${new Date().getFullYear()} LorePDF</p></footer>`);
   const nav = $("#nav"), burger = $("#burger"), sov = $("#sov"), sin = $("#sin"), lb = $("#lb");
   const syncLock = () => document.body.classList.toggle("lock", !sov.hidden || !lb.hidden || nav.classList.contains("open"));
   const setMenu = o => { nav.classList.toggle("open", o); $("#bd").classList.toggle("on", o); burger.setAttribute("aria-expanded", o); syncLock(); };
@@ -807,6 +808,7 @@ const seriesList = () =>
       }))
       .sort((a, b) => b.items.length - a.items.length || a.s.localeCompare(b.s));
   
+  const seriesLink = x => ORDER_PAGES[x.s] || href(firstPart(x));
   const firstPart = x =>
     x.items.find(n => n.part === 1) ||
     x.items.find(n => n.part != null) ||
@@ -992,7 +994,7 @@ const seriesList = () =>
   function home() {
     if (!DATA.length) { $("main").innerHTML = `<div class="empty pad"><h3>No novels yet</h3></div>`; return; }
     const sl = seriesList();
-    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, href(firstPart(x)))).join(""); initSeriesCarousel($("#sgrid"));
+    if (sl.length) { $("#sgrid").innerHTML = sl.map(x => scard(x, seriesLink(x))).join(""); initSeriesCarousel($("#sgrid"));
         fitSeriesTitles($("#sgrid")); } else $("#series").hidden = true;
     const bk = (n, i, eager) => `<a class="bk" style="--i:${i}" href="${href(n)}">${cover(n, eager)}<h3>${n.title}</h3><p>${n.author}</p></a>`;
    
@@ -1027,12 +1029,12 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
       const w = input.value.toLowerCase().split(/\s+/).filter(Boolean);
       const hits = all.filter(x => w.every(t => x.s.toLowerCase().includes(t)));
       $("#count").textContent = `${hits.length} series`;
-      $("#sgrid").innerHTML = hits.length ? hits.map(x => scard(x, href(firstPart(x)))).join("") : emptyMsg("No series found", "Try a different name."); initSeriesCoverRotations($("#sgrid"));
+      $("#sgrid").innerHTML = hits.length ? hits.map(x => scard(x, seriesLink(x))).join("") : emptyMsg("No series found", "Try a different name."); initSeriesCoverRotations($("#sgrid"));
       fitSeriesTitles($("#sgrid"));
     };
     input.value = new URLSearchParams(location.search).get("q") || "";
     input.oninput = draw; draw();
-    setLd("ld-list", { "@type": "ItemList", name: "Novel Series", itemListElement: all.map((x, i) => ({ "@type": "ListItem", position: i + 1, name: x.s, url: "https://lorepdf.com/" + href(firstPart(x)) })) });
+    setLd("ld-list", { "@type": "ItemList", name: "Novel Series", itemListElement: all.map((x, i) => ({ "@type": "ListItem", position: i + 1, name: x.s, url: "https://lorepdf.com/" + seriesLink(x) })) });
   }
   
   /* ---------- Library page ---------- */
@@ -1133,7 +1135,6 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
   }
   
   /* ---------- Reading order pages (one per series) ---------- */
-  const ORDER_PAGES = { "Harry Potter": "harry-potter-books-in-order.html", "The Lord of the Rings": "lord-of-the-rings-books-in-order.html", "A Song of Ice and Fire": "a-song-of-ice-and-fire-books-in-order.html", "The Empyrean": "fourth-wing-books-in-order.html" };
   function orderPage() {
     const name = document.body.dataset.series, list = $("#olist");
     const parts = DATA.filter(n => n.series === name).sort((a, b) => (a.part == null ? 99 : a.part) - (b.part == null ? 99 : b.part));
@@ -1141,7 +1142,8 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     $("#count").textContent = `${parts.length} ${parts.length === 1 ? "book" : "books"}`;
     list.innerHTML = parts.map((n, i) => `<a class="card" href="${href(n)}">${cover(n, i < 4)}<h3>${n.part != null ? n.part + ". " : ""}${n.title}</h3><p>${n.author}</p><small>${n.partLabel || n.category}</small></a>`).join("");
     const pre = parts[0].prequel && byId(parts[0].prequel.id);
-    if (pre) $("#onote").innerHTML = `<p class="ro-note">Optional prequel: <a href="${href(pre)}">${pre.title}</a> — ${parts[0].prequel.text}</p>`;
+    const first = parts[0];
+    $("#onote").innerHTML = `<p class="ro-start"><a class="btn" href="${href(first)}">Start with ${first.part === 1 ? "Part 1" : first.title}</a></p>` + (pre ? `<p class="ro-note">Optional prequel: <a href="${href(pre)}">${pre.title}</a> — ${first.prequel.text}</p>` : "");
     const canon = (document.querySelector('link[rel="canonical"]') || {}).href || location.href;
     setLd("ld-list", { "@type": "ItemList", name: document.title, itemListElement: parts.map((n, i) => ({ "@type": "ListItem", position: i + 1, name: n.title, url: "https://lorepdf.com/" + href(n) })) });
     wireBack();

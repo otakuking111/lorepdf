@@ -626,3 +626,8 @@ body[data-page="home"] #lib-track{display:grid;grid-template-columns:repeat(2,mi
 .ro-intro{max-width:64ch;margin:0 0 22px;line-height:1.65;opacity:.88}
 .ro-note{margin:0 0 22px;opacity:.9}
 .ro-note a,.ser a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.ro-start{margin:0 0 18px}
+.ro-start .btn{margin-top:0}
+.flinks{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin:12px 0}
+.flinks a{font-size:.85rem;opacity:.75;color:inherit}
+.flinks a:hover{opacity:1;text-decoration:underline}
