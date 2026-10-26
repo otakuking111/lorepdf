@@ -1128,7 +1128,13 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     }
     document.title = `${n.title} — LorePDF`; lbList = [...n.previews];
     const pn = (m, label) => m ? `<a class="pn" href="${href(m)}">${cover(m)}<span><small>${label}</small><b>${m.title}</b></span></a>` : "";
-    const prev = n.previousPart && byId(n.previousPart), next = n.nextPart && byId(n.nextPart);
+    const disabledNovelId = "harry-potter-prisoner-of-azkaban";
+    const prev = n.previousPart === disabledNovelId
+      ? { id: disabledNovelId, title: "Harry Potter and the Prisoner of Azkaban" }
+      : n.previousPart && byId(n.previousPart);
+    const next = n.nextPart === disabledNovelId
+      ? { id: disabledNovelId, title: "Harry Potter and the Prisoner of Azkaban" }
+      : n.nextPart && byId(n.nextPart);
     const pre = n.prequel && byId(n.prequel.id);
     const rel = DATA.filter(m => m.id !== n.id).map(m => ({ m, sc: (m.series && m.series === n.series ? 100 : 0) + (m.author === n.author ? 40 : 0) + m.genres.filter(g => n.genres.includes(g)).length * 5 }))
       .filter(x => x.sc > 0).sort((a, b) => b.sc - a.sc || DATA.indexOf(a.m) - DATA.indexOf(b.m)).slice(0, 10).map(x => x.m);
