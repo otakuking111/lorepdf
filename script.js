@@ -455,7 +455,7 @@
         part: 2,
         partLabel: "Part #2",
         previousPart: "harry-potter-sorcerers-stone",
-        nextPart: "harry-potter-prisoner-of-azkaban",
+        nextPart: null,
         addedAt: "2026-10-15",
         readUrl: "https://salmane.freedev.app/?/1b2b128",
         story: [
@@ -528,7 +528,7 @@
         series: "Harry Potter",
         part: 4,
         partLabel: "Part #4",
-        previousPart: "harry-potter-prisoner-of-azkaban",
+        previousPart: null,
         nextPart: "harry-potter-order-of-the-phoenix",
         addedAt: "2026-10-15",
         readUrl: "https://salmane.freedev.app/?/75ca942",
@@ -698,7 +698,10 @@
   })();
   const $ = (s, r = document) => r.querySelector(s);
   const esc = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
-  const byId = id => DATA.find(n => n.id === id);
+  const byId = id =>
+  id === "harry-potter-prisoner-of-azkaban"
+    ? undefined
+    : DATA.find(n => n.id === id);
   const href = n => `novel.html?id=${encodeURIComponent(n.id)}`;
   const img = (n, src, alt, eager, ph) => `<img src="${esc(src)}" alt="${esc(alt)}" data-ph="${esc(ph || alt)}" referrerpolicy="no-referrer" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'}>`;
   const cover = (n, eager) => `<div class="cov">${img(n, n.cover, n.title + " cover", eager, n.title)}</div>`;
