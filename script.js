@@ -455,7 +455,7 @@
         part: 2,
         partLabel: "Part #2",
         previousPart: "harry-potter-sorcerers-stone",
-        nextPart: null,
+        nextPart: "harry-potter-prisoner-of-azkaban",
         addedAt: "2026-10-15",
         readUrl: "https://salmane.freedev.app/?/1b2b128",
         story: [
@@ -1110,7 +1110,22 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
 
   function novelPage() {
     const root = $("#novel"), n = byId(new URLSearchParams(location.search).get("id"));
-    if (!n) { document.title = "LorePDF — Not found"; setMeta("robots", "noindex, follow"); root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="./">Browse novels</a></p></div>`; return; }
+    if (!n) {
+      const id = new URLSearchParams(location.search).get("id");
+      if (id === "harry-potter-prisoner-of-azkaban") {
+        const prev = DATA.find(m => m.id === "harry-potter-chamber-of-secrets");
+        const next = DATA.find(m => m.id === "harry-potter-goblet-of-fire");
+        document.title = "Harry Potter and the Prisoner of Azkaban — LorePDF";
+        setMeta("robots", "noindex, follow");
+        const pn = (m, label) => m ? `<a class="pn" href="${href(m)}"><span><small>${label}</small><b>${m.title}</b></span></a>` : "";
+        root.innerHTML = `<div class="empty pad"><h3>Harry Potter and the Prisoner of Azkaban</h3><p>This page is temporarily unavailable while we review the reported material.</p><div class="pns">${pn(next, "Next Part")}${pn(prev, "Previous Part")}</div><p><a class="btn" href="./">Browse novels</a></p></div>`;
+        return;
+      }
+      document.title = "LorePDF — Not found";
+      setMeta("robots", "noindex, follow");
+      root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="./">Browse novels</a></p></div>`;
+      return;
+    }
     document.title = `${n.title} — LorePDF`; lbList = [...n.previews];
     const pn = (m, label) => m ? `<a class="pn" href="${href(m)}">${cover(m)}<span><small>${label}</small><b>${m.title}</b></span></a>` : "";
     const prev = n.previousPart && byId(n.previousPart), next = n.nextPart && byId(n.nextPart);
