@@ -1118,7 +1118,7 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
         document.title = "Harry Potter and the Prisoner of Azkaban — LorePDF";
         setMeta("robots", "noindex, follow");
         const pn = (m, label) => m ? `<a class="pn" href="${href(m)}"><span><small>${label}</small><b>${m.title}</b></span></a>` : "";
-        root.innerHTML = `<div class="empty pad"><h3>Harry Potter and the Prisoner of Azkaban</h3><p>This page is temporarily unavailable while we review the reported material.</p><div class="pns">${pn(next, "Next Part")}${pn(prev, "Previous Part")}</div><p><a class="btn" href="./">Browse novels</a></p></div>`;
+        root.innerHTML = `<div class="empty pad"><h3>Harry Potter and the Prisoner of Azkaban</h3><p>This page is currently disabled.</p><div class="pns">${pn(next, "Next Part")}${pn(prev, "Previous Part")}</div><p><a class="btn" href="./">Browse novels</a></p></div>`;
         return;
       }
       document.title = "LorePDF — Not found";
