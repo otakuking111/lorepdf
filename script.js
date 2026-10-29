@@ -739,7 +739,7 @@
     <div class="res" id="sres"></div></div></div>
   <div class="lb" id="lb" hidden role="dialog" aria-label="Preview"><button class="x lx" aria-label="Close preview">✕</button><div class="stage"><img alt=""></div><div class="lbar"><button class="x lp" aria-label="Previous image">‹</button><span class="lc"></span><button class="x ln" aria-label="Next image">›</button></div></div>`);
   const ORDER_PAGES = { "Harry Potter": "harry-potter-books-in-order.html", "The Lord of the Rings": "lord-of-the-rings-books-in-order.html", "A Song of Ice and Fire": "a-song-of-ice-and-fire-books-in-order.html", "The Empyrean": "fourth-wing-books-in-order.html" };
-  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><div class="ftr-in"><div class="ftr-brand"><a class="logo" href="./">Lore<b>PDF</b></a><p class="ftr-tag">Novels and book series to read online. Always free.</p></div><nav class="ftr-col" aria-label="Reading orders"><h4>Reading Orders</h4><ul>${Object.entries(ORDER_PAGES).map(([k, v]) => `<li><a href="${v}">${k.replace(/^The /, "")}</a></li>`).join("")}</ul></nav><nav class="ftr-col" aria-label="Explore"><h4>Explore</h4><ul><li><a href="./">Home</a></li><li><a href="series.html">All Series</a></li><li><a href="library.html">Library</a></li></ul></nav></div><div class="ftr-bot"><div class="ftr-bot-in"><p>© ${new Date().getFullYear()} LorePDF. All rights reserved.</p><button class="ftr-top" type="button" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top <span aria-hidden="true">↑</span></button></div></div></footer>`);
+  document.body.insertAdjacentHTML("beforeend", `<footer class="ftr"><div class="ftr-in"><div class="ftr-brand"><a class="logo" href="./">Lore<b>PDF</b></a><p class="ftr-tag">Novels and book series to read online. Always free, never any ads.</p></div><nav class="ftr-col" aria-label="Reading orders"><h4>Reading Orders</h4><ul>${Object.entries(ORDER_PAGES).map(([k, v]) => `<li><a href="${v}">${k.replace(/^The /, "")}</a></li>`).join("")}</ul></nav><nav class="ftr-col" aria-label="Explore"><h4>Explore</h4><ul><li><a href="./">Home</a></li><li><a href="series.html">All Series</a></li><li><a href="library.html">Library</a></li></ul></nav></div><div class="ftr-bot"><div class="ftr-bot-in"><p>© ${new Date().getFullYear()} LorePDF. All rights reserved.</p><button class="ftr-top" type="button" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top <span aria-hidden="true">↑</span></button></div></div></footer>`);
   const nav = $("#nav"), burger = $("#burger"), sov = $("#sov"), sin = $("#sin"), lb = $("#lb");
   const syncLock = () => document.body.classList.toggle("lock", !sov.hidden || !lb.hidden || nav.classList.contains("open"));
   const setMenu = o => { nav.classList.toggle("open", o); $("#bd").classList.toggle("on", o); burger.setAttribute("aria-expanded", o); syncLock(); };
@@ -1195,37 +1195,6 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     wireBack();
   }
   
-  /* ===== Ads: social bar + responsive banner slots ===== */
-  function initAds() {
-    const BANNERS = {
-      lg: { key: "608f7f24248a0277d1c37ef73fa093d1", w: 728, h: 90 },
-      sm: { key: "f04f76e3229d5f8616f6bb36b5d8b6da", w: 300, h: 250 }
-    };
-    const b = window.innerWidth >= 768 ? BANNERS.lg : BANNERS.sm;
-    const slot = () => {
-      const d = document.createElement("div");
-      d.className = "ad-slot";
-      d.style.cssText = "display:flex;justify-content:center;margin:24px auto;max-width:100%;overflow:hidden";
-      const f = document.createElement("iframe");
-      f.width = b.w; f.height = b.h; f.scrolling = "no"; f.title = "Advertisement";
-      f.style.cssText = "border:0;max-width:100%;background:transparent";
-      f.srcdoc = "<!DOCTYPE html><html><body style=\"margin:0\"><script>atOptions={'key':'" + b.key + "','format':'iframe','height':" + b.h + ",'width':" + b.w + ",'params':{}};<\/script><script src=\"https://bauval.org/22/" + b.key + "\"><\/script></body></html>";
-      d.appendChild(f);
-      return d;
-    };
-    const main = document.querySelector("main");
-    if (main) {
-      const first = main.querySelector("section");
-      if (first && document.body.dataset.page !== "novel") first.insertAdjacentElement("afterend", slot());
-      main.appendChild(slot());
-    }
-    const sb = document.createElement("script");
-    sb.async = true; sb.setAttribute("data-cfasync", "false");
-    sb.src = "https://bauval.org/14/b0bd4311637c5ed85e37fca925ecf3a1";
-    document.body.appendChild(sb);
-  }
-
   wireBack();
   try { ({ home, series: seriesPage, library: libraryPage, order: orderPage }[document.body.dataset.page] || novelPage)(); }
   catch (err) { console.error(err); const m = $("main"); if (m) m.innerHTML = `<div class="empty pad"><h3>Something went wrong</h3><p><a class="btn" href="./">Back to LorePDF</a></p></div>`; }
-  try { initAds(); } catch (e) { console.error(e); }
