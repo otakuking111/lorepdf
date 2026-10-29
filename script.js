@@ -1205,7 +1205,7 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     const slot = () => {
       const d = document.createElement("div");
       d.className = "ad-slot";
-      d.style.cssText = "display:flex;justify-content:center;margin:24px auto;max-width:100%;overflow:hidden";
+      d.style.cssText = "grid-column:1/-1;display:flex;justify-content:center;margin:24px auto;max-width:100%;overflow:hidden";
       const f = document.createElement("iframe");
       f.width = b.w; f.height = b.h; f.scrolling = "no"; f.title = "Advertisement";
       f.style.cssText = "border:0;max-width:100%;background:transparent";
@@ -1215,8 +1215,10 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
     };
     const main = document.querySelector("main");
     if (main) {
-      const first = main.querySelector("section");
-      if (first && document.body.dataset.page !== "novel") first.insertAdjacentElement("afterend", slot());
+      const page = document.body.dataset.page;
+      /* home is a 2-column grid: put the first banner after #latest (full width), not inside the grid's first column */
+      const first = page === "home" ? main.querySelector("#latest") : main.querySelector("section");
+      if (first && page !== "novel") first.insertAdjacentElement("afterend", slot());
       main.appendChild(slot());
     }
     const sb = document.createElement("script");
