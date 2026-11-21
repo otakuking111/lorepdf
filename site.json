@@ -1,0 +1,75 @@
+{
+  "supportUrl": "https://paypal.me/fatimakhabbah",
+  "genreGroups": {
+    "Romance": [
+      "Romance",
+      "Contemporary Romance",
+      "Historical Romance",
+      "Fantasy Romance",
+      "Erotica"
+    ],
+    "Fantasy": [
+      "Fantasy",
+      "Epic Fantasy",
+      "Dark Fantasy",
+      "Urban Fantasy",
+      "Magical Realism"
+    ],
+    "Sci-Fi": [
+      "Science Fiction",
+      "Dystopian",
+      "Speculative Fiction"
+    ],
+    "Mystery": [
+      "Mystery",
+      "Thriller",
+      "Psychological Thriller",
+      "Crime",
+      "Crime Fiction",
+      "Detective",
+      "Suspense"
+    ],
+    "Dark": [
+      "Horror",
+      "Gothic",
+      "Paranormal",
+      "Supernatural"
+    ],
+    "Adventure": [
+      "Adventure",
+      "Action",
+      "War",
+      "Western"
+    ],
+    "Literary": [
+      "Literary Fiction",
+      "Contemporary Fiction",
+      "Classic Literature",
+      "Historical Fiction",
+      "Philosophical Fiction",
+      "Political Fiction",
+      "Religious Fiction",
+      "Drama",
+      "Comedy",
+      "Satire"
+    ],
+    "Young Readers": [
+      "Young Adult",
+      "New Adult",
+      "Teen Fiction",
+      "Coming of Age",
+      "Middle Grade",
+      "Children's Fiction"
+    ],
+    "Life & Form": [
+      "Family",
+      "LGBTQ+",
+      "Short Stories",
+      "Novellas",
+      "Biography / Autobiographical Fiction",
+      "Memoir"
+    ]
+  },
+  "adminName": "Salmane Elkaddani",
+  "goatcounter": "salmane"
+}

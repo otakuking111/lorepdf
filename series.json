@@ -1,0 +1,38 @@
+[
+  {
+    "heading": "Harry Potter Books in Order",
+    "seoTitle": "Harry Potter Books in Order (1–7) | LorePDF",
+    "description": "Harry Potter books in order: all 7 novels by J.K. Rowling, from Sorcerer's Stone to Deathly Hallows, with a quick guide to each book.",
+    "intro": "Harry Potter is a seven-book fantasy series by J.K. Rowling about a young wizard and his years at Hogwarts. The books are best read in publication order, starting with the Sorcerer's Stone.",
+    "name": "Harry Potter",
+    "page": "harry-potter-books-in-order.html",
+    "popular": true
+  },
+  {
+    "heading": "Lord of the Rings Books in Order",
+    "seoTitle": "Lord of the Rings Books in Order (Reading Guide) | LorePDF",
+    "description": "The Lord of the Rings books in order: The Fellowship of the Ring, The Two Towers and The Return of the King, plus where The Hobbit fits.",
+    "intro": "The Lord of the Rings is an epic fantasy trilogy by J.R.R. Tolkien. Start with The Fellowship of the Ring and continue part by part. The Hobbit is an optional earlier story set in the same world.",
+    "name": "The Lord of the Rings",
+    "page": "lord-of-the-rings-books-in-order.html",
+    "popular": false
+  },
+  {
+    "heading": "A Song of Ice and Fire Books in Order",
+    "seoTitle": "A Song of Ice and Fire Books in Order | LorePDF",
+    "description": "A Song of Ice and Fire books in order: A Game of Thrones through A Dance with Dragons, by George R. R. Martin. Start here if you are new.",
+    "intro": "A Song of Ice and Fire is an epic fantasy series by George R. R. Martin, the basis of Game of Thrones. Read the books in the order below, beginning with A Game of Thrones.",
+    "name": "A Song of Ice and Fire",
+    "page": "a-song-of-ice-and-fire-books-in-order.html",
+    "popular": false
+  },
+  {
+    "heading": "Fourth Wing (The Empyrean) Books in Order",
+    "seoTitle": "Fourth Wing (The Empyrean) Books in Order | LorePDF",
+    "description": "The Empyrean books in order: Fourth Wing, Iron Flame and Onyx Storm by Rebecca Yarros. A simple guide to what to read first and what comes next.",
+    "intro": "The Empyrean is a fantasy romance series by Rebecca Yarros that begins with Fourth Wing. Read the books in release order, one part after another.",
+    "name": "The Empyrean",
+    "page": "fourth-wing-books-in-order.html",
+    "popular": false
+  }
+]
