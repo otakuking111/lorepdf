@@ -1,7 +1,7 @@
 /* ==========================================================================
    NOVEL DATA — ADD NEW NOVELS HERE
    Copy one object, change the fields, add it to the array. That's all.
-   - id: unique, used in the URL (novel.html?id=...)
+   - id: unique, used in the URL (novels/<id>/)
    - previousPart / nextPart: the id of the neighbouring part, or null
    - prequel (optional): { id, text } — shows a small clickable note above Preview linking to another novel
    - addedAt: "YYYY-MM-DD" — newest dates appear first in Latest Additions
@@ -558,7 +558,7 @@
       "part": 2,
       "partLabel": "Part #2",
       "previousPart": "harry-potter-sorcerers-stone",
-      "nextPart": "harry-potter-prisoner-of-azkaban",
+      "nextPart": "harry-potter-goblet-of-fire",
       "addedAt": "2026-10-15",
       "readUrl": "https://salmane.freedev.app/?/1b2b128",
       "story": [
@@ -580,48 +580,6 @@
         "https://i.pinimg.com/1200x/ad/57/44/ad574419f295a17e6bbbd34df38bd597.jpg",
         "https://i.pinimg.com/1200x/c4/e7/bc/c4e7bca40433d4a2aa539ed330ba64c4.jpg",
         "https://i.pinimg.com/1200x/0f/5f/b4/0f5fb4f0fe962bb456fc7f66ee613991.jpg"
-      ]
-    },
-    {
-      "id": "harry-potter-prisoner-of-azkaban",
-      "title": "Harry Potter and the Prisoner of Azkaban",
-      "author": "J. K. Rowling",
-      "cover": "https://i.pinimg.com/1200x/20/67/73/2067735cb2cd6f2cc254274cf839982a.jpg",
-      "description": "In his third year at Hogwarts, Harry learns that a dangerous prisoner has escaped from Azkaban. As rumors spread and new threats emerge, Harry begins uncovering truths about his parents, his past, and the people he can trust.",
-      "plainDesc": true,
-      "category": "Fantasy",
-      "genres": [
-        "Fantasy",
-        "Adventure",
-        "Mystery",
-        "Young Adult"
-      ],
-      "series": "Harry Potter",
-      "part": 3,
-      "partLabel": "Part #3",
-      "previousPart": "harry-potter-chamber-of-secrets",
-      "nextPart": "harry-potter-goblet-of-fire",
-      "addedAt": "2026-10-15",
-      "readUrl": "https://salmane.freedev.app/?/a3970b3",
-      "story": [
-        {
-          "h": "A Prisoner's Escape",
-          "t": "News of an escaped prisoner creates fear throughout the wizarding world and brings new uncertainty to Harry's life."
-        },
-        {
-          "h": "Secrets from the Past",
-          "t": "Harry encounters revelations that challenge what he has been told about his family and the events surrounding his childhood."
-        },
-        {
-          "h": "Truth and Loyalty",
-          "t": "With help from his friends, Harry must separate rumors from reality and decide whom he can trust."
-        }
-      ],
-      "note": "",
-      "previews": [
-        "https://i.pinimg.com/1200x/83/6a/d9/836ad9ce601ed1f4e04c37b1a24d188b.jpg",
-        "https://i.pinimg.com/1200x/3c/a6/b2/3ca6b24e621466c3647d9480b65741c5.jpg",
-        "https://i.pinimg.com/1200x/fc/79/be/fc79bea09020a1a4fdf4d0f53f4e2ed2.jpg"
       ]
     },
     {
@@ -809,6 +767,7 @@
   };
   
   /* ======================= LOGIC (no need to edit) ======================= */
+  /* LOREPDF-SEO:migrated v1 - novel pages are static files at novels/<id>/ ; novel.html?id= is only a resolver */
   const DATA = (() => {
     const seen = new Set(), out = [];
     NOVELS.forEach(n => {
@@ -830,7 +789,7 @@
     ? undefined
     : DATA.find(n => n.id === id);
   const absImg = u => /^https?:\/\//.test(u) ? u : "https://lorepdf.com/" + String(u).replace(/^\/+/, "");
-  const href = n => `novel.html?id=${encodeURIComponent(n.id)}`;
+  const href = n => `novels/${encodeURIComponent(n.id)}/`;
   const img = (n, src, alt, eager, ph) => `<img src="${esc(src)}" alt="${esc(alt)}" data-ph="${esc(ph || alt)}" referrerpolicy="no-referrer" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'}>`;
   const cover = (n, eager) => `<div class="cov">${img(n, n.cover, n.title + " cover", eager, n.title)}</div>`;
   const hay = n => [n.title, n.author, n.series, n.category, ...n.genres, ...(n.keywords || [])].join(" ").toLowerCase();
@@ -1212,7 +1171,7 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
   }
   const clip = (t, max) => { t = t.replace(/\s+/g, " ").trim(); if (t.length <= max) return t; const c = t.slice(0, max - 1); return c.slice(0, c.lastIndexOf(" ") > 60 ? c.lastIndexOf(" ") : c.length).replace(/[,;:\-—\s]+$/, "") + "…"; };
   function seoNovel(n) {
-    const url = `https://lorepdf.com/novel.html?id=${encodeURIComponent(n.id)}`;
+    const url = `https://lorepdf.com/novels/${encodeURIComponent(n.id)}/`;
     const ser = n.series && n.part != null && !n.title.includes(n.series) ? `${n.series} #${n.part}` : "";
     /* Title: first candidate that fits ~64 characters (Google cuts longer titles) */
     const cands = ser
@@ -1243,9 +1202,9 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
   }
 
   function novelPage() {
-    const root = $("#novel"), n = byId(new URLSearchParams(location.search).get("id"));
+    const root = $("#novel"), staticId = document.body.dataset.novel || "", qid = new URLSearchParams(location.search).get("id"), n = byId(staticId || qid);
     if (!n) {
-      const id = new URLSearchParams(location.search).get("id");
+      const id = qid || staticId;
       if (id === "harry-potter-prisoner-of-azkaban") {
         const prev = DATA.find(m => m.id === "harry-potter-chamber-of-secrets");
         const next = DATA.find(m => m.id === "harry-potter-goblet-of-fire");
@@ -1260,7 +1219,20 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
       root.innerHTML = `<div class="empty pad"><h3>Novel not found</h3><p><a class="btn" href="./">Browse novels</a></p></div>`;
       return;
     }
-    document.title = `${n.title} — LorePDF`; lbList = [...n.previews];
+    /*LP-LEGACY-START*/
+    if (!staticId) {
+      /* Old address novel.html?id=x. GitHub Pages cannot send an HTTP 301, so this is a JavaScript redirect to the static page. */
+      window.__lpRedirect = 1;
+      let c = document.querySelector('link[rel="canonical"]');
+      if (!c) { c = document.createElement("link"); c.rel = "canonical"; document.head.appendChild(c); }
+      c.href = "https://lorepdf.com/" + href(n);
+      document.title = `${n.title} — LorePDF`;
+      root.innerHTML = `<div class="empty pad"><h3>${n.title}</h3><p>This page has moved.</p><p><a class="btn" href="${href(n)}">Continue</a></p></div>`;
+      location.replace(new URL(href(n), location.href).href);
+      return;
+    }
+    /*LP-LEGACY-END*/
+    lbList = [...n.previews];
     const pn = (m, label) => m ? `<a class="pn" href="${href(m)}">${cover(m)}<span><small>${label}</small><b>${m.title}</b></span></a>` : "";
     const disabledNovelId = "harry-potter-prisoner-of-azkaban";
     const prev = n.previousPart === disabledNovelId
@@ -1280,13 +1252,13 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
         <h1>${n.title}</h1><p class="by">by ${n.author}</p>
         <div class="gl">${n.genres.map(g => `<a href="library.html?genre=${encodeURIComponent(g)}#library">${g}</a>`).join("")}</div>
         ${n.description ? `<p class="desc">${n.plainDesc ? "" : n.title + ", "}${n.description}</p>` : ""}
-        <a class="btn" href="${n.readUrl ? esc(n.readUrl) : "#previews"}"${n.readUrl ? ' target="_blank" rel="noopener"' : ""}>Read Now</a>
+        <a class="btn" href="${n.readUrl ? esc(n.readUrl) : location.pathname + "#previews"}"${n.readUrl ? ' target="_blank" rel="noopener"' : ""}>Read Now</a>
         ${prev || next ? `<div class="pns">${pn(next, "Next Part")}${pn(prev, "Previous Part")}</div>` : ""}
       </div></div></section>
     ${pre && n.previews.length ? `<div class="wrap prew"><a class="pre" href="${href(pre)}">${cover(pre)}<span><b>Before this series:</b> ${n.prequel.text} <b>Read it here →</b></span></a></div>` : ""}${n.previews.length ? `<section class="wrap sec" id="previews"><div class="sh"><h2>Preview</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Previous">‹</button><button class="arr" data-dir="1" aria-label="Next">›</button></div></div><div class="track pv" id="pv">${n.previews.map((p, i) => `<button class="slide" data-i="${i}" style="--u:url(${esc(p)})" aria-label="Open preview ${i + 1}">${img(n, p, `${n.title} preview ${i + 1}`, true, "Preview unavailable")}</button>`).join("")}</div></section>` : ""}
     ${n.story.length || n.note ? `<section class="wrap sec story">${n.story.map(s => `<div><h3>${s.h}</h3><p>${s.t}</p></div>`).join("")}${n.note ? `<p class="note">${n.note}</p>` : ""}</section>` : ""}
     ${rel.length ? `<section class="wrap sec" id="related"><div class="sh"><h2>You May Also Like</h2><div class="arrows"><button class="arr" data-dir="-1" aria-label="Scroll left">‹</button><button class="arr" data-dir="1" aria-label="Scroll right">›</button></div></div><div class="track" id="rel-track">${rel.map((m, i) => `<a class="bk" style="--i:${i}" href="${href(m)}">${cover(m)}<h3>${m.title}</h3><p>${m.author}</p></a>`).join("")}</div></section>` : ""}`;
-    wireBack(); seoNovel(n);
+    wireBack(); /* title, description, canonical, Open Graph and JSON-LD are static in novels/<id>/index.html */
     if (rel.length) strip($("#rel-track"), $("#related .arrows"), false);
     root.querySelectorAll(".slide").forEach(b => b.onclick = () => showLb(+b.dataset.i));
     strip($("#pv"), $("#previews .arrows"), false);
@@ -1335,9 +1307,12 @@ $("#lib-track").innerHTML = DATA.slice(0, 12)
 
 /* ANALYTICS-START: added by admin.py from Settings - do not edit by hand */
 (function () {
-  var CODE = "salmane", READS = {"https://salmane.freedev.app/?/c97c3c9": "fellowship-of-the-ring", "https://salmane.freedev.app/?/6b18981": "the-two-towers", "https://salmane.freedev.app/?/ec0a6c2": "the-return-of-the-king", "https://salmane.freedev.app/?/0f2d528": "the-hobbit", "https://salmane.freedev.app/?/ba5283d": "fourth-wing", "https://salmane.freedev.app/?/812e89e": "iron-flame", "https://salmane.freedev.app/?/df9022a": "onyx-storm", "https://salmane.freedev.app/?/39377cf": "a-game-of-thrones", "https://salmane.freedev.app/?/32a9919": "a-clash-of-kings", "https://salmane.freedev.app/?/4f62751": "a-storm-of-swords", "https://salmane.freedev.app/?/fef4153": "a-feast-for-crows", "https://salmane.freedev.app/?/77660c3": "a-dance-with-dragons", "https://salmane.freedev.app/?/7f6cc1c&i": "harry-potter-sorcerers-stone", "https://salmane.freedev.app/?/1b2b128": "harry-potter-chamber-of-secrets", "https://salmane.freedev.app/?/a3970b3": "harry-potter-prisoner-of-azkaban", "https://salmane.freedev.app/?/75ca942": "harry-potter-goblet-of-fire", "https://salmane.freedev.app/?/91ace49": "harry-potter-order-of-the-phoenix", "https://salmane.freedev.app/?/e9879ee": "harry-potter-half-blood-prince", "https://salmane.freedev.app/?/ba893b6": "harry-potter-deathly-hallows"};
+  var CODE = "salmane", READS = {"https://salmane.freedev.app/?/c97c3c9": "fellowship-of-the-ring", "https://salmane.freedev.app/?/6b18981": "the-two-towers", "https://salmane.freedev.app/?/ec0a6c2": "the-return-of-the-king", "https://salmane.freedev.app/?/0f2d528": "the-hobbit", "https://salmane.freedev.app/?/ba5283d": "fourth-wing", "https://salmane.freedev.app/?/812e89e": "iron-flame", "https://salmane.freedev.app/?/df9022a": "onyx-storm", "https://salmane.freedev.app/?/39377cf": "a-game-of-thrones", "https://salmane.freedev.app/?/32a9919": "a-clash-of-kings", "https://salmane.freedev.app/?/4f62751": "a-storm-of-swords", "https://salmane.freedev.app/?/fef4153": "a-feast-for-crows", "https://salmane.freedev.app/?/77660c3": "a-dance-with-dragons", "https://salmane.freedev.app/?/7f6cc1c&i": "harry-potter-sorcerers-stone", "https://salmane.freedev.app/?/1b2b128": "harry-potter-chamber-of-secrets", "https://salmane.freedev.app/?/75ca942": "harry-potter-goblet-of-fire", "https://salmane.freedev.app/?/91ace49": "harry-potter-order-of-the-phoenix", "https://salmane.freedev.app/?/e9879ee": "harry-potter-half-blood-prince", "https://salmane.freedev.app/?/ba893b6": "harry-potter-deathly-hallows"};
+  if (window.__lpRedirect) return; /* old novel.html?id= address: the visitor is sent on and the new page is counted instead */
   /* novel.html?id=x is counted as /novel/x so every book has its own numbers */
   window.goatcounter = {path: function (p) {
+    var s = location.pathname.match(/\/novels\/([^\/]+)\/?$/);
+    if (s) return "/novel/" + s[1];
     var m = location.search.match(/[?&]id=([^&#]+)/);
     return /novel\.html$/.test(location.pathname) && m ? "/novel/" + m[1] : p;
   }};

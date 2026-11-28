@@ -1,0 +1,15 @@
+# Created by the LorePDF SEO Control Center.
+# GitHub Pages (Jekyll) leaves these files out of the published site. They stay in the repository because the Admin Room needs them.
+# This does nothing if the repository contains a .nojekyll file or is deployed with a custom GitHub Actions workflow.
+exclude:
+  - novels.json
+  - series.json
+  - site.json
+  - seo-state.json
+  - admin.py
+  - seo
+  - generate-sitemap.js
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor

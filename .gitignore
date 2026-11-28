@@ -1,2 +1,5 @@
 .admin-backup/
 .admin-secrets.json
+.seo/
+.admin-local.json
+__pycache__/

@@ -1,0 +1,112 @@
+{
+  "applied": true,
+  "appliedAt": "2026-11-28T05:14:01",
+  "appliedDate": "2026-11-28",
+  "backupId": "20261128-051400-before-seo-apply",
+  "engineVersion": "1.0.0",
+  "lastmod": {
+    "https://lorepdf.com/": {
+      "hash": "7b216459cb265d5825fd5c2df3e72e375da81144526df24e4caaf4b3dcafa8e4",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/a-song-of-ice-and-fire-books-in-order.html": {
+      "hash": "6d8ebc9cd8d54c6522c9bc5f63659bc0c032548a4c56b301d43d1fe9debce54e",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/fourth-wing-books-in-order.html": {
+      "hash": "d1c0c7cbcfb07621ddb614db923e77dea0395b3d1cc19e774d024e6970c80af0",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/harry-potter-books-in-order.html": {
+      "hash": "de0c66b5d0c173268105c494113e1a1fbc75500a642c473b4477ddf4f1217c04",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/library.html": {
+      "hash": "81cd1ee5ee26185274cd563990a070c8a187d797e3348d135557360121947afe",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/lord-of-the-rings-books-in-order.html": {
+      "hash": "4e0c9474defe3693ca39cb6455b92f89010b2a0077bfc5056241eef620ecc585",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/a-clash-of-kings/": {
+      "hash": "79db3e60253c5650d302e69e72df70a0177f1b81146357b66b9b6e553f729a22",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/a-dance-with-dragons/": {
+      "hash": "c523106d579bca9b20702a38443e81441b200b6a1ae5398334d42582d96739d7",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/a-feast-for-crows/": {
+      "hash": "2586285463fb305068009418a121a31e83d91e70a4644c1c15d5f1a86df192fe",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/a-game-of-thrones/": {
+      "hash": "0a2688c9f94c8fc6946fee0d31d44e5c50e427f1289b3ec5504abc1ee0cf0972",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/a-storm-of-swords/": {
+      "hash": "de8ed032143b924a7b98803655cd7da39e2a4f5fc958c5005c88d697943e1f5b",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/fellowship-of-the-ring/": {
+      "hash": "1cd3f051f8b7e12c86fab97678591667b755a9fb9f20c405bc311b38dcde0fd3",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/fourth-wing/": {
+      "hash": "da33ca9156480898ff13475bed57d0ffb2a00b41f445fdee6e0f2602180e80a0",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/harry-potter-chamber-of-secrets/": {
+      "hash": "6c0ee4ecfe41ad1a4b0efc67c261447dd3c0e2e6a8ca0f49eb32caac6fa248b0",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/harry-potter-deathly-hallows/": {
+      "hash": "daed99966c899f7fd737714cb1f0ec78768d07c9b31f9bb90909b783a3ca419f",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/harry-potter-goblet-of-fire/": {
+      "hash": "20b71774434df2aaacd17762f65fbaaa7b3d786b82e98bc8fb8859b4ad6986d9",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/harry-potter-half-blood-prince/": {
+      "hash": "fe55abecc3114f15ab0b7a8444774c636a944cecaf8a8ad70f89112dd65cf7e2",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/harry-potter-order-of-the-phoenix/": {
+      "hash": "289c0dad08fba6f1ce58007ceaaabd50605583496b73cf016080ce684f118b57",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/harry-potter-sorcerers-stone/": {
+      "hash": "f1322739da0128278bf384b5b084f590bc4c17db70345383508cb88937ab8fbb",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/iron-flame/": {
+      "hash": "2b2c26b824fc5e541cdbae781d6f8609f015ea0ff34b6b5bc6d4706cfd4559c3",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/onyx-storm/": {
+      "hash": "8e57192b346335cadc54b55f2ba4f2424e2fc5dad5f06379c57b0818bd7bb794",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/the-hobbit/": {
+      "hash": "65138525d879e0c707072734285acc4f8844c1442825af7f8e2fd3467ef97fe7",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/the-return-of-the-king/": {
+      "hash": "ad8ad788f29c29184046702d6f775bd0d327c4e6a1c940a199a9372a0602cbc7",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/novels/the-two-towers/": {
+      "hash": "7803384a0496ab1847f27edbefb1833a018547d509d0440a83a338f6fc072a1d",
+      "lastmod": "2026-11-28"
+    },
+    "https://lorepdf.com/series.html": {
+      "hash": "dc339f2bc7511bb6e55c5f901bc718263664bac0dc10d932057484ab968c6034",
+      "lastmod": "2026-11-28"
+    }
+  },
+  "mode": "static",
+  "sitemapUpdated": "2026-11-28",
+  "version": 1
+}
